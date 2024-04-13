@@ -1,0 +1,56 @@
+:root {
+	--color-default: #31363F;
+	--color-second: #222831;
+	--color-white: #fff;
+	--color-body: #e4e9f7;
+	--color-light: #e0e0e0;
+}
+
+/* CARD STYLES */
+.discount__card,
+.preview__card {
+	background-color: #2C2E34 !important;
+}
+
+.discount__preview,
+.product__preview {
+	display: -webkit-box;
+	-webkit-line-clamp: 3;
+	-webkit-box-orient: vertical;
+	overflow: hidden;
+}
+
+.card-img-top {
+	height: 150px !important;
+}
+
+/* PAGE 2 */
+.home-section .text {
+	display: inline-block;
+	color: var(--color-default);
+	font-size: 25px;
+	font-weight: 500;
+	margin: 18px;
+}
+
+.product__snapshot {
+  filter: grayscale(1);
+  max-height: 300px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: filter 300ms ease-in-out;
+}
+
+.product__snapshot:hover {
+  filter: grayscale(0);
+}
+
+.carousel-item {
+	height: 750px !important;
+}
+
+@media screen and (width < 700px){
+	.carousel-item img {
+		height: 300px !important;
+	}
+}

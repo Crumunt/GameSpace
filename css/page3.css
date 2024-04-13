@@ -1,0 +1,383 @@
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
+
+
+:root {
+  --color-default: #31363F;
+  --color-second: #222831;
+  --color-white: #fff;
+  --color-body: #e4e9f7;
+  --color-light: #e0e0e0;
+}
+
+* {
+  font-family: 'PT Sans', sans-serif;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.heading-wrapper h1 {
+  font-size: 56px;
+  color: white;
+  margin: 60px auto;
+  /* Adjust margin as needed */
+  margin-left: 6%;
+}
+
+.category__wrapper h1 {
+  color: transparent;
+  text-align: left;
+  margin: 0;
+  /* Remove margin from the <h1> itself */
+  font-size: 36px;
+  /* Adjust the font size as needed */
+  background-color: white;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shine 5s linear infinite;
+}
+
+.home-section {
+  /* position: relative;
+  background-color: var(--color-second);
+  min-height: 100vh; */
+  top: 0;
+  left: 40px;
+  /* adjust pang left card */
+  width: calc(100% - 78px);
+  transition: all .5s ease;
+  z-index: 2;
+}
+
+.home-section .text {
+  display: inline-block;
+  color: var(--color-default);
+  font-size: 25px;
+  font-weight: 500;
+  margin: 18px;
+}
+
+
+
+.wrapper-container {
+  overflow: hidden;
+  position: relative;
+  width: 1200px;
+  /* Set width according to your images */
+  margin: 0 auto;
+  margin-right: 40px;
+  margin-top: 10px;
+}
+
+.wrapper-slider {
+  display: flex;
+  transition: transform 0.5s ease;
+}
+
+.category__wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  gap: 1rem;
+}
+
+.card {
+  cursor: pointer;
+  position: relative;
+  width: 25%;
+  height: 500px !important;
+  /* Adjust the width as needed */
+  margin-bottom: 6%;
+  /* Added space between cards */
+  background-color: #4b4b4b;
+  border-radius: 20px;
+  box-shadow: 0 35px 80px rgba(0, 0, 0, 0.25);
+  overflow: hidden;
+}
+
+.card .poster {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  /* Ensure the poster fills the card */
+  height: 100%;
+  /* Ensure the poster fills the card */
+}
+
+.card .poster::before {
+  content: '';
+  position: absolute;
+  bottom: -180px;
+  width: 100%;
+  height: 100%;
+  transition: 0.5s;
+  background: linear-gradient(0deg, #ff2929 35%, transparent);
+  z-index: 1;
+}
+
+.card1 .poster::before {
+  background: linear-gradient(0deg, #00155a 35%, transparent);
+}
+
+.card2 .poster::before {
+  background: linear-gradient(0deg, #ff9742 35%, transparent);
+}
+
+.card3 .poster::before {
+  background: linear-gradient(0deg, #2ea300 35%, transparent);
+}
+
+.card4 .poster::before {
+  background: linear-gradient(0deg, #009191 35%, transparent);
+}
+
+.card5 .poster::before {
+  background: linear-gradient(0deg, #195800 35%, transparent);
+}
+
+.card6 .poster::before {
+  background: linear-gradient(0deg, #e60032 35%, transparent);
+}
+
+.card7 .poster::before {
+  background: linear-gradient(0deg, #9c6f0f 35%, transparent);
+}
+
+.card8 .poster::before {
+  background: linear-gradient(0deg, #b8b8b8 35%, transparent);
+}
+
+.card8 .poster::before {
+  background: linear-gradient(0deg, #3542ff 35%, transparent);
+}
+
+.card:hover .poster::before {
+  bottom: 0;
+}
+
+.card .poster img {
+  width: 100%;
+  height: 100%;
+  /* Ensure the image fills its container */
+  object-fit: cover;
+  /* Maintain aspect ratio and cover the entire container */
+  transition: transform 0.5s, filter 0.5s;
+  /* Include transition properties */
+}
+
+.card:hover .poster img {
+  transform: translateY(-50px);
+  filter: blur(5px) brightness(.3);
+}
+
+.card .details {
+  position: absolute;
+  bottom: -500%;
+  left: 0;
+  width: 100%;
+  z-index: 2;
+  color: #fff;
+  transition: bottom 0.5s ease;
+  padding: 20px;
+  box-sizing: border-box;
+  font-size: .9rem;
+}
+
+.card:hover .details {
+  bottom: 30px;
+}
+
+.card .details h1 {
+  margin-bottom: 10px;
+}
+
+.card .details p {
+  margin-top: 10px;
+}
+
+.card .tags {
+  margin-top: 10px;
+}
+
+.card .tags span {
+  background-color: #ff5252;
+  padding: 5px 10px;
+  border-radius: 5px;
+  margin-right: 5px;
+}
+
+.poster {
+  position: relative;
+}
+
+.title-overlay {
+  position: absolute;
+  top: 70%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  padding: 10px 20px;
+  border-radius: 5px;
+  z-index: 10;
+  transition: opacity 0.5s ease;
+}
+
+.title-overlay h2 {
+  margin: 0;
+  font-size: 30px;
+}
+
+.card:hover .title-overlay {
+  opacity: 0;
+}
+
+@media screen and (max-width: 1200px) {
+  .category__wrapper {
+    display: flex;
+    transition: all 0.5s ease;
+  }
+
+  .card {
+    width: 37%;
+    transition: all 0.5s ease;
+  }
+}
+
+@media screen and (max-width: 923px){
+  .card .details {
+    font-size: .67rem;
+  }
+}
+
+@media screen and (max-width: 800px){
+  .card .details {
+    font-size: .6rem;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .category__wrapper {
+    flex-direction: column;
+    align-items: center;
+    transition: all 0.5s ease;
+    /* Add smooth transition for container */
+  }
+
+  .card {
+    width: 80%;
+    margin-bottom: 20px;
+    transition: all 0.5s ease;
+    /* Add smooth transition for cards */
+  }
+
+  .heading-wrapper h1 {
+    font-size: 36px;
+    margin: 40px auto;
+    transition: all 0.5s ease;
+    /* Add smooth transition for heading */
+  }
+
+  .home-section .text {
+    font-size: 18px;
+    margin: 10px;
+    transition: all 0.5s ease;
+    /* Add smooth transition for text */
+  }
+
+  /* Additional styles for card details */
+  .card .details {
+    font-size: .75rem;
+    padding: 1rem;
+    transition: padding 0.5s ease;
+    /* Add smooth transition for padding */
+  }
+
+  .card .tags span {
+    padding: 3px 6px;
+    font-size: 12px;
+    transition: padding 0.5s ease, font-size 0.5s ease;
+    /* Add smooth transition for padding and font-size */
+  }
+
+  .card .details h1 {
+    font-size: 1px;
+    transition: font-size 0.5s ease;
+    /* Add smooth transition for font-size */
+  }
+
+  /* Smooth transition for additional properties */
+  .card:hover .poster::before {
+    transition: bottom 0.5s ease;
+    /* Smooth transition for gradient overlay */
+  }
+
+  .card:hover .poster img {
+    transition: transform 0.5s ease, filter 0.5s ease;
+    /* Smooth transition for image hover effects */
+  }
+
+  .card:hover .details {
+    transition: bottom 0.5s ease;
+    /* Smooth transition for card details */
+  }
+
+  .card:hover .title-overlay {
+    transition: opacity 0.5s ease;
+    /* Smooth transition for title overlay */
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .category__wrapper {
+    flex-direction: column;
+    align-items: center;
+    margin-left: 1rem;
+  }
+
+  .card {
+    width: 100%;
+    margin-bottom: 20px;
+  }
+
+  .heading-wrapper h1 {
+    font-size: 16px;
+    /* Adjust font size for smaller screens */
+    margin: 40px auto;
+    /* Adjust margin for smaller screens */
+    transition: all 1.0s ease;
+  }
+  
+  .home-section {
+    width: 100%;
+    padding: 1rem;
+  }
+
+  .home-section .text {
+    font-size: 9px;
+    /* Adjust font size for smaller screens */
+    margin: 10px;
+    transition: all 1.0s ease;
+  }
+
+  /* Additional styles for card details */
+  .card .details {
+    font-size: .55rem;
+    padding: 1rem;
+    /* Adjust padding for smaller screens */
+    transition: all 1.0s ease;
+  }
+
+  .card .tags span {
+    padding: 3px 6px;
+    font-size: 12px;
+    /* Adjust font size for smaller screens */
+    transition: all 1.0s ease;
+  }
+
+  .card .details h1 {
+    font-size: 1px;
+    /* Adjust font size for smaller screens */
+    transition: all 1.0s ease;
+  }
+}
