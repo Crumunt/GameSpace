@@ -22,10 +22,12 @@ $category_data = $userView->fetchCategories();
                         <h2><?= $category['category_name'] ?></h2>
                     </div>
                 </div>
-                <div class="details">
-                    <!-- <h1><?= $category['category_name'] ?></h1> -->
-                    <div><?= $category['description'] ?></div>
-                </div>
+                <a href="games.php?category=<?= "{$category['category_name']}" ?>">
+                    <div class="details">
+                        <!-- <h1><?= $category['category_name'] ?></h1> -->
+                        <div><?= $category['description'] ?></div>
+                    </div>
+                </a>
             </div>
         <?php endforeach ?>
     </div>

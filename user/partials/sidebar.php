@@ -1,4 +1,4 @@
-<?php 
+<?php
 session_start();
 $page = basename($_SERVER['PHP_SELF'], ".php");
 ?>
@@ -12,15 +12,17 @@ $page = basename($_SERVER['PHP_SELF'], ".php");
 	<title>GameSpace</title>
 	<link rel="stylesheet" href="<?= ($page == 'index') ? '' : "../" ?>css/sidebar-footer.css">
 	<link rel="stylesheet" href="<?= ($page == 'index') ? '' : "../" ?>css/page_1_&_2_&_5.css">
-	<script src="<?= ($page == 'index') ? '' : '../' ?>js/sidebar.js" defer></script>
 	<?php
-	$included_pages = ['index', 'featured', 'view_game'];
+	$included_pages = ['index', 'featured', 'view_game', 'cart', 'checkout', 'order'];
 	if (!in_array($page, $included_pages)) {
 	?>
-		<link rel="stylesheet" href="../css/<?= ($page == 'categories') ? 'page3' : 'page4' ?>.css">
+		<link rel="stylesheet" href="../css/page3.css">
 	<?php
 	}
 	?>
+
+	<script src="<?= ($page == 'index') ? '' : '../' ?>js/sidebar.js" defer></script>
+	<script src="<?= ($page == 'index') ? '' : '../' ?>js/user.js" defer></script>
 
 	<!-- CDN LINKS -->
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
@@ -71,13 +73,13 @@ $page = basename($_SERVER['PHP_SELF'], ".php");
 					</a>
 				</li>
 				<li class="sidebar-item">
-					<a href="" class="sidebar-link d-flex align-items-center">
+					<a href="<?= ($page == 'index') ? 'user/' : '' ?>cart.php" class="sidebar-link d-flex align-items-center">
 						<i class='bx bx-cart fs-4'></i>
 						<span class="fs-5">Cart</span>
 					</a>
 				</li>
 				<li class="sidebar-item">
-					<a href="" class="sidebar-link d-flex align-items-center">
+					<a href="<?= ($page == 'index') ? 'user/' : '' ?>order.php"" class=" sidebar-link d-flex align-items-center">
 						<i class='bx bxs-truck fs-4'></i>
 						<span class="fs-5">Orders</span>
 					</a>
@@ -85,14 +87,21 @@ $page = basename($_SERVER['PHP_SELF'], ".php");
 				<li class="sidebar-item mt-5">
 					<a href="" class="sidebar-link has-dropdown collapsed d-flex align-items-center" data-bs-toggle="collapse" data-bs-target="#user_collapse" aria-expanded="false" aria-controls="user_collapse">
 						<i class='bx bx-user-circle fs-4'></i>
-						<span class="fs-5"><?= $_SESSION['username'] ?></span>
+						<span class="fs-5"><?= $_SESSION['username'] ?? "Not Logged in" ?></span>
 					</a>
 					<ul id="user_collapse" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
 						<li class="sidebar-item">
-							<a href="<?= ($page == 'index') ? 'user/' : '' ?>featured.php" class="sidebar-link">Settings</a>
-						</li>
-						<li class="sidebar-item">
-							<a href="<?= ($page == 'index') ? 'user/' : '' ?>categories.php" class="sidebar-link">Logout</a>
+							<?php
+							if (isset($_SESSION['user_id'])) {
+							?>
+								<a href="<?= ($page == 'index') ? 'form_handlers/' : '../form_handlers/' ?>logout.php" class="sidebar-link">Logout</a>
+							<?php
+							} else {
+							?>
+								<a href="<?= ($page == 'index') ? '' : '../' ?>login.php" class="sidebar-link">Login</a>
+							<?php
+							}
+							?>
 						</li>
 					</ul>
 				</li>

@@ -232,6 +232,20 @@
   opacity: 0;
 }
 
+#pagination {
+  display: flex;
+  justify-content: center;
+  margin-top: auto;
+}
+
+#page_control > button {
+  border: none;
+  padding: 5px 10px;
+  margin: 0 5px;
+  cursor: pointer;
+  font-size: 20px;
+}
+
 @media screen and (max-width: 1200px) {
   .category__wrapper {
     display: flex;
@@ -244,13 +258,13 @@
   }
 }
 
-@media screen and (max-width: 923px){
+@media screen and (max-width: 923px) {
   .card .details {
     font-size: .67rem;
   }
 }
 
-@media screen and (max-width: 800px){
+@media screen and (max-width: 800px) {
   .card .details {
     font-size: .6rem;
   }
@@ -347,7 +361,7 @@
     /* Adjust margin for smaller screens */
     transition: all 1.0s ease;
   }
-  
+
   .home-section {
     width: 100%;
     padding: 1rem;

@@ -7,28 +7,38 @@ include "partials/sidebar.php";
 
 $userView = new UserView();
 
-$game_data = $userView->getProducts(0, 30);
+$filter = $_GET['category'] ?? NULL;
+
+if ($filter != NULL) {
+    $game_data = $userView->getProducts("game_category LIKE '%$filter%'");
+} else {
+    $game_data = $userView->getRandomProducts(NULL);
+}
+
 ?>
-<section class="home-section">
-    <div class="heading-wrapper">
-        <h1 class="pt-5 text-uppercase">All Games</h1>
+<section class="home-section container-fluid">
+    <div class="heading-wrapper p-5 pb-0 d-lg-flex align-items-center">
+        <h1 class="text-start text-uppercase col-lg-8 col-sm-10">All Games</h1>
+        <div class="search_form col-lg-3 col-sm-10">
+            <input type="search" name="" id="" class="form-control w-100" placeholder="Search for Games" onkeyup="searchGames(this.value)">
+        </div>
     </div>
 
-    <div id="games-container" class="mt-5">
+    <div id="games-container" class="d-flex flex-wrap gap-4 justify-content-center mt-5">
         <?php foreach ($game_data as $game) : ?>
-            <div class="card card1">
+            <div class="card rounded-5 card1" style="width: 18rem;">
                 <a href="view_game.php?product_id=<?= $game['id'] ?>">
                     <div class="poster">
                         <img src=<?= "{$game['product_thumbnail']}" ?> alt="Yes Poster Image">
-                        <div class="title-overlay">
-                            <h2><?= $game['product_name'] ?></h2>
+                        <div class="title-overlay w-100">
+                            <h3><?= $game['product_name'] ?></h3>
                             <div class="product__preview"><?= $game['product_description'] ?></div>
                         </div>
 
                     </div>
                     <div class="details">
-                        <h1><?= $game['product_name'] ?></h1>
-                        <div class="tags">
+                        <h5><?= $game['product_name'] ?></h5>
+                        <div class="tags d-flex flex-wrap g-2 gap-1">
                             <?php foreach (unserialize($game['game_category']) as $game_tag) : ?>
                                 <span class="bg-danger"><?= $game_tag ?></span>
                             <?php endforeach; ?>
@@ -38,17 +48,17 @@ $game_data = $userView->getProducts(0, 30);
             </div>
         <?php endforeach; ?>
     </div>
-    <div class="pagination" id="pagination">
+    <div class="pagination pb-5 d-flex justify-content-center gap-3 flex-wrap" id="page_control"></div>
 </section>
 
 
-
 <?php include "user/partials/footer.php"; ?>
+
 <script>
     const gamesContainer = document.getElementById('games-container');
-    const pagination = document.getElementById('pagination');
+    const pagination = document.getElementById('page_control');
     const cards = document.querySelectorAll('.card');
-    const cardsPerPage = 12;
+    const cardsPerPage = 20;
     let currentPage = 1;
 
     function showPage(page) {
@@ -69,7 +79,9 @@ $game_data = $userView->getProducts(0, 30);
         pagination.innerHTML = '';
 
         for (let i = 1; i <= totalPages; i++) {
-            const button = document.createElement('button');
+            let button = document.createElement('button');
+            button.classList.add('btn')
+            button.classList.add('btn-outline-light')
             button.innerText = i;
             if (i === currentPage) {
                 button.classList.add('active');
@@ -97,30 +109,4 @@ $game_data = $userView->getProducts(0, 30);
     showPage(currentPage);
     createPaginationButtons();
 
-
-
-
-    window.onload = function() {
-        const sidebar = document.querySelector(".sidebar");
-        const closeBtn = document.querySelector("#btn");
-        const searchBtn = document.querySelector(".bx-search")
-
-        closeBtn.addEventListener("click", function() {
-            sidebar.classList.toggle("open")
-            menuBtnChange()
-        })
-
-        searchBtn.addEventListener("click", function() {
-            sidebar.classList.toggle("open")
-            menuBtnChange()
-        })
-
-        function menuBtnChange() {
-            if (sidebar.classList.contains("open")) {
-                closeBtn.classList.replace("bx-menu", "bx-menu-alt-right")
-            } else {
-                closeBtn.classList.replace("bx-menu-alt-right", "bx-menu")
-            }
-        }
-    }
 </script>

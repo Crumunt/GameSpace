@@ -70,6 +70,7 @@ background-color: white;
   width: 500%;
   transition: transform 0.5s ease;
 }
+
 #games-container {
     display: flex;
     justify-content: center;
@@ -80,11 +81,13 @@ background-color: white;
 
 
 .card {
+  cursor: pointer;
   position: relative;
-  min-height: 450px;
-  width: 317px; /* Adjust the width as needed */
-  margin-bottom: 4%; /* Added space between cards */
-  margin-left: 3%;
+  width: 25%;
+  height: 500px !important;
+  /* Adjust the width as needed */
+  margin-bottom: 6%;
+  /* Added space between cards */
   background-color: #4b4b4b;
   border-radius: 20px;
   box-shadow: 0 35px 80px rgba(0, 0, 0, 0.25);

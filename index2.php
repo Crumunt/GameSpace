@@ -18,48 +18,62 @@ try {
 	echo $e;
 }
 
-$response = $client->get("https://api.rawg.io/api/games/10035?key={$apiKey}")->getBody();
-$response = json_decode($response);
+// $response = $client->get("https://api.rawg.io/api/games/10035?key={$apiKey}")->getBody();
+// $response = json_decode($response);
 
-// var_dump($response->genres);
+// var_dump($response->developers);
 
 // $genres = $response->genres;
 
-// foreach($genres as $genre) {
-// 	echo "{$genre->name} <br>";
+// foreach ($response->developers as $developer) {
+// 	echo "{$developer->name} <br>";
+// }
+
+// $sql = "SELECT * FROM tbl_products WHERE id = 10141";
+// $data = mysqli_query($conn, $sql);
+
+// $row = mysqli_fetch_assoc($data);
+// // unserialize($row['game_category']);
+// foreach(unserialize($row['game_category']) as $category) {
+// 	echo "$category <br>";
 // }
 
 // foreac
 
-for ($i = 0; $i < 20; $i++) {
-	$sql = "SELECT * FROM tbl_products WHERE game_category = '' LIMIT 20";
-	$data = mysqli_query($conn, $sql);
+// $count = 1;
+// for ($i = 0; $i < 200; $i++) {
 
-	while($row = mysqli_fetch_assoc($data)) {
-		$id = $row['product_id'];
-		$response = $client->get("https://api.rawg.io/api/games/{$id}?key={$apiKey}")->getBody();
-		$response = json_decode($response);
-
-		// $desc = str_replace("'", "\'", $response->description);
-		// $bg = $response->image_background;
-		// $sql = "UPDATE tbl_categories SET description = '$desc',background_image = '$bg'  WHERE id = $id";
+// 	$sql = "SELECT * FROM tbl_products LIMIT 1";
+// 	$data = mysqli_query($conn, $sql);
 
 
-		$sql = "UPDATE tbl_products SET game_category = ";
+// 	while ($row = mysqli_fetch_assoc($data)) {
+// 		$id = $row['product_name'];
+// 		// $response = $client->get("https://api.rawg.io/api/games/{$id}?key={$apiKey}")->getBody();
+// 		// $response = json_decode($response);
 
-		$array = [];
-		foreach($response->genres as $record) {
-			array_push($array, $record->name);
-		}
-		$sArray = serialize($array);
-		$sArray2 = str_replace("'", "\'", $sArray);
-		$sql .= "'$sArray2' WHERE product_id = $id";
+// 		// $desc = str_replace("'", "\'", $response->description);
+// 		// $bg = $response->image_background;
+// 		// $sql = "UPDATE tbl_categories SET description = '$desc',background_image = '$bg'  WHERE id = $id";
 
-		try {
-			mysqli_query($conn, $sql);
-		} catch (Exception $e) {
-			echo "ERROR: $e";
-		}
-		echo "{$row['product_name']} DONE <br>";
-	}
-}
+
+// 		$sql = "UPDATE tbl_products SET id = {$count} WHERE product_name = '{$id}'";
+
+// 		// $array = [];
+// 		// foreach ($response->developers as $record) {
+// 		// 	array_push($array, $record->name);
+// 		// }
+// 		// $sArray = serialize($array);
+// 		// $sArray2 = str_replace("'", "\'", $sArray);
+// 		// $sql .= "'$sArray2' WHERE id = $id";
+
+// 		try {
+// 			mysqli_query($conn, $sql);
+// 		} catch (Exception $e) {
+// 			echo "ERROR: $e";
+// 			exit();
+// 		}
+// 		echo "{$row['id']} DONE <br>";
+// 		$count++;
+// 	}
+// }

@@ -38,7 +38,7 @@
                                         <button type="submit" name="login" class="btn btn-outline-success w-50 btn-lg text-body">Login</button>
                                     </div>
 
-                                    <p class="text-center text-muted mt-5 mb-0">Don't an account? <a href="#!" class="fw-bold text-body"><u>Register here</u></a></p>
+                                    <p class="text-center text-muted mt-5 mb-0">Don't an account? <a href="signup.php" class="fw-bold text-body"><u>Register here</u></a></p>
 
                                 </form>
 

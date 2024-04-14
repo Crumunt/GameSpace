@@ -19,12 +19,12 @@ $banner__product = $userView->getRandomProducts(1);
                 <div class="card-body text-white discount__body">
                     <h5 class="card-title fw-bolder fs-2"><?= $banner__product[0]['product_name'] ?></h5>
                     <div class="d-flex flex-wrap gap-2 mb-2">
-                        <?php foreach(unserialize($banner__product[0]['game_category']) as $banner__category): ?>
+                        <?php foreach (unserialize($banner__product[0]['game_category']) as $banner__category) : ?>
                             <span class="bg-danger rounded-1 p-1"><?= $banner__category ?></span>
                         <?php endforeach; ?>
                     </div>
                     <div class="card-text discount__preview"><?= $banner__product[0]['product_description'] ?></div>
-                    <button class="btn btn-outline-info mt-2">Get Here</button>
+                    <a href="view_game.php?product_id=<?= $banner__product[0]['id'] ?>" class="btn btn-outline-info mt-2">Get Here</a>
                 </div>
             </div>
         </div>
@@ -33,49 +33,53 @@ $banner__product = $userView->getRandomProducts(1);
     <div class="row mt-5">
         <h1 class="text-white">Popular Titles</h1>
         <!-- FIRST ROW -->
-        <div class="row d-flex">
+        <div class="row d-flex g-3">
             <?php
             $popular__products_data = $userView->getRandomProducts(2);
             foreach ($popular__products_data as $popular__items) :
             ?>
-                <div class="col-lg-6 col-md-10">
+                <div class="col-lg-6 col-md-10 mx-auto">
                     <div class="card text-bg-dark overflow-hidden" style="max-height: 350px;">
                         <img src=<?= "{$popular__items['product_thumbnail']}" ?> class="card-img" alt="..." style="filter: brightness(.5);">
-                        <div class="card-img-overlay">
-                            <h3><?= $popular__items['product_name'] ?></h3>
-                            <div class="d-flex gap-2 flex-wrap">
-                                <?php foreach (unserialize($popular__items['game_category']) as $game_category) : ?>
-                                    <span class="bg-danger p-1 rounded-1"><?= $game_category ?></span>
-                                <?php endforeach; ?>
+                        <a href="view_game.php?product_id=<?= $popular__items['id'] ?>" class="text-decoration-none text-white">
+                            <div class="card-img-overlay">
+                                <h3><?= $popular__items['product_name'] ?></h3>
+                                <div class="d-flex gap-2 flex-wrap">
+                                    <?php foreach (unserialize($popular__items['game_category']) as $game_category) : ?>
+                                        <span class="bg-danger p-1 rounded-1"><?= $game_category ?></span>
+                                    <?php endforeach; ?>
+                                </div>
                             </div>
-                        </div>
+                        </a>
                     </div>
                 </div>
             <?php endforeach ?>
         </div>
         <!-- SECOND ROW -->
-        <div class="row d-flex my-5">
+        <div class="row d-flex my-5 mx-auto g-1">
             <?php
             $popular__products_data = $userView->getRandomProducts(3);
             foreach ($popular__products_data as $popular__items) :
             ?>
-                <div class="col-lg-4 col-md-5">
+                <div class="col-lg-4 col-md-5 mx-auto">
                     <div class="card text-bg-dark overflow-hidden" style="max-height: 230px;">
                         <img src=<?= "{$popular__items['product_thumbnail']}" ?> class="card-img" alt="..." style="filter: brightness(.5);">
-                        <div class="card-img-overlay">
-                            <h3><?= $popular__items['product_name'] ?></h3>
-                            <div class="d-flex gap-2 flex-wrap">
-                                <?php foreach (unserialize($popular__items['game_category']) as $game_category) : ?>
-                                    <span class="bg-danger p-1 rounded-1"><?= $game_category ?></span>
-                                <?php endforeach; ?>
+                        <a href="view_game.php?product_id=<?= $popular__items['id'] ?>" class="text-decoration-none text-white">
+                            <div class="card-img-overlay">
+                                <h3><?= $popular__items['product_name'] ?></h3>
+                                <div class="d-flex gap-2 flex-wrap">
+                                    <?php foreach (unserialize($popular__items['game_category']) as $game_category) : ?>
+                                        <span class="bg-danger p-1 rounded-1"><?= $game_category ?></span>
+                                    <?php endforeach; ?>
+                                </div>
                             </div>
-                        </div>
+                        </a>
                     </div>
                 </div>
             <?php endforeach ?>
         </div>
         <!-- LAST ROW -->
-        <div class="row d-flex mb-5">
+        <div class="row d-flex mb-5 mx-auto g-3">
             <?php
             $popular__products_data = $userView->getRandomProducts(4);
             foreach ($popular__products_data as $popular__items) :
@@ -83,14 +87,16 @@ $banner__product = $userView->getRandomProducts(1);
                 <div class="col-lg-3 col-md-4 col-sm-10">
                     <div class="card text-bg-dark overflow-hidden" style="max-height: 187px;">
                         <img src=<?= "{$popular__items['product_thumbnail']}" ?> class="card-img" alt="..." style="filter: brightness(.5);">
-                        <div class="card-img-overlay">
-                            <p class="fs-5 text-fluid"><?= $popular__items['product_name'] ?></->
-                            <div class="text-truncate d-flex gap-2 flex-wrap">
-                                <?php foreach (unserialize($popular__items['game_category']) as $game_category) : ?>
-                                    <span class="bg-danger p-1 rounded-1"><?= $game_category ?></span>
-                                <?php endforeach; ?>
+                        <a href="view_game.php?product_id=<?= $popular__items['id'] ?>" class="text-decoration-none text-white">
+                            <div class="card-img-overlay">
+                                <h3><?= $popular__items['product_name'] ?></h3>
+                                <div class="d-flex gap-2 flex-wrap">
+                                    <?php foreach (unserialize($popular__items['game_category']) as $game_category) : ?>
+                                        <span class="bg-danger p-1 rounded-1"><?= $game_category ?></span>
+                                    <?php endforeach; ?>
+                                </div>
                             </div>
-                        </div>
+                        </a>
                     </div>
                 </div>
             <?php endforeach ?>

@@ -41,16 +41,18 @@ $gameData = $userView->fetchGameInfo($id);
         </div>
       </div>
       <!-- FORM START -->
-      <form action="" class="justify-self-end">
+      <div class="form justify-self-end">
         <div class="form-group mb-3">
           <label for="" class="form-label text-white fw-bold text-uppercase">Quantity</label>
-          <input type="number" name="" value="1" min="1" id="" class="form-control w-25">
+          <input type="number" name="quantity" value="1" min="1" id="quantity" class="form-control w-25">
         </div>
         <div class="button-group mb-3">
-          <button class="btn btn-warning">Add to Cart</button>
-          <button class="btn btn-primary">Buy Now</button>
+          <button value=<?= "{$gameData[0]['id']}" ?> onclick="addToCart(this)" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#confirmModal">
+            Add to Cart
+          </button>
+          <button class="btn btn-primary"  value=<?= "{$gameData[0]['id']}" ?> onclick="redirectCheckout(this.value)">Buy Now</button>
         </div>
-      </form>
+      </div>
     </div>
   </div>
   <div class="row">
@@ -60,7 +62,6 @@ $gameData = $userView->fetchGameInfo($id);
 
   <div class="row pb-5">
     <h1 class="text-white text-uppercase fw-bolder my-5">Game Preview</h1>
-    <!-- <div class="card-group gap-2"> -->
     <div class="row">
       <?php foreach (unserialize($gameData[0]['snapshots']) as $snapshot) : ?>
         <div class="col-lg-4 col-md-6 col-sm-10 mb-5">
@@ -70,8 +71,13 @@ $gameData = $userView->fetchGameInfo($id);
         </div>
       <?php endforeach; ?>
     </div>
-    <!-- </div> -->
   </div>
 </div>
 
-<?php include "partials/footer.php"; ?>
+<!-- MODAL -->
+<?php 
+include "partials/modal.php";
+
+
+include "partials/footer.php"; 
+?>
