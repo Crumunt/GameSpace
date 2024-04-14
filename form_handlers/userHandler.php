@@ -109,12 +109,12 @@ function removeCartItem($userCtrl)
 function checkout($userCtrl)
 {
 
-    $user_id = $_POST['user_id'];
-    $recipient_name = $_POST['recipient_name'];
-    $product_id = $_POST['product_id'];
-    $quantity = $_POST['quantity'];
+    $user_id = filter_var($_POST['user_id'], FILTER_SANITIZE_NUMBER_INT);
+    $recipient_name = htmlspecialchars($_POST['recipient_name'], ENT_QUOTES);
+    $product_id = filter_var($_POST['product_id'], FILTER_SANITIZE_NUMBER_INT);
+    $quantity = filter_var($_POST['quantity'], FILTER_SANITIZE_NUMBER_INT);
     $order_total = $_POST['order_total'];
-    $order_address = $_POST['order_address'];
+    $order_address = htmlspecialchars($_POST['order_address'], ENT_QUOTES);
 
     $userCtrl->buyItem($user_id, $recipient_name, $product_id, $quantity, $order_total, $order_address);
 }

@@ -17,7 +17,7 @@ function addToCart(button) {
     xhr.onreadystatechange = function () {
 
         if (this.readyState == 4) {
-            if(this.responseText == "ERROR") {
+            if (this.responseText == "ERROR") {
                 window.location = '../login.php';
             }
             document.getElementById('modalStatus').textContent = this.responseText
@@ -107,15 +107,18 @@ function checkInput() {
         }
     })
 
-    if(counter != 0) {
+    if (counter != 0) {
         checkout_button.setAttribute('disabled', '');
-    }else {
+    } else {
         checkout_button.removeAttribute('disabled');
     }
 
     console.log(counter)
 
 }
+
+let games_wrapper = document.getElementById('games-container')
+games_wrapper.onload = searchGames('')
 
 function searchGames(keyword) {
 
@@ -128,58 +131,7 @@ function searchGames(keyword) {
     xhr.onreadystatechange = function () {
         if (this.readyState == 4 && this.status == 200) {
             document.getElementById('games-container').innerHTML = this.responseText
-
-            const gamesContainer = document.getElementById('games-container');
-            const pagination = document.getElementById('pagination');
-            const cards = document.querySelectorAll('.card');
-            const cardsPerPage = 12;
-            let currentPage = 1;
-
-            function showPage(page) {
-                const startIndex = (page - 1) * cardsPerPage;
-                const endIndex = startIndex + cardsPerPage;
-
-                cards.forEach((card, index) => {
-                    if (index >= startIndex && index < endIndex) {
-                        card.style.display = 'block';
-                    } else {
-                        card.style.display = 'none';
-                    }
-                });
-            }
-
-            function createPaginationButtons() {
-                const totalPages = Math.ceil(cards.length / cardsPerPage);
-                pagination.innerHTML = '';
-
-                for (let i = 1; i <= totalPages; i++) {
-                    const button = document.createElement('button');
-                    button.innerText = i;
-                    if (i === currentPage) {
-                        button.classList.add('active');
-                    }
-                    button.addEventListener('click', () => {
-                        currentPage = i;
-                        showPage(currentPage);
-                        updatePaginationButtons();
-                    });
-                    pagination.appendChild(button);
-                }
-            }
-
-            function updatePaginationButtons() {
-                const buttons = document.querySelectorAll('.pagination button');
-                buttons.forEach((button, index) => {
-                    if (index + 1 === currentPage) {
-                        button.classList.add('active');
-                    } else {
-                        button.classList.remove('active');
-                    }
-                });
-            }
-
-            showPage(currentPage);
-            createPaginationButtons();
+            page_setter();
         }
     }
 
@@ -187,6 +139,62 @@ function searchGames(keyword) {
 
     xhr.send(data);
 
+}
+
+function page_setter() {
+    const gamesContainer = document.getElementById('games-container');
+    const pagination = document.getElementById('page_control');
+    const cards = document.querySelectorAll('.card');
+    const cardsPerPage = 20;
+    let currentPage = 1;
+
+    function showPage(page) {
+        const startIndex = (page - 1) * cardsPerPage;
+        const endIndex = startIndex + cardsPerPage;
+
+        cards.forEach((card, index) => {
+            if (index >= startIndex && index < endIndex) {
+                card.style.display = 'block';
+            } else {
+                card.style.display = 'none';
+            }
+        });
+    }
+
+    function createPaginationButtons() {
+        const totalPages = Math.ceil(cards.length / cardsPerPage);
+        pagination.innerHTML = '';
+
+        for (let i = 1; i <= totalPages; i++) {
+            const button = document.createElement('button');
+            button.innerText = i;
+            button.classList.add('btn')
+            button.classList.add('btn-outline-light')
+            if (i === currentPage) {
+                button.classList.add('active');
+            }
+            button.addEventListener('click', () => {
+                currentPage = i;
+                showPage(currentPage);
+                updatePaginationButtons();
+            });
+            pagination.appendChild(button);
+        }
+    }
+
+    function updatePaginationButtons() {
+        const buttons = document.querySelectorAll('.pagination button');
+        buttons.forEach((button, index) => {
+            if (index + 1 === currentPage) {
+                button.classList.add('active');
+            } else {
+                button.classList.remove('active');
+            }
+        });
+    }
+
+    showPage(currentPage);
+    createPaginationButtons();
 }
 
 function redirectCheckout(product_id) {

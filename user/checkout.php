@@ -29,7 +29,7 @@ $data = $userView->fetchGameInfo($product_id);
             <ul class="list-group">
                 <li class="list-group-item d-flex justify-content-between">
                     <div>
-                        <h6 class="text-truncate fs-5 fw-bolder"><?= $data[0]['product_name'] ?></h6>
+                        <h6 class="fs-5 fw-bolder"><?= $data[0]['product_name'] ?></h6>
                         <span class="text-muted">Quantity: <span id="order_quantity"><?= $quantity ?></span></span>
                     </div>
                     <span class="text-muted">$ <?= $data[0]['price'] ?></span>

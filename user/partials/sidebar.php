@@ -17,6 +17,7 @@ $page = basename($_SERVER['PHP_SELF'], ".php");
 	if (!in_array($page, $included_pages)) {
 	?>
 		<link rel="stylesheet" href="../css/page3.css">
+		<!-- <script src="../js/pagination.js" defer></script> -->
 	<?php
 	}
 	?>

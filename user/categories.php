@@ -32,4 +32,5 @@ $category_data = $userView->fetchCategories();
         <?php endforeach ?>
     </div>
 </section>
-<?php include "user/partials/footer.php"; ?>
+
+<?php include "partials/footer.php"; ?>

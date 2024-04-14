@@ -19,9 +19,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 function registerUser($authCtrl)
 {
 
-    $full_name = $_POST['full_name'];
-    $username = $_POST['username'];
-    $email = $_POST['email'];
+    $full_name = htmlspecialchars($_POST['full_name'], ENT_QUOTES);
+    $username = preg_replace("/[^a-zA-Z0-9_-]/", "", $_POST['username']);
+    $email = filter_var($_POST['email'], FILTER_SANITIZE_EMAIL);
     $password = password_hash($_POST['password'], PASSWORD_BCRYPT);
 
     $action = $authCtrl->addUser($full_name, $username, $email, $password);
@@ -48,7 +48,7 @@ function checkEmptyInputs()
 function loginUser($authCtrl)
 {
 
-    $email = $_POST['email'];
+    $email = filter_var($_POST['email'], FILTER_SANITIZE_EMAIL);
     $password = $_POST['password'];
 
     $action = $authCtrl->getUser($email, $password);
@@ -58,5 +58,4 @@ function loginUser($authCtrl)
 
     header("location: ../index.php?error=none");
     exit();
-
 }
