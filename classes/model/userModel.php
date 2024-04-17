@@ -2,18 +2,16 @@
 class User extends Dbh
 {
 
-	protected function getGames($where = NULL, $limit = NULL)
+	protected function getGames($where = NULL)
 	{
 
-		$sql = "SELECT * FROM tbl_products";
+		$sql = "SELECT * FROM product_view";
 
 		if($where != NULL) {
 			$sql .= " WHERE $where";
 		}
 
-		if($limit != NULL) {
-			$sql .= " LIMIT $limit";
-		}
+		$sql .= " GROUP BY id";
 
 		$stmt = $this->connect()->prepare($sql);
 
@@ -24,6 +22,34 @@ class User extends Dbh
 
 		$results = $stmt->fetchAll(PDO::FETCH_ASSOC);
 		return $results;
+	}
+
+	protected function getGameCategories($product_id) {
+
+		$sql = "SELECT category_name FROM product_view WHERE id = ?";
+		$stmt = $this->connect()->prepare($sql);
+
+		if(!$stmt->execute([$product_id])) {
+			header("location: ../index.php?error=SomethingWentWrong");
+			exit();
+		}
+
+		$results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+		return $results;
+	}
+
+	protected function getGamePlatforms($product_id) {
+		$sql = "SELECT platform_name FROM game_platform_view WHERE id = ?";
+		$stmt = $this->connect()->prepare($sql);
+
+		if(!$stmt->execute([$product_id])) {
+			header("location: ../index.php?error=SomethingWentWrong");
+			exit();
+		}
+
+		$results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+		return $results;
+
 	}
 
 	protected function getGame($id)

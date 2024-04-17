@@ -20,7 +20,10 @@ $gameData = $userView->fetchGameInfo($id);
 <div class="container-sm">
   <div class="row mt-5 border-bottom pb-3 d-flex justify-content-center">
     <div class="col-lg-5 col-md-10 mx-auto">
-      <img src=<?= "{$gameData[0]['product_thumbnail']}" ?> alt="Product Image" class="img-fluid w-100 rounded-4">
+      <?php
+      $src = (str_contains($gameData[0]['product_thumbnail'], 'https') == true) ? $gameData[0]['product_thumbnail'] : "../assets/thumbnails/" . $gameData[0]['product_thumbnail'];
+      ?>
+      <img src="<?= $src ?>" alt="Product Image" class="img-fluid w-100 rounded-4">
     </div>
     <div class="col-lg-5 col-md-10 mx-auto d-flex flex-column justify-content-between">
       <div class="overview">
@@ -28,15 +31,20 @@ $gameData = $userView->fetchGameInfo($id);
         <!-- TAGS START -->
         <p class="text-white text-uppercase fw-bolder">Tags</p>
         <div class="tags d-flex gap-2 align-items-center flex-wrap">
-          <?php foreach (unserialize($gameData[0]['game_category']) as $tag) : ?>
-            <span class="btn btn-warning p-1 rounded-1"><?= $tag ?></span>
+          <?php
+          $cateogry_data = $userView->fetchGameCategories($gameData[0]['id']);
+          foreach ($cateogry_data as $game_category) :
+          ?>
+            <span class="btn btn-warning p-1 rounded-1"><?= $game_category['category_name'] ?></span>
           <?php endforeach; ?>
         </div>
         <!-- PLATFORMS START -->
         <p class="text-white text-uppercase fw-bolder mt-3">platforms</p>
         <div class="platforms d-flex flex-wrap gap-2 mb-2">
-          <?php foreach (unserialize($gameData[0]['product_platforms']) as $platform) : ?>
-            <span class="btn btn-danger p-1 rounded-1"><?= $platform ?></span>
+          <?php
+          $platform_data = $userView->fetchGamePlatforms($gameData[0]['id']);
+          foreach ($platform_data as $platform) : ?>
+            <span class="btn btn-danger p-1 rounded-1"><?= $platform['platform_name'] ?></span>
           <?php endforeach; ?>
         </div>
       </div>
@@ -50,7 +58,7 @@ $gameData = $userView->fetchGameInfo($id);
           <button value=<?= "{$gameData[0]['id']}" ?> onclick="addToCart(this)" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#confirmModal">
             Add to Cart
           </button>
-          <button class="btn btn-primary"  value=<?= "{$gameData[0]['id']}" ?> onclick="redirectCheckout(this.value)">Buy Now</button>
+          <button class="btn btn-primary" value=<?= "{$gameData[0]['id']}" ?> onclick="redirectCheckout(this.value)">Buy Now</button>
         </div>
       </div>
     </div>
@@ -64,9 +72,12 @@ $gameData = $userView->fetchGameInfo($id);
     <h1 class="text-white text-uppercase fw-bolder my-5">Game Preview</h1>
     <div class="row">
       <?php foreach (unserialize($gameData[0]['snapshots']) as $snapshot) : ?>
+        <?php
+        $src = (str_contains($snapshot, 'https') == true) ? $snapshot : "../assets/" . $snapshot;
+        ?>
         <div class="col-lg-4 col-md-6 col-sm-10 mb-5">
           <div class="card bg-dark border text-white product__snapshot w-75 h-100 mx-auto">
-            <img src="<?= $snapshot ?>" class="card-img w-100 h-100" alt="...">
+            <img src="<?= $src ?>" class="card-img w-100 h-100" alt="...">
           </div>
         </div>
       <?php endforeach; ?>
@@ -75,9 +86,9 @@ $gameData = $userView->fetchGameInfo($id);
 </div>
 
 <!-- MODAL -->
-<?php 
+<?php
 include "partials/modal.php";
 
 
-include "partials/footer.php"; 
+include "partials/footer.php";
 ?>

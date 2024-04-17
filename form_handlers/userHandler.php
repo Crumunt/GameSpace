@@ -169,10 +169,13 @@ function searchGames($userView)
     $data = $userView->getProducts("product_name LIKE '%$keyword%'");
 
     foreach ($data as $game) : ?>
+        <?php
+        $src = (str_contains($game['product_thumbnail'], 'https') == true) ? $game['product_thumbnail'] : "../assets/thumbnails/" . $game['product_thumbnail'];
+        ?>
         <div class="card rounded-5 card1" style="width: 18rem;">
             <a href="view_game.php?product_id=<?= $game['id'] ?>">
                 <div class="poster">
-                    <img src=<?= "{$game['product_thumbnail']}" ?> alt="Yes Poster Image">
+                    <img src="<?= $src ?>" alt="Yes Poster Image">
                     <div class="title-overlay w-100">
                         <h3><?= $game['product_name'] ?></h3>
                         <div class="product__preview"><?= $game['product_description'] ?></div>
@@ -182,8 +185,11 @@ function searchGames($userView)
                 <div class="details">
                     <h5><?= $game['product_name'] ?></h5>
                     <div class="tags d-flex flex-wrap g-4 gap-1">
-                        <?php foreach (unserialize($game['game_category']) as $game_tag) : ?>
-                            <span class="bg-danger"><?= $game_tag ?></span>
+                        <?php
+                        $cateogry_data = $userView->fetchGameCategories($game['id']);
+                        foreach ($cateogry_data as $game_category) :
+                        ?>
+                            <span class="bg-danger p-1 rounded-1"><?= $game_category['category_name'] ?></span>
                         <?php endforeach; ?>
                     </div>
                 </div>

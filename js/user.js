@@ -118,7 +118,7 @@ function checkInput() {
 }
 
 let games_wrapper = document.getElementById('games-container')
-games_wrapper.onload = searchGames('')
+games_wrapper.onload = page_setter() 
 
 function searchGames(keyword) {
 

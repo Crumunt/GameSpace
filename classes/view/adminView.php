@@ -9,6 +9,11 @@ class AdminView extends Admin
         return $data;
     }
 
+    public function fetchProductCount() {
+        $data = $this->getProductCount();
+        return $data;
+    }
+
     public function searchProduct($keyword) {
         try {
             $data = $this->searchGames("%$keyword%");
@@ -25,6 +30,26 @@ class AdminView extends Admin
 
     public function fetchPlatforms() {
         $data = $this->getPlatforms();
+        return $data;
+    }
+
+    public function fetchOrders() {
+        $data = $this->getOrders();
+        return $data;
+    }
+
+    public function fetchPendingOrders() {
+        $data = $this->getOrderCount();
+        return $data;
+    }
+
+    public function fetchCompletedOrders() {
+        $data = $this->getCompletedOrderCount();
+        return $data;
+    }
+
+    public function fetchUserCount() {
+        $data = $this->getUserCount();
         return $data;
     }
 }

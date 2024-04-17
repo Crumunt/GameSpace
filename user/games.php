@@ -10,9 +10,9 @@ $userView = new UserView();
 $filter = $_GET['category'] ?? NULL;
 
 if ($filter != NULL) {
-    $game_data = $userView->getProducts("game_category LIKE '%$filter%'");
+    $data = $userView->getProducts("category_name LIKE '%$filter%'");
 } else {
-    $game_data = $userView->getRandomProducts(NULL);
+    $data = $userView->getProducts(NULL);
 }
 
 ?>
@@ -24,7 +24,32 @@ if ($filter != NULL) {
         </div>
     </div>
 
-    <div id="games-container" class="d-flex flex-wrap gap-4 justify-content-center mt-5" onload="seachForm('')">
+    <div id="games-container" class="d-flex flex-wrap gap-4 justify-content-evenly mt-5">
+        <?php foreach ($data as $game) : ?>
+            <div class="card rounded-5 card1" style="width: 18rem; display: block;">
+                <a href="view_game.php?product_id=<?= $game['id'] ?>">
+                    <div class="poster">
+                        <img src=<?= "{$game['product_thumbnail']}" ?> alt="Yes Poster Image">
+                        <div class="title-overlay w-100">
+                            <h3><?= $game['product_name'] ?></h3>
+                            <div class="product__preview"><?= $game['product_description'] ?></div>
+                        </div>
+
+                    </div>
+                    <div class="details">
+                        <h5><?= $game['product_name'] ?></h5>
+                        <div class="tags d-flex flex-wrap g-4 gap-1">
+                            <?php
+                            $cateogry_data = $userView->fetchGameCategories($game['id']);
+                            foreach ($cateogry_data as $game_category) :
+                            ?>
+                                <span class="bg-danger p-1 rounded-1"><?= $game_category['category_name'] ?></span>
+                            <?php endforeach; ?>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        <?php endforeach; ?>
     </div>
     <div class="pagination pb-5 d-flex justify-content-center gap-3 flex-wrap" id="page_control"></div>
 </section>

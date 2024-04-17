@@ -45,8 +45,11 @@ $banner__product = $userView->getRandomProducts(1);
                             <div class="card-img-overlay">
                                 <h3><?= $popular__items['product_name'] ?></h3>
                                 <div class="d-flex gap-2 flex-wrap">
-                                    <?php foreach (unserialize($popular__items['game_category']) as $game_category) : ?>
-                                        <span class="bg-danger p-1 rounded-1"><?= $game_category ?></span>
+                                    <?php
+                                    $cateogry_data = $userView->fetchGameCategories($popular__items['id']);
+                                    foreach ($cateogry_data as $game_category) :
+                                    ?>
+                                        <span class="bg-danger p-1 rounded-1"><?= $game_category['category_name'] ?></span>
                                     <?php endforeach; ?>
                                 </div>
                             </div>
@@ -68,8 +71,11 @@ $banner__product = $userView->getRandomProducts(1);
                             <div class="card-img-overlay">
                                 <h3><?= $popular__items['product_name'] ?></h3>
                                 <div class="d-flex gap-2 flex-wrap">
-                                    <?php foreach (unserialize($popular__items['game_category']) as $game_category) : ?>
-                                        <span class="bg-danger p-1 rounded-1"><?= $game_category ?></span>
+                                    <?php
+                                    $cateogry_data = $userView->fetchGameCategories($popular__items['id']);
+                                    foreach ($cateogry_data as $game_category) :
+                                    ?>
+                                        <span class="bg-danger p-1 rounded-1"><?= $game_category['category_name'] ?></span>
                                     <?php endforeach; ?>
                                 </div>
                             </div>
@@ -91,8 +97,11 @@ $banner__product = $userView->getRandomProducts(1);
                             <div class="card-img-overlay">
                                 <h3><?= $popular__items['product_name'] ?></h3>
                                 <div class="d-flex gap-2 flex-wrap">
-                                    <?php foreach (unserialize($popular__items['game_category']) as $game_category) : ?>
-                                        <span class="bg-danger p-1 rounded-1"><?= $game_category ?></span>
+                                    <?php
+                                    $cateogry_data = $userView->fetchGameCategories($popular__items['id']);
+                                    foreach ($cateogry_data as $game_category) :
+                                    ?>
+                                        <span class="bg-danger p-1 rounded-1"><?= $game_category['category_name'] ?></span>
                                     <?php endforeach; ?>
                                 </div>
                             </div>

@@ -1,9 +1,41 @@
-.category-label {
+.category-label,
+.platform-label {
     cursor: pointer;
     background-color: transparent;
 }
 
-.category-label:has(input[type='checkbox']:checked) {
+.category-label:has(input[type='checkbox']:checked),
+.platform-label:has(input[type='checkbox']:checked) {
     background-color: red;
     color: white;
+}
+
+.card > img {
+    height: 150px !important;
+    /* height: 150px;
+    max-height: 150px; */
+}
+
+#thumbnail_label,
+#snapshot_label {
+    max-height: 38px !important;
+}
+
+#thumbnail_img {
+    object-fit: cover;
+    width: 500px !important;
+    height: 360px !important;
+    max-height: 360px !important;
+    border: 1px solid black;
+    border-radius: 1rem;
+}
+
+#snapshot_container > img {
+    width: 200px !important;
+    max-width: 200px !important;
+    height: 100px !important;
+    max-height: 100px !important;
+    border: 1px solid black;
+    border-radius: 1rem;
+    object-fit: cover;
 }

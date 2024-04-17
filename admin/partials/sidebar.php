@@ -13,7 +13,7 @@ $page = basename($_SERVER['PHP_SELF'], ".php");
     <link rel="stylesheet" href="../css/admin.css">
     <link rel="stylesheet" href="../css/sidebar-footer.css">
     <script src="../js/sidebar.js" defer></script>
-    <script src="../js/pagination.js" defer></script>
+    <!-- <script src="../js/pagination.js" defer></script> -->
     <script src="../js/admin.js" defer></script>
     <!-- CDN LINKS -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>

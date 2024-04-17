@@ -29,8 +29,35 @@ try {
 // 	echo "{$developer->name} <br>";
 // }
 
-// $sql = "SELECT * FROM tbl_products WHERE id = 10141";
-// $data = mysqli_query($conn, $sql);
+$sql = "SELECT * FROM tbl_products";
+$data = mysqli_query($conn, $sql);
+
+while ($row = mysqli_fetch_assoc($data)) {
+
+	// echo $row['product_name'];
+
+	$product_id = $row['id'];
+
+	echo "<h1>{$row['product_name']}</h1>";
+	echo "$product_id <br>";
+	foreach (unserialize($row['product_platforms']) as $category) {
+		$cSQL = "SELECT id FROM tbl_platforms WHERE platform_name = '{$category}'";
+		$cID = mysqli_query($conn, $cSQL);
+		$id = mysqli_fetch_assoc($cID);
+		$caID = $id['id'];
+		echo $caID . "<br>";
+		$sSql = "INSERT INTO tbl_product_platforms (`product_id`, `platform_id`) VALUES ($product_id, $caID)";
+
+		try {
+			mysqli_query($conn, $sSql);
+			// $stmt = mysqli_prepare($conn, "INSERT INTO tbl_product_platforms (product_id, platform_id) VALUES (?, ?)");
+			// mysqli_stmt_bind_param($stmt, "ii", $product_id, $caID);
+			// mysqli_stmt_execute($stmt);
+		} catch (Exception $e) {
+			echo "ERROR: $e";
+		}
+	}
+}
 
 // $row = mysqli_fetch_assoc($data);
 // // unserialize($row['game_category']);
