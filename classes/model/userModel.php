@@ -39,7 +39,7 @@ class User extends Dbh
 	}
 
 	protected function getGamePlatforms($product_id) {
-		$sql = "SELECT platform_name FROM game_platform_view WHERE id = ?";
+		$sql = "SELECT platform_name FROM game_platform_view WHERE product_id = ?";
 		$stmt = $this->connect()->prepare($sql);
 
 		if(!$stmt->execute([$product_id])) {
@@ -92,19 +92,6 @@ class User extends Dbh
 	protected function getCategories($page = 0, $limit = 10)
 	{
 		$sql = "SELECT * FROM tbl_categories LIMIT $page, $limit";
-		$stmt = $this->connect()->prepare($sql);
-
-		if (!$stmt->execute()) {
-			// HEAD TO LOCATION
-		}
-
-		$results = $stmt->fetchAll(PDO::FETCH_ASSOC);
-		return $results;
-	}
-
-	protected function getPlatforms($page = 0)
-	{
-		$sql = "SELECT * FROM tbl_platforms LIMIT $page, 10";
 		$stmt = $this->connect()->prepare($sql);
 
 		if (!$stmt->execute()) {

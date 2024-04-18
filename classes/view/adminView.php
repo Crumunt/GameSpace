@@ -9,6 +9,11 @@ class AdminView extends Admin
         return $data;
     }
 
+    public function fetchProductInfo($product_id) {
+        $data = $this->getProductInfo($product_id);
+        return $data;
+    }
+
     public function fetchProductCount() {
         $data = $this->getProductCount();
         return $data;
@@ -33,8 +38,8 @@ class AdminView extends Admin
         return $data;
     }
 
-    public function fetchOrders() {
-        $data = $this->getOrders();
+    public function fetchOrders($limit = NULL) {
+        $data = $this->getOrders($limit);
         return $data;
     }
 

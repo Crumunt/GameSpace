@@ -35,8 +35,8 @@ $data = $adminView->showProducts();
                     <div class="card-body">
                         <h5 class="card-title text-truncate"><?= $game['product_name'] ?></h5>
                         <p class="card-text">$<?= $game['price'] ?></p>
-                        <button class="btn btn-warning">Edit</button>
-                        <button class="btn btn-danger">Delete</button>
+                        <button data-product-id="<?= $game['id'] ?>" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#editor_modal" onclick="loadGameInfo(this)">Edit</button>
+                        <button data-id="products_<?= $game['id'] ?>" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#archive_modal" onclick="confirmDelete(this)">Delete</button>
                     </div>
                 </div>
             </div>
@@ -46,17 +46,17 @@ $data = $adminView->showProducts();
 <div class="pagination py-5 d-flex justify-content-center gap-3 flex-wrap" id="page_control"></div>
 
 <!-- Modal -->
-<div class="modal fade " id="editor_modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+<div class="modal fade " id="editor_modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modal_status" aria-hidden="true">
     <div class="modal-dialog modal-xl modal-dialog-scrollable">
         <div class="modal-content bg-secondary-subtle">
             <div class="modal-header">
-                <h1 class="modal-title fs-5" id="staticBackdropLabel">Add Product</h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <h1 class="modal-title fs-5" id="modal_status">Add Product</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" onclick="resetForm()"></button>
             </div>
             <div class="modal-body">
-                <div class="form">
+                <form class="form">
                     <div class="form-group mb-3">
-                        <label for="" class="form-label">Product Name</label>
+                        <label for="" class="form-label">Product Name <span class="text-muted">(Required*)</span></label>
                         <input type="text" class="form-control" id="product_name">
                     </div>
                     <div class="form-group mb-3">
@@ -64,7 +64,7 @@ $data = $adminView->showProducts();
                         <textarea name="" id="product_description" cols="30" rows="10" class="form-control" style="max-height: 255px;"></textarea>
                     </div>
                     <div class="form-group mb-3">
-                        <label for="product_price" class="form-label">Product Price $</label>
+                        <label for="product_price" class="form-label">Product Price $ <span class="text-muted">(Required*)</span></label>
                         <input type="number" value="1" name="product_price" min="1" max="99999" id="product_price" class="form-control">
                     </div>
                     <div class="form-group mb-3">
@@ -72,7 +72,7 @@ $data = $adminView->showProducts();
                             <div class="accordion-item">
                                 <h2 class="accordion-header">
                                     <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
-                                        Category
+                                        Category <span class="text-muted">(Required*)</span>
                                     </button>
                                 </h2>
                                 <div id="flush-collapseOne" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
@@ -92,7 +92,7 @@ $data = $adminView->showProducts();
                             <div class="accordion-item">
                                 <h2 class="accordion-header">
                                     <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseTwo" aria-expanded="false" aria-controls="flush-collapseTwo">
-                                        Platforms
+                                        Platforms <span class="text-muted">(Required*)</span>
                                     </button>
                                 </h2>
                                 <div id="flush-collapseTwo" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
@@ -111,22 +111,22 @@ $data = $adminView->showProducts();
                             </div>
                         </div>
                     </div>
-                </div>
+                </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" onclick="resetForm()">Close</button>
                 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editor_images_modal">Next</button>
             </div>
         </div>
     </div>
 </div>
 
-<div class="modal fade " id="editor_images_modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+<div class="modal fade " id="editor_images_modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modal_status_extend" aria-hidden="true">
     <div class="modal-dialog modal-xl modal-dialog-scrollable">
         <div class="modal-content bg-secondary-subtle">
             <div class="modal-header">
-                <h1 class="modal-title fs-5" id="staticBackdropLabel">Add Product</h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <h1 class="modal-title fs-5" id="modal_status_extend">Add Product</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" onclick="resetForm()"></button>
             </div>
             <div class="modal-body">
                 <div class="row">
@@ -151,8 +151,10 @@ $data = $adminView->showProducts();
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#editor_modal">Back</button>
-                <button type="button" class="btn btn-primary" onclick="addProduct()" data-bs-dismiss="modal">Save</button>
+                <button type="button" id="save_button" class="btn btn-primary" onclick="addProduct()" data-bs-dismiss="modal">Save</button>
             </div>
         </div>
     </div>
 </div>
+
+<?php include "partials/archive_modal.php"; ?>

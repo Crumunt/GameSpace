@@ -23,8 +23,7 @@ class AdminCtrl extends Admin
     {
 
         if (empty($files ?? NULL)) {
-            header("location: ../index.php?error=SomethignWentWrong");
-            exit();
+            return;
         }
 
         $product_image = [];
@@ -49,7 +48,7 @@ class AdminCtrl extends Admin
             $file_name = ($i == 0) ? 'product_thumbnail_' : 'product_snapshot_';
             $file_name .= rand(0, 999999) . "." . $file_extension;
 
-            ($i == 0) ? $thumbnail = $file_name: $snapshots[] = $file_name;
+            ($i == 0) ? $thumbnail = $file_name : $snapshots[] = $file_name;
 
             $file_tmp = $product_image_tmp[$i];
 
@@ -67,7 +66,38 @@ class AdminCtrl extends Admin
         return [$thumbnail, $snapshots];
     }
 
-    public function clear_unused_resources() {
+    public function clear_unused_resources()
+    {
         $this->clear_resources();
+    }
+
+    public function updateGame($data)
+    {
+        $product_id = $data['product_id'];
+        $product_name = $data['product_name'];
+        $product_desc = $data['product_description'];
+        $product_category = $data['category'];
+        $product_platform = $data['platform'];
+        $price = $data['product_price'];
+
+        $thumbnail = NULL;
+        $serialized_snapshots = NULL;
+
+        if (!empty($data['image'] ?? NULL)) {
+            $files = $this->upload_images($data['image']);
+            $thumbnail = $files[0];
+            $serialized_snapshots = serialize($files[1]);
+        }
+
+
+        try {
+            $this->updateProduct($product_name, $product_desc, $thumbnail, $serialized_snapshots, $price, $product_category, $product_platform, $product_id);
+        } catch (Exception $e) {
+            echo "ERROR: $e";
+        }
+    }
+
+    public function archiveGame($product_id) {
+        $this->archiveProduct($product_id);
     }
 }

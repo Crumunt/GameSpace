@@ -1,56 +1,58 @@
 @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
 
 :root {
-	--color-default: #31363F;
-	--color-second: #222831;
-	--color-white: #fff;
-	--color-body: #e4e9f7;
-	--color-light: #e0e0e0;
+  --color-default: #31363F;
+  --color-second: #222831;
+  --color-white: #fff;
+  --color-body: #e4e9f7;
+  --color-light: #e0e0e0;
 }
 
 
 * {
-    font-family: 'PT Sans', sans-serif;
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+  font-family: 'PT Sans', sans-serif;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 body {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    background-color: var(--color-second)
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: var(--color-second)
 }
 
 
 h1 {
   color: transparent;
   text-align: center;
-  margin: 0; /* Remove margin from the <h1> itself */
-  font-size: 36px; /* Adjust the font size as needed */
-background-color: white;
+  margin: 0;
+  /* Remove margin from the <h1> itself */
+  font-size: 36px;
+  /* Adjust the font size as needed */
+  background-color: white;
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
   animation: shine 5s linear infinite;
 }
 
-.home-section{
+.home-section {
   position: relative;
   background-color: var(--color-second);
   min-height: 100vh;
-  top:0;
-  left:7px;
+  top: 0;
+  left: 7px;
   width: calc(100% - 78px);
   transition: all .5s ease;
   z-index: 2;
 }
 
-.home-section .text{
+.home-section .text {
   display: inline-block;
-  color:var(--color-default);
+  color: var(--color-default);
   font-size: 25px;
   font-weight: 500;
   margin: 18px;
@@ -60,11 +62,13 @@ background-color: white;
 .wrapper-container {
   overflow: hidden;
   position: relative;
-  width: 100px; /* Set width according to your images */
+  width: 100px;
+  /* Set width according to your images */
   margin: 0 auto;
   margin-right: 10px;
   margin-top: 10px;
 }
+
 .wrapper-slider {
   display: flex;
   width: 500%;
@@ -72,11 +76,11 @@ background-color: white;
 }
 
 #games-container {
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-    gap: 1rem;
-    margin-left: auto;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-left: auto;
 }
 
 
@@ -97,136 +101,135 @@ background-color: white;
 .card .poster {
   position: relative;
   overflow: hidden;
-  width: 100%; /* Ensure the poster fills the card */
-  height: 100%; /* Ensure the poster fills the card */
+  width: 100%;
+  /* Ensure the poster fills the card */
+  height: 100%;
+  /* Ensure the poster fills the card */
 }
 
 .card .poster::before {
-    content: '';
-    position: absolute;
-    bottom: -180px;
-    width: 100%;
-    height: 100%;
-    transition: 0.5s;
-    background: linear-gradient(0deg, #ff2929 35%, transparent);
-    z-index: 1;
+  content: '';
+  position: absolute;
+  bottom: -180px;
+  width: 100%;
+  height: 100%;
+  transition: 0.5s;
+  background: linear-gradient(0deg, #ff2929 35%, transparent);
+  z-index: 1;
 }
-.card1 .poster::before{
+
+.card1 .poster::before {
   background: linear-gradient(0deg, #31363F 15%, transparent);
 }
-.card2 .poster::before{
+
+.card2 .poster::before {
   background: linear-gradient(0deg, #31363F 15%, transparent);
 }
-.card3 .poster::before{
+
+.card3 .poster::before {
   background: linear-gradient(0deg, #31363F 15%, transparent);
 }
-.card4 .poster::before{
+
+.card4 .poster::before {
   background: linear-gradient(0deg, #009191 15%, transparent);
 }
-.card5 .poster::before{
+
+.card5 .poster::before {
   background: linear-gradient(0deg, #195800 15%, transparent);
 }
-.card6 .poster::before{
+
+.card6 .poster::before {
   background: linear-gradient(0deg, #e60032 15%, transparent);
 }
-.card7 .poster::before{
+
+.card7 .poster::before {
   background: linear-gradient(0deg, #9c6f0f 15%, transparent);
 }
-.card8 .poster::before{
+
+.card8 .poster::before {
   background: linear-gradient(0deg, #b8b8b8 15%, transparent);
 }
-.card8 .poster::before{
+
+.card8 .poster::before {
   background: linear-gradient(0deg, #3542ff 15%, transparent);
-}
-.card:hover .poster::before {
-    bottom: 0;
 }
 
 .card .poster img {
   width: 100%;
-  height: 100%; /* Ensure the image fills its container */
-  object-fit: cover; /* Maintain aspect ratio and cover the entire container */
-  transition: transform 0.5s, filter 0.5s; /* Include transition properties */
-}
-
-.card:hover .poster img {
-    transform: translateY(-50px);
-    filter: blur(5px);
+  height: 100%;
+  /* Ensure the image fills its container */
+  object-fit: cover;
+  /* Maintain aspect ratio and cover the entire container */
+  transition: transform 0.5s, filter 0.5s;
+  /* Include transition properties */
 }
 
 .card .details {
-    position: absolute;
-    bottom: -600%;/* Change this value to ensure the details are fully visible */
-    left: 0;
-    width: 100%;
-    z-index: 2;
-    color: #fff;
-    transition: bottom 0.5s ease;
-    padding: 20px;
-    box-sizing: border-box;
-}
-
-.card:hover .details {
-    bottom: 30px;
+  position: absolute;
+  bottom: -600%;
+  /* Change this value to ensure the details are fully visible */
+  left: 0;
+  width: 100%;
+  z-index: 2;
+  color: #fff;
+  transition: bottom 0.5s ease;
+  padding: 20px;
+  box-sizing: border-box;
 }
 
 .card .details h1 {
-    margin-bottom: 10px;
-    font-size: 30px;
-    text-align: left;
+  margin-bottom: 10px;
+  font-size: 30px;
+  text-align: left;
 }
 
 .card .details p {
-    font-size: 18px;
-    margin-top: 10px;
+  font-size: 18px;
+  margin-top: 10px;
 }
 
 .card .tags {
-    /* margin-top: 10px; */
-    display: flex;
-    gap: .8rem;
-    flex-wrap: wrap;
+  /* margin-top: 10px; */
+  display: flex;
+  gap: .8rem;
+  flex-wrap: wrap;
 }
 
 .card .tags span {
-    background-color: #ff5252;
-    padding: 2px 10px;
-    border-radius: 5px;
-    /* margin-right: 5px; */
+  background-color: #ff5252;
+  padding: 2px 10px;
+  border-radius: 5px;
+  /* margin-right: 5px; */
 }
 
 .poster {
-    position: relative;
+  position: relative;
 }
 
 .title-overlay {
-    position: absolute;
-    top: 70%;
-    left: 50%;
-    width: 90%;
-    transform: translate(-50%, -30%);
-    margin-bottom: 39px;
-    color: white;
-    padding: 50px 0;
-    border-radius: 5px;
-    z-index: 10;
-    transition: opacity 0.5s ease;
-    text-align: left;
-    
+  position: absolute;
+  top: 70%;
+  left: 50%;
+  width: 90%;
+  transform: translate(-50%, -30%);
+  margin-bottom: 39px;
+  color: white;
+  padding: 50px 0;
+  border-radius: 5px;
+  z-index: 10;
+  transition: opacity 0.5s ease;
+  text-align: left;
+
 }
 
 .title-overlay h2 {
-    margin: 0;
-    margin-bottom: 10px;
-    font-size: 25px;
+  margin: 0;
+  margin-bottom: 10px;
+  font-size: 25px;
 }
 
 .title-overlay p {
-font-size: 18px;
-}
-
-.card:hover .title-overlay {
-    opacity: 0;
+  font-size: 18px;
 }
 
 .icon-container {
@@ -245,9 +248,10 @@ font-size: 18px;
   top: 0;
   left: 0;
   visibility: active;
-  transform: translate(40%, 30%); /* Center the icon within the container */
+  transform: translate(40%, 30%);
+  /* Center the icon within the container */
 }
- 
+
 
 .pagination {
   display: flex;
@@ -265,18 +269,40 @@ font-size: 18px;
   font-size: 20px;
 }
 
+@media (hover: hover) {
+  .card:hover .poster::before {
+    bottom: 0;
+  }
+
+  .card:hover .poster img {
+    transform: translateY(-50px);
+    filter: blur(5px);
+  }
+
+  .card:hover .details {
+    bottom: 30px;
+  }
+
+  .card:hover .title-overlay {
+    opacity: 0;
+  }
+}
 
 /* Adjust card width and margin */
 @media only screen and (max-width: 600px) {
   .container {
-    margin-left: 12%; /* Reset the margin to avoid overlap */
+    margin-left: 12%;
+    /* Reset the margin to avoid overlap */
   }
 
   .card {
-    width: 90%; /* Adjust card width to fit smaller screens */
-    margin-left: auto; /* Center the cards horizontally */
+    width: 90%;
+    /* Adjust card width to fit smaller screens */
+    margin-left: auto;
+    /* Center the cards horizontally */
     margin-right: auto;
-    margin-bottom: 20px; /* Add some bottom margin for spacing */
+    margin-bottom: 20px;
+    /* Add some bottom margin for spacing */
   }
 }
 
@@ -284,33 +310,39 @@ font-size: 18px;
 
 @media (max-width: 1200px) {
   .card {
-      width: calc(33.33% - 1rem); /* Adjust card width to fit three cards per row */
+    width: calc(33.33% - 1rem);
+    /* Adjust card width to fit three cards per row */
   }
 }
 
 @media (max-width: 992px) {
   .card {
-      width: calc(50% - 1rem); /* Adjust card width to fit two cards per row */
+    width: calc(50% - 1rem);
+    /* Adjust card width to fit two cards per row */
   }
 }
 
 @media (max-width: 576px) {
   .card {
-      width: 100%; /* Full width for smaller mobile screens */
-      margin-right: 0; /* Remove margin between cards */
+    width: 100%;
+    /* Full width for smaller mobile screens */
+    margin-right: 0;
+    /* Remove margin between cards */
   }
 }
 
-.sidebar.open ~ .container {
-  margin-left: 250px; /* Adjust margin to account for expanded sidebar */
+.sidebar.open~.container {
+  margin-left: 250px;
+  /* Adjust margin to account for expanded sidebar */
 }
 
 @media only screen and (max-width: 600px) {
-  .sidebar.open ~ .container {
-    margin-left: 250px; /* Adjust margin to account for expanded sidebar */
+  .sidebar.open~.container {
+    margin-left: 250px;
+    /* Adjust margin to account for expanded sidebar */
   }
 
- 
+
 
 
   .icon-container {
@@ -319,12 +351,14 @@ font-size: 18px;
   }
 
   .windows-28-icon {
-    transform: translate(50%, -100%); /* Center the icon within the container */
+    transform: translate(50%, -100%);
+    /* Center the icon within the container */
   }
 }
 
 
 @media screen and (max-width: 768px) {
+
   /* Adjust sidebar width and other styles for smaller screens */
   .sidebar {
     width: 60px;
@@ -337,11 +371,15 @@ font-size: 18px;
 }
 
 @media screen and (max-width: 768px) {
+
   /* Adjust card width and margin for smaller screens */
   .card {
-    width: 100%; /* Full width for smaller screens */
-    margin-left: 0; /* Remove left margin */
-    margin-bottom: 20px; /* Increase bottom margin for spacing */
+    width: 100%;
+    /* Full width for smaller screens */
+    margin-left: 0;
+    /* Remove left margin */
+    margin-bottom: 20px;
+    /* Increase bottom margin for spacing */
   }
 }
 
@@ -356,7 +394,7 @@ footer {
   text-align: center;
   padding: 20px 0;
   z-index: 9999;
-  
+
 }
 
 .footer-content {
@@ -437,4 +475,3 @@ footer {
     opacity: 0;
   }
 }
-

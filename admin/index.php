@@ -19,28 +19,28 @@ $completed_count = $adminView->fetchCompletedOrders();
 <!-- <div class="container-fluid text-white"> -->
 <div class="row g-1 mt-5 text-white container-fluid px-5">
     <div class="col-lg-3 col-md-5 col-sm-10 p-2 d-flex status-boxes shadow-md" style="background-color: #31363F;">
-        <div class="col d-flex align-items-center justify-content-center"><img src="../admin side/svg/person-svgrepo-com.svg" alt="person" height="50" class="pink"></div>
+        <div class="col d-flex align-items-center justify-content-center"><img src="../assets/svg/person-svgrepo-com.svg" alt="person" height="50" class="pink"></div>
         <div class="col py-3 ">
             <div class="row fw-bolder text-white user-count">User Count</div>
             <div class="row text-white user-count text-center"><?= $user_count[0]['count'] ?? 0 ?></div>
         </div>
     </div>
     <div class="col-lg-3 col-md-5 col-sm-10 p-2 d-flex status-boxes shadow-md" style="background-color: #31363F;">
-        <div class="col d-flex align-items-center justify-content-center"><img src="../admin side/svg/box-svgrepo-com.svg" alt="person" height="50" class="pink"></div>
+        <div class="col d-flex align-items-center justify-content-center"><img src="../assets/svg/box-svgrepo-com.svg" alt="person" height="50" class="pink"></div>
         <div class="col py-3">
             <div class="row fw-bolder text-white user-count">Product Count</div>
             <div class="row text-white user-count text-center"><?= $product_count[0]['count'] ?? 0 ?></div>
         </div>
     </div>
     <div class="col-lg-3 col-md-5 col-sm-10 p-2 d-flex status-boxes shadow-md" style="background-color: #31363F;">
-        <div class="col d-flex align-items-center justify-content-center"><img src="../admin side/svg/reciept-svgrepo-com.svg" alt="person" height="50" class="pink"></div>
+        <div class="col d-flex align-items-center justify-content-center"><img src="../assets/svg/reciept-svgrepo-com.svg" alt="person" height="50" class="pink"></div>
         <div class="col py-3">
             <div class="row fw-bolder text-white user-count">Total Orders</div>
             <div class="row text-white user-count text-center"><?= $completed_count[0]['count'] ?? 0 ?></div>
         </div>
     </div>
     <div class="col-lg-3 col-md-5 col-sm-10 p-2 d-flex status-boxes shadow-md" style="background-color: #31363F;">
-        <div class="col d-flex align-items-center justify-content-center"><img src="../admin side/svg/hourglass-end-svgrepo-com.svg" alt="person" height="50" class="pink"></div>
+        <div class="col d-flex align-items-center justify-content-center"><img src="../assets/svg/hourglass-end-svgrepo-com.svg" alt="person" height="50" class="pink"></div>
         <div class="col py-3">
             <div class="row fw-bolder text-white user-count">Pending Orders</div>
             <div class="row text-white user-count"><?= $pending_count[0]['count'] ?? 0 ?></div>
@@ -60,10 +60,10 @@ $completed_count = $adminView->fetchCompletedOrders();
     </div>
 </div>
 
-<div class="container-fluid mt-5">
-    <table class="table table-responsive table-dark table-hover">
+<div class="table-responsive mt-5">
+    <table class="table table-dark table-hover text-center table-bordered">
         <thead>
-            <tr>
+            <tr class="table-light">
                 <td class="text-uppercase fw-bolder">Id</td>
                 <td class="text-uppercase fw-bolder">Customer</td>
                 <td class="text-uppercase fw-bolder">Game</td>
@@ -71,42 +71,21 @@ $completed_count = $adminView->fetchCompletedOrders();
                 <td class="text-uppercase fw-bolder">Status</td>
             </tr>
         </thead>
+        <?php $latest_orders = $adminView->fetchOrders(5); ?>
         <tbody>
-            <tr>
-                <td>1</td>
-                <td>Francis</td>
-                <td>elden</td>
-                <td>$21.99</td>
-                <td>Success</td>
-            </tr>
-            <tr>
-                <td>1</td>
-                <td>Francis</td>
-                <td>elden</td>
-                <td>$21.99</td>
-                <td>Success</td>
-            </tr>
-            <tr>
-                <td>1</td>
-                <td>Francis</td>
-                <td>elden</td>
-                <td>$21.99</td>
-                <td>Success</td>
-            </tr>
-            <tr>
-                <td>1</td>
-                <td>Francis</td>
-                <td>elden</td>
-                <td>$21.99</td>
-                <td>Success</td>
-            </tr>
-            <tr>
-                <td>1</td>
-                <td>Francis</td>
-                <td>elden</td>
-                <td>$21.99</td>
-                <td>Success</td>
-            </tr>
+
+            <?php
+            $id = 1;
+            foreach ($latest_orders as $order) :
+            ?>
+                <tr>
+                    <td><?= $id++ ?></td>
+                    <td class="text-truncate"><?= $order['receipient_name'] ?></td>
+                    <td class="text-truncate"><?= $order['product_name'] ?></td>
+                    <td>$<?= $order['order_total'] ?></td>
+                    <td class="text-truncate"><?= $order['order_status'] ?></td>
+                </tr>
+            <?php endforeach; ?>
         </tbody>
     </table>
 </div>

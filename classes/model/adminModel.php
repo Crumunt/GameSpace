@@ -15,9 +15,24 @@ class Admin extends Dbh
         $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
         return $results;
     }
-    
-    protected function getProductCount() {
-        $sql = "SELECT COUNT(*) as count FROM product_view WHERE deleted_at IS NULL";
+
+    protected function getProductInfo($product_id) {
+
+        $sql = "SELECT product_view.id, product_name, product_description, category_name, platform_name, price FROM product_view INNER JOIN game_platform_view ON product_view.id = game_platform_view.product_id WHERE product_view.id = ?";
+        $stmt = $this->connect()->prepare($sql);
+
+        if(!$stmt->execute([$product_id])) {
+            header("location: ../admin/index.php?error=SomethingWentWrong");
+            exit();
+        }
+
+        $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $results;
+    }
+
+    protected function getProductCount()
+    {
+        $sql = "SELECT COUNT(*) as count FROM tbl_products WHERE deleted_at IS NULL";
         $stmt = $this->connect()->prepare($sql);
 
         $stmt->execute();
@@ -38,7 +53,7 @@ class Admin extends Dbh
         $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
         return $results;
     }
-    
+
 
     protected function getPlatforms()
     {
@@ -68,9 +83,14 @@ class Admin extends Dbh
         return $results;
     }
 
-    protected function getOrders()
+    protected function getOrders($limit = NULL)
     {
-        $sql = "SELECT * FROM order_view";
+        $sql = "SELECT * FROM order_view ORDER BY id DESC";
+
+        if ($limit != NULL) {
+            $sql .= " LIMIT $limit";
+        }
+
         $stmt = $this->connect()->prepare($sql);
 
         if (!$stmt->execute()) {
@@ -82,7 +102,8 @@ class Admin extends Dbh
         return $results;
     }
 
-    protected function getOrderCount() {
+    protected function getOrderCount()
+    {
         $sql = "SELECT COUNT(*) as count FROM tbl_orders WHERE NOT order_status = 'delivered'";
         $stmt = $this->connect()->prepare($sql);
 
@@ -91,7 +112,8 @@ class Admin extends Dbh
         return $results;
     }
 
-    protected function getCompletedOrderCount() {
+    protected function getCompletedOrderCount()
+    {
         $sql = "SELECT COUNT(*) as count FROM tbl_orders WHERE order_status = 'delivered'";
         $stmt = $this->connect()->prepare($sql);
 
@@ -100,7 +122,8 @@ class Admin extends Dbh
         return $results;
     }
 
-    protected function getUserCount() {
+    protected function getUserCount()
+    {
         $sql = "SELECT COUNT(*) as count FROM tbl_users WHERE role = 'student'";
         $stmt = $this->connect()->prepare($sql);
 
@@ -185,6 +208,71 @@ class Admin extends Dbh
             if (!in_array($snap_name, $snapshot_files)) {
                 unlink($snap_file);
             }
+        }
+    }
+
+    protected function updateProduct($product_name, $product_desc, $product_thumbnail = NULL, $snapshots = NULL, $price, $product_category, $product_platform, $product_id) {
+        // INITIALIZE empty array to store values that will be updated
+        $products_array = [];
+        // store value from parameters to products_array
+        array_push($products_array, $product_name, $product_desc, $price);
+
+        // create initial sql without the thumbnail and snapshots
+        $prod_sql = "UPDATE tbl_products SET product_name = ?, product_description = ?, price = ?";
+
+        // check if thumbnail is not null
+        // if not null concat a update statement in the sql and push its corresponding value to the products_array
+        if($product_thumbnail != NULL) {
+            $prod_sql .= ", product_thumbnail = ?";
+            array_push($products_array, $product_thumbnail);
+        }
+        // same procedure as the one from the thumbnail
+        if($snapshots != NULL) {
+            $prod_sql .= ", snapshots = ?";
+            array_push($products_array, $snapshots);
+        }
+        // lastly concat where condition and push the product_id into the products_array
+        $prod_sql .= " WHERE id = ?";
+        array_push($products_array, $product_id);
+
+        $prod_stmt = $this->connect()->prepare($prod_sql);
+
+        if (!$prod_stmt->execute($products_array)) {
+            header("location: ../admin/index.php?error=SomethingWentWrong");
+            exit();
+        }
+
+        foreach ($product_category as $category) {
+            $prod_cat_sql = "UPDATE tbl_product_categories SET category_id = ? WHERE product_id = ?";
+            $prod_cat_stmt = $this->connect()->prepare($prod_cat_sql);
+
+            // EXECUTE ACCEPTS AN ARRAY AS A ARGUMENT, THIS ARRAY STORES THE VALUES THAT WILL USED BY THE PLACEHOLDERS
+            // ORDER IS IMPORTANT
+            if (!$prod_cat_stmt->execute([$category, $product_id])) {
+                header("location: ../admin/index.php?error=SomethingWentWrong");
+                exit();
+            }
+        }
+
+        // LOOP THROUGH ALL PLATFORMS SELECTED AND STORE IT IN THE DATABASE
+        foreach ($product_platform as $platform) {
+            $prod_plat_sql = "UPDATE tbl_product_platforms SET platform_id = ? WHERE product_id = ?";
+            $prod_plat_stmt = $this->connect()->prepare($prod_plat_sql);
+
+            if (!$prod_plat_stmt->execute([$platform, $product_id])) {
+                header("location: ../admin/index.php?error=SomethingWentWrong");
+                exit();
+            }
+        }
+    }
+
+    protected function archiveProduct($product_id) {
+        $sql = "UPDATE tbl_products SET deleted_at = NOW() WHERE id = ?";
+        $stmt = $this->connect()->prepare($sql);
+
+        if(!$stmt->execute([$product_id])) {
+            header("location: ../admin/index.php?error=SomethingWentWrong");
+            exit();
         }
     }
 }

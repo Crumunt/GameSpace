@@ -13,6 +13,19 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
         searchProduct($adminView);
     } elseif (isset($_POST['add_game'])) {
         addGame($adminCtrl);
+    } elseif (isset($_POST['update_game'])) {
+        updateGame($adminCtrl);
+    }elseif(isset($_POST['archive_data'])) {
+        archiveData($adminCtrl);
+    }
+}
+
+if ($_SERVER['REQUEST_METHOD'] == "GET") {
+    if (isset($_GET['product_id'])) {
+        fetchGameInfo($adminView);
+    }
+    if (isset($_GET['archive_content'])) {
+        fetchToDeleteInfo($adminView);
     }
 }
 
@@ -33,8 +46,8 @@ function searchProduct($adminView)
                 <div class="card-body">
                     <h5 class="card-title text-truncate"><?= $game['product_name'] ?></h5>
                     <p class="card-text">$<?= $game['price'] ?></p>
-                    <button class="btn btn-warning">Edit</button>
-                    <button class="btn btn-danger">Delete</button>
+                    <button data-product-id="<?= $game['id'] ?>" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#editor_modal" onclick="loadGameInfo(this)">Edit</button>
+                    <button data-id="products_<?= $game['id'] ?>" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#archive_modal" onclick="confirmDelete(this)">Delete</button>
                 </div>
             </div>
         </div>
@@ -48,11 +61,10 @@ function addGame($adminCtrl)
         if ($name == 'add_game') continue;
         $data[$name] = $value;
     }
-    $some_data = [];
+
     if (!empty($_FILES['game_images'] ?? NULL)) {
         foreach ($_FILES['game_images'] as $name => $value) {
             $data["image"][$name] = $value;
-            $some_data[$name] = $value;
         }
     }
 
@@ -61,4 +73,66 @@ function addGame($adminCtrl)
     } catch (Exception $e) {
         echo "ERROR: $e";
     }
+}
+
+function fetchGameInfo($adminView)
+{
+
+    $product_id = $_GET['product_id'];
+
+    $game_data = $adminView->fetchProductInfo($product_id);
+
+    $data = [];
+
+    foreach ($game_data as $name => $value) {
+        $data[$name] = $value;
+    }
+    echo json_encode($data);
+}
+
+function updateGame($adminCtrl)
+{
+
+    $data = [];
+    foreach ($_POST as $name => $value) {
+        if ($name == 'update_game') continue;
+        $data[$name] = $value;
+    }
+
+    if (!empty($_FILES['game_images'] ?? NULL)) {
+        foreach ($_FILES['game_images'] as $name => $value) {
+            $data["image"][$name] = $value;
+        }
+    }
+
+    try {
+        $adminCtrl->updateGame($data);
+    } catch (Exception $e) {
+        echo "ERROR: $e";
+    }
+}
+
+function fetchToDeleteInfo($adminView)
+{
+
+    $id = $_GET['archive_content'];
+    $tbl = $_GET['tbl'];
+
+    if ($tbl == 'products') {
+        $data = $adminView->fetchProductInfo($id);
+    }
+
+    echo json_encode($data);
+}
+
+function archiveData($adminCtrl) {
+
+    $id = $_POST['archive_data'];
+    $tbl = $_POST['tbl'];
+
+    if($tbl == 'products') {
+        $adminCtrl->archiveGame($id);
+        echo "Product has been arhived successfully";
+    }
+
 }

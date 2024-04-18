@@ -10,7 +10,7 @@
     color: white;
 }
 
-.card > img {
+.card>img {
     height: 150px !important;
     /* height: 150px;
     max-height: 150px; */
@@ -30,7 +30,7 @@
     border-radius: 1rem;
 }
 
-#snapshot_container > img {
+#snapshot_container>img {
     width: 200px !important;
     max-width: 200px !important;
     height: 100px !important;
@@ -38,4 +38,18 @@
     border: 1px solid black;
     border-radius: 1rem;
     object-fit: cover;
+}
+
+.welcome-user {
+    background: linear-gradient(to left, #ffffff, #ebdfff, #debdff, #d898ff, #d76cfd);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.status-boxes {
+    background-color: #31363F;
+}
+
+.pink {
+    filter: invert(67%) sepia(84%) saturate(4608%) hue-rotate(241deg) brightness(105%) contrast(98%);
 }
