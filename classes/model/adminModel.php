@@ -101,10 +101,33 @@ class Admin extends Dbh
         $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
         return $results;
     }
+    
+    protected function getOrderInfo($order_id) {
+        $sql = "SELECT * FROM order_view WHERE id = ?";
+        $stmt = $this->connect()->prepare($sql);
+
+        if(!$stmt->execute([$order_id])) {
+            header("location: ../admin/index.php?error=SomethingWentWrong");
+            exit();
+        }
+        $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $results;
+    }
+
+    protected function setOrder($order_id, $order_status) {
+        $sql = "UPDATE tbl_orders SET order_status = ? WHERE id = ?";
+        $stmt = $this->connect()->prepare($sql);
+
+        if(!$stmt->execute([$order_status, $order_id])) {
+            header("location: ../admin/index.php?error=SomethingWentWrong");
+            exit();
+        }
+
+    }
 
     protected function getOrderCount()
     {
-        $sql = "SELECT COUNT(*) as count FROM tbl_orders WHERE NOT order_status = 'delivered'";
+        $sql = "SELECT COUNT(*) as count FROM order_view WHERE order_completed IS NULL";
         $stmt = $this->connect()->prepare($sql);
 
         $stmt->execute();
@@ -114,7 +137,7 @@ class Admin extends Dbh
 
     protected function getCompletedOrderCount()
     {
-        $sql = "SELECT COUNT(*) as count FROM tbl_orders WHERE order_status = 'delivered'";
+        $sql = "SELECT COUNT(*) as count FROM order_view WHERE NOT order_completed IS NULL";
         $stmt = $this->connect()->prepare($sql);
 
         $stmt->execute();
@@ -243,12 +266,21 @@ class Admin extends Dbh
         }
 
         foreach ($product_category as $category) {
-            $prod_cat_sql = "UPDATE tbl_product_categories SET category_id = ? WHERE product_id = ?";
+
+            $del_cat_sql = "DELETE FROM tbl_product_categories WHERE product_id = ? AND category_id = ?";
+            $del_cat_stmt = $this->connect()->prepare($del_cat_sql);
+
+            if (!$del_cat_stmt->execute([$product_id, $category])) {
+                header("location: ../admin/index.php?error=SomethingWentWrong");
+                exit();
+            }
+
+            $prod_cat_sql = "INSERT INTO tbl_product_categories (product_id,category_id) VALUES (?,?)";
             $prod_cat_stmt = $this->connect()->prepare($prod_cat_sql);
 
             // EXECUTE ACCEPTS AN ARRAY AS A ARGUMENT, THIS ARRAY STORES THE VALUES THAT WILL USED BY THE PLACEHOLDERS
             // ORDER IS IMPORTANT
-            if (!$prod_cat_stmt->execute([$category, $product_id])) {
+            if (!$prod_cat_stmt->execute([$product_id, $category])) {
                 header("location: ../admin/index.php?error=SomethingWentWrong");
                 exit();
             }
@@ -256,10 +288,19 @@ class Admin extends Dbh
 
         // LOOP THROUGH ALL PLATFORMS SELECTED AND STORE IT IN THE DATABASE
         foreach ($product_platform as $platform) {
-            $prod_plat_sql = "UPDATE tbl_product_platforms SET platform_id = ? WHERE product_id = ?";
+            
+            $del_plat_sql = "DELETE FROM tbl_product_platforms WHERE product_id = ? AND platform_id = ?";
+            $del_plat_stmt = $this->connect()->prepare($del_plat_sql);
+
+            if(!$del_plat_stmt->execute([$product_id, $platform])) {
+                header("location: ../admin/index.php?error=SomethingWentWrong");
+                exit();
+            }
+
+            $prod_plat_sql = "INSERT INTO tbl_product_platforms(product_id, platform_id) VALUES (?,?) ";
             $prod_plat_stmt = $this->connect()->prepare($prod_plat_sql);
 
-            if (!$prod_plat_stmt->execute([$platform, $product_id])) {
+            if (!$prod_plat_stmt->execute([$product_id, $platform])) {
                 header("location: ../admin/index.php?error=SomethingWentWrong");
                 exit();
             }
@@ -274,5 +315,18 @@ class Admin extends Dbh
             header("location: ../admin/index.php?error=SomethingWentWrong");
             exit();
         }
+    }
+    
+    protected function getMonthlyUserRegistrations() {
+        $sql = "SELECT MONTHNAME(date_registered) as monthname, COUNT(*) as users FROM tbl_users GROUP BY date_registered";
+        $stmt = $this->connect()->prepare($sql);
+
+        if(!$stmt->execute()) {
+            header("location: ../index.php?error=SomethingWentWrong");
+            exit();
+        }
+
+        $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $results;
     }
 }

@@ -55,7 +55,13 @@ function loginUser($authCtrl)
 
     $_SESSION['username'] = $action[0]['username'];
     $_SESSION['user_id'] = $action[0]['id'];
+    $type = $action[0]['role'];
 
-    header("location: ../index.php?error=none");
-    exit();
+    if ($type == 'student') {
+        header("location: ../index.php?error=none");
+        exit();
+    } else {
+        header("location: ../admin/index.php?error=none");
+        exit();
+    }
 }

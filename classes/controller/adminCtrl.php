@@ -100,4 +100,8 @@ class AdminCtrl extends Admin
     public function archiveGame($product_id) {
         $this->archiveProduct($product_id);
     }
+
+    public function updateOrderStatus($order_id, $order_status) {
+        $this->setOrder($order_id, $order_status);
+    }
 }

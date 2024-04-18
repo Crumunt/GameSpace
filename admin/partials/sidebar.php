@@ -37,26 +37,26 @@ $page = basename($_SERVER['PHP_SELF'], ".php");
             <ul class="sidebar-nav">
                 <li class="sidebar-item">
                     <a href="index.php" class="sidebar-link d-flex align-items-center">
-                        <i class='bx bxs-dashboard fs-4'></i>
+                       <i class='bx bx-home-alt-2 fs-4'></i>
                         <span class="fs-5">Home</span>
                     </a>
                 </li>
                 <li class="sidebar-item">
                     <a href="manage-products.php" class="sidebar-link d-flex align-items-center">
-                        <i class='bx bx-library fs-4'></i>
+                        <i class='bx bx-game fs-4'></i>
                         <span class="fs-5">Manage Products</span>
                     </a>
                 </li>
                 <li class="sidebar-item">
-                    <a href="manage-orders.php"" class=" sidebar-link d-flex align-items-center">
-                        <i class='bx bxs-truck fs-4'></i>
+                    <a href="manage-orders.php" class="sidebar-link d-flex align-items-center">
+                        <i class='bx bx-package fs-4' ></i>
                         <span class="fs-5">Manage Orders</span>
                     </a>
                 </li>
                 <li class="sidebar-item mt-5">
                     <a href="" class="sidebar-link has-dropdown collapsed d-flex align-items-center" data-bs-toggle="collapse" data-bs-target="#user_collapse" aria-expanded="false" aria-controls="user_collapse">
                         <i class='bx bx-user-circle fs-4'></i>
-                        <span class="fs-5"><?= $_SESSION['username']?></span>
+                        <span class="fs-5"><?= $_SESSION['username'] ?></span>
                     </a>
                     <ul id="user_collapse" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
                         <li class="sidebar-item">

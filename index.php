@@ -3,7 +3,7 @@ include "classes/dbh.php";
 include "classes/model/userModel.php";
 include "classes/view/userView.php";
 $userView = new UserView();
-$data = $userView->getProducts(null, 12);
+$data = $userView->getProducts(NULL, 12);
 $carouselData = $userView->getRandomProducts(3);
 ?>
 
@@ -24,9 +24,11 @@ $carouselData = $userView->getRandomProducts(3);
       foreach ($carouselData as $carouselItem) :
       ?>
         <div class="carousel-item <?= ($carouselCounter == 1) ? 'active' : '' ?>">
-          <img src=<?= "{$carouselItem['product_thumbnail']}" ?> class="d-block w-100 h-100" alt="..." style="filter: brightness(0.5);">
+          <?php
+          $src = (str_contains($carouselItem['product_thumbnail'], 'https')) ? $carouselItem['product_thumbnail'] : "../assets/thumbnails/{$carouselItem['product_thumbnail']}";
+          ?>
+          <img src="<?= $src ?>" class="img-fluid d-block w-100 carousel_image" alt="..." style="filter: brightness(0.5);">
           <div class="carousel-caption top-0 mt-lg-4 mt-sm-0">
-            <h5 class="text-uppercase display-lg-5 display-sm-5 mt-lg-5 mt-sm-0">TOP SELLING GAMES</h5>
             <p class="fs-1 fs-sm-5 mt-lg-5 mt-sm-4 fw-bolder text-capitalize text-truncate"><?= $carouselItem['product_name'] ?></p>
             <a href="user/view_game.php?product_id=<?= $carouselItem['id'] ?>" class="btn btn-primary px-4 py-2 fs-5 mt-5">View</a>
           </div>
@@ -53,7 +55,10 @@ $carouselData = $userView->getRandomProducts(3);
     <?php foreach ($data as $gameDetails) : ?>
       <div class="col-lg-3 col-md-6 col-sm-10 d-flex justify-content-center">
         <div class="card preview__card text-white shadow" style="width: 18rem;">
-          <img src=<?= "" . $gameDetails['product_thumbnail'] . "" ?> class="card-img-top mh-50 object-fit-cover" alt="...">
+          <?php
+          $src = (str_contains($gameDetails['product_thumbnail'], 'https')) ? $gameDetails['product_thumbnail'] : "../assets/thumbnails/{$gameDetails['product_thumbnail']}";
+          ?>
+          <img src="<?= $src ?>" class="card-img-top mh-50 object-fit-cover" alt="...">
           <div class="card-body">
             <h5 class="card-title text-truncate"><?= $gameDetails['product_name'] ?></h5>
             <div class="card-text product__preview"><?= $gameDetails['product_description'] ?></div>
@@ -70,10 +75,13 @@ $carouselData = $userView->getRandomProducts(3);
 
   <!-- BANNER START -->
   <?php $banner__product = $userView->getRandomProducts(1)  ?>
-  <div class="card my-5 discount__card shadow" style="">
+  <div class="card my-5 discount__card shadow">
     <div class="row g-0">
       <div class="col-md-4">
-        <img src=<?= "{$banner__product[0]['product_thumbnail']}" ?> class="img-fluid rounded-start h-100" alt="...">
+        <?php
+        $src = (str_contains($banner__product[0]['product_thumbnail'], 'https')) ? $banner__product[0]['product_thumbnail'] : "../assets/thumbnails/{$banner__product[0]['product_thumbnail']}";
+        ?>
+        <img src="<?= $src ?>" class="img-fluid rounded-start h-100" alt="...">
       </div>
       <div class="col-md-8">
         <div class="card-body text-white discount__body">

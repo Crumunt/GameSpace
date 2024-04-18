@@ -12,7 +12,7 @@ $filter = $_GET['category'] ?? NULL;
 if ($filter != NULL) {
     $data = $userView->getProducts("category_name LIKE '%$filter%'");
 } else {
-    $data = $userView->getProducts(NULL);
+    $data = $userView->getProducts();
 }
 
 ?>

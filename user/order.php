@@ -18,33 +18,26 @@ $order_data = $userView->fetchOrders($user_id);
 
 ?>
 
-<div class="container" style="min-height: 100vh;">
-    <?php foreach ($order_data as $order) : ?>
-        <div class="card my-5 discount__card shadow overflow-hidden w-100">
-            <div class="row g-0">
-                <div class="col-md-4">
-                    <img src=<?= "{$order['product_thumbnail']}" ?> class="img-fluid d-block rounded-start w-100 h-100" alt="<?= $order['product_name'] ?> Thumbnail">
-                </div>
-                <div class="col-md-8">
-                    <div class="card-body text-white discount__body">
-                        <div class="header border-bottom d-flex justify-content-between gap-2 align-items-center">
-                            <h1 class="text-truncate"><?= $order['product_name'] ?></h1>
-                            <h6><?= $order['order_status'] ?></h6>
-                        </div>
-                        <div class="order_details mt-1 border-bottom">
-                            <p class="fs-5">Recipient: <b><?= $order['receipient_name'] ?></b></p>
-                            <p class="fs-5">Address: <b><?= $order['order_address'] ?></b></p>
-                            <p class="fs-5">Quantity: <?= $order['quantity'] ?></p>
-                        </div>
-                        <div class="order_price mt-2">
-                            <p class="fs-5">Total: $<?= $order['order_total'] ?></p>
-                        </div>
+<div class="container py-3" style="min-height: 100vh;">
+    <h1 class="text-white text-uppercase mb-5">Orders</h1>
+    <div class="row row-cols-lg-4 row-cols-md-2 row-cols-sm-1 g-4">
+        <?php foreach ($order_data as $order) : ?>
+            <div class="col">
+                <div class="card">
+                    <img src=<?= "{$order['product_thumbnail']}" ?> class="card-img-top object-fit-cover" alt="<?= $order['product_name'] ?> Thumbnail" style="max-height: 170px;">
+                    <div class="card-body">
+                        <p class="fs-5 text-truncate">Recipient: <b><?= $order['receipient_name'] ?></b></p>
+                        <p class="fs-3 text-truncate"><?= $order['product_name'] ?></p>
+                        <p class="fs-5">Total: $<?= $order['order_total'] ?></p>
+                    </div>
+                    <div class="card-footer d-flex justify-content-between">
+                        <h6><?= $order['order_status'] ?></h6>
+                        <button class="btn btn-primary" <?= ($order['order_completed'] == NULL) ? 'disabled': '' ?> >Order Received</button>
                     </div>
                 </div>
             </div>
-        </div>
-
-    <?php endforeach; ?>
+        <?php endforeach; ?>
+    </div>
 </div>
 
 

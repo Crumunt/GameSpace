@@ -15,8 +15,15 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
         addGame($adminCtrl);
     } elseif (isset($_POST['update_game'])) {
         updateGame($adminCtrl);
-    }elseif(isset($_POST['archive_data'])) {
+    } elseif (isset($_POST['archive_data'])) {
         archiveData($adminCtrl);
+    } elseif (isset($_POST['update_order'])) {
+        updateOrderStatus($adminCtrl);
+    } elseif (isset($_POST['load_products'])) {
+        loadProducts($adminView);
+        echo "THIS IS HAPPENING";
+    } elseif (isset($_POST['load_orders'])) {
+        loadOrders($adminView);
     }
 }
 
@@ -27,14 +34,16 @@ if ($_SERVER['REQUEST_METHOD'] == "GET") {
     if (isset($_GET['archive_content'])) {
         fetchToDeleteInfo($adminView);
     }
+    if (isset($_GET['order_id'])) {
+        getOrderInfo($adminView);
+    }
 }
 
-function searchProduct($adminView)
+function loadProducts($adminView = NULL, $data = NULL)
 {
-
-    $keyword = htmlspecialchars($_POST['product_keyword'], ENT_QUOTES);
-
-    $data = $adminView->searchProduct($keyword);
+    if ($data == NULL) {
+        $data = $adminView->showProducts();
+    }
 
     foreach ($data as $game) : ?>
         <?php
@@ -51,22 +60,44 @@ function searchProduct($adminView)
                 </div>
             </div>
         </div>
+    <?php endforeach;
+}
+
+function loadOrders($adminView = NULL, $order_data = NULL)
+{
+
+    if ($order_data == NULL) {
+        $order_data = $adminView->fetchOrders();
+    }
+
+    foreach ($order_data as $order) : ?>
+        <div class="col-lg-3 col-md-6 col-sm-10 mx-auto">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title text-truncate"><b><?= $order['receipient_name'] ?></b></h5>
+                    <p class="card-text text-truncate">Order: <b><?= $order['product_name'] ?></b></p>
+                    <p class="card-text text-truncate">Quantity: <b><?= $order['quantity'] ?></b></p>
+                    <p class="card-text"><small class="text-muted">Total Price to pay: $<b><?= $order['order_total'] ?></b></small></p>
+                    <button data-order-id="<?= $order['id'] ?>" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#order_modal" onclick="getOrderInfo(this)">View Order</button>
+                </div>
+            </div>
+        </div>
 <?php endforeach;
+}
+
+function searchProduct($adminView)
+{
+
+    $keyword = htmlspecialchars($_POST['product_keyword'], ENT_QUOTES);
+
+    $data = $adminView->searchProduct($keyword);
+
+    loadProducts(NULL, $data);
 }
 
 function addGame($adminCtrl)
 {
-    $data = [];
-    foreach ($_POST as $name => $value) {
-        if ($name == 'add_game') continue;
-        $data[$name] = $value;
-    }
-
-    if (!empty($_FILES['game_images'] ?? NULL)) {
-        foreach ($_FILES['game_images'] as $name => $value) {
-            $data["image"][$name] = $value;
-        }
-    }
+    $data = getPostData();
 
     try {
         $action = $adminCtrl->addProduct($data);
@@ -93,9 +124,22 @@ function fetchGameInfo($adminView)
 function updateGame($adminCtrl)
 {
 
+    $data = getPostData();
+
+    try {
+        $adminCtrl->updateGame($data);
+    } catch (Exception $e) {
+        echo "ERROR: $e";
+    }
+}
+
+function getPostData()
+{
+    $flag_names = ['add_game', 'update_game'];
+
     $data = [];
     foreach ($_POST as $name => $value) {
-        if ($name == 'update_game') continue;
+        if (in_array($name, $flag_names)) continue;
         $data[$name] = $value;
     }
 
@@ -105,11 +149,7 @@ function updateGame($adminCtrl)
         }
     }
 
-    try {
-        $adminCtrl->updateGame($data);
-    } catch (Exception $e) {
-        echo "ERROR: $e";
-    }
+    return $data;
 }
 
 function fetchToDeleteInfo($adminView)
@@ -125,14 +165,38 @@ function fetchToDeleteInfo($adminView)
     echo json_encode($data);
 }
 
-function archiveData($adminCtrl) {
+function archiveData($adminCtrl)
+{
 
     $id = $_POST['archive_data'];
     $tbl = $_POST['tbl'];
 
-    if($tbl == 'products') {
+    if ($tbl == 'products') {
         $adminCtrl->archiveGame($id);
-        echo "Product has been arhived successfully";
+        echo "Product has been archived successfully";
+    }
+}
+
+function getOrderInfo($adminView)
+{
+
+    $order_id = $_GET['order_id'];
+
+    $data = $adminView->fetchOrderInfo($order_id);
+
+    echo json_encode($data);
+}
+
+function updateOrderStatus($adminCtrl)
+{
+
+    $order_id = $_POST['update_order'];
+    $order_status = $_POST['order_status'];
+    try {
+        $adminCtrl->updateOrderStatus($order_id, $order_status);
+    } catch (Exception $e) {
+        echo "ERROR: $e";
     }
 
+    echo "success";
 }

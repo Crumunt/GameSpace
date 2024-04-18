@@ -33,17 +33,17 @@ $banner__product = $userView->getRandomProducts(1);
     <div class="row mt-5">
         <h1 class="text-white">Popular Titles</h1>
         <!-- FIRST ROW -->
-        <div class="row d-flex g-3">
+        <div class="row d-flex mx-auto g-3">
             <?php
             $popular__products_data = $userView->getRandomProducts(2);
             foreach ($popular__products_data as $popular__items) :
             ?>
-                <div class="col-lg-6 col-md-10 mx-auto">
+                <div class="col-lg-6 col-md-11 mx-auto">
                     <div class="card text-bg-dark overflow-hidden" style="max-height: 350px;">
                         <img src=<?= "{$popular__items['product_thumbnail']}" ?> class="card-img" alt="..." style="filter: brightness(.5);">
                         <a href="view_game.php?product_id=<?= $popular__items['id'] ?>" class="text-decoration-none text-white">
                             <div class="card-img-overlay">
-                                <h3><?= $popular__items['product_name'] ?></h3>
+                                <h3 class="text-truncate"><?= $popular__items['product_name'] ?></h3>
                                 <div class="d-flex gap-2 flex-wrap">
                                     <?php
                                     $cateogry_data = $userView->fetchGameCategories($popular__items['id']);
@@ -69,7 +69,7 @@ $banner__product = $userView->getRandomProducts(1);
                         <img src=<?= "{$popular__items['product_thumbnail']}" ?> class="card-img" alt="..." style="filter: brightness(.5);">
                         <a href="view_game.php?product_id=<?= $popular__items['id'] ?>" class="text-decoration-none text-white">
                             <div class="card-img-overlay">
-                                <h3><?= $popular__items['product_name'] ?></h3>
+                                <h3 class="text-truncate"><?= $popular__items['product_name'] ?></h3>
                                 <div class="d-flex gap-2 flex-wrap">
                                     <?php
                                     $cateogry_data = $userView->fetchGameCategories($popular__items['id']);
@@ -95,7 +95,7 @@ $banner__product = $userView->getRandomProducts(1);
                         <img src=<?= "{$popular__items['product_thumbnail']}" ?> class="card-img" alt="..." style="filter: brightness(.5);">
                         <a href="view_game.php?product_id=<?= $popular__items['id'] ?>" class="text-decoration-none text-white">
                             <div class="card-img-overlay">
-                                <h3><?= $popular__items['product_name'] ?></h3>
+                                <h3 class="text-truncate"><?= $popular__items['product_name'] ?></h3>
                                 <div class="d-flex gap-2 flex-wrap">
                                     <?php
                                     $cateogry_data = $userView->fetchGameCategories($popular__items['id']);

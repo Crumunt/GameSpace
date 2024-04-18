@@ -57,4 +57,14 @@ class AdminView extends Admin
         $data = $this->getUserCount();
         return $data;
     }
+
+    public function fetchMonthlyRegistrations() {
+        $data = $this->getMonthlyUserRegistrations();
+        return $data;
+    }
+
+    public function fetchOrderInfo($order_id) {
+		$data = $this->getOrderInfo($order_id);
+		return $data;
+	}
 }

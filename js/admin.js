@@ -75,11 +75,6 @@ function page_setter() {
     createPaginationButtons();
 }
 
-function changeOrderStatus(cart_id, status) {
-    console.log(cart_id)
-    console.log(status)
-}
-
 function addThumbnail(file) {
 
     const thumbnail_wrapper = document.getElementById('thumbnail_container')
@@ -107,6 +102,7 @@ function addSnapshots(file) {
         let snapshot = document.createElement('img')
         snapshot.setAttribute('onclick', 'removeSnapshot(this)');
         snapshot.classList.add('snapshot')
+        snapshot.setAttribute('title', 'CLICK TO REMOVE')
         snapshot.src = URL.createObjectURL(file.files[i])
         snapshot_container.appendChild(snapshot)
     }
@@ -119,6 +115,26 @@ function removeSnapshot(snapshot) {
 
 function getFormData(id) {
     return document.getElementById(id)
+}
+
+function loadContent(tbl) {
+
+    let data = new FormData()
+
+    data.append('load_' + tbl, 'load')
+
+    let xhr = new XMLHttpRequest()
+
+    xhr.onreadystatechange = function() {
+        if(this.readyState == 4) {
+            document.getElementById('content_wrapper').innerHTML = this.responseText
+            page_setter()
+        }
+    }
+
+    xhr.open('POST', '/GameSpace/form_handlers/adminHandler.php')
+    xhr.send(data)
+
 }
 
 function addProduct() {
@@ -148,7 +164,9 @@ function addProduct() {
 
     xhr.onreadystatechange = function () {
         if (this.readyState == 4) {
-            console.log(this.responseText)
+            loadContent('products')
+            resetForm()
+            console.log('hehe');
         }
     }
 
@@ -239,7 +257,7 @@ function updateData(button) {
 
     xhr.onreadystatechange = function () {
         if (this.readyState == 4) {
-            console.log(this.responseText)
+            loadContent('products')
         }
     }
 
@@ -324,11 +342,59 @@ function archiveData(button) {
 
     xhr.onreadystatechange = function () {
         if (this.readyState == 4) {
-            // getFormData('confirmation_message').textContent = this.responseText
-            console.log(this.responseText)
+            getFormData('confirmation_message').textContent = this.responseText
+            loadContent('products')
         }
     }
 
     xhr.open('POST', '/GameSpace/form_handlers/adminHandler.php');
     xhr.send(data);
+}
+
+function getOrderInfo(button) {
+
+    let order_id = button.getAttribute('data-order-id');
+
+    let xhr = new XMLHttpRequest()
+
+    xhr.onreadystatechange = function() {
+        if(this.readyState == 4) {
+            let data = JSON.parse(this.responseText)
+            console.log(data)
+            getFormData('updateOrderButton').setAttribute('data-order-id', data[0].id)
+            getFormData('order_product').textContent = data[0].product_name
+            getFormData('receipient_holder').textContent = data[0].receipient_name
+            getFormData('order_address').textContent = data[0].order_address
+            getFormData('order_quantity').textContent = data[0].quantity
+            getFormData('order_total').textContent = "$" + data[0].order_total
+            getFormData('order_status').value = data[0].order_status
+        }
+    }
+
+    xhr.open('GET', '/GameSpace/form_handlers/adminHandler.php?order_id=' + order_id);
+    xhr.send();
+
+}
+
+function updateOrderInfo() {
+    
+    const order_id = getFormData('updateOrderButton').getAttribute('data-order-id')
+
+    let data = new FormData()
+
+    data.append('update_order', order_id)
+    data.append('order_status', getFormData('order_status').value)
+
+    console.log(data)
+
+    let xhr = new XMLHttpRequest()
+
+    xhr.onreadystatechange = function() {
+        if(this.readyState == 4) {
+            console.log(this.responseText)
+        }
+    }
+
+    xhr.open('POST', '/GameSpace/form_handlers/adminHandler.php')
+    xhr.send(data)
 }

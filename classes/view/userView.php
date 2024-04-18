@@ -1,8 +1,8 @@
 <?php
 class UserView extends User {
 
-	public function getProducts($where = NULL) {
-		$data = $this->getGames($where);
+	public function getProducts($where = NULL, $limit = NULL) {
+		$data = $this->getGames($where, $limit);
 		return $data;
 	}
 

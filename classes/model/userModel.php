@@ -2,7 +2,7 @@
 class User extends Dbh
 {
 
-	protected function getGames($where = NULL)
+	protected function getGames($where = NULL, $limit = NULL)
 	{
 
 		$sql = "SELECT * FROM product_view";
@@ -12,6 +12,11 @@ class User extends Dbh
 		}
 
 		$sql .= " GROUP BY id";
+		
+		if($limit != NULL) {
+			$sql .= " LIMIT $limit";
+		}
+
 
 		$stmt = $this->connect()->prepare($sql);
 
@@ -158,6 +163,17 @@ class User extends Dbh
 		}
 
 		return "Check your email to verify your purchase.";
+	}
+
+	protected function completeOrder($order_id) {
+		$sql = "UPDATE tbl_orders SET date_completed = NOW() WHERE id = ?";
+		$stmt = $this->connect()->prepare($sql);
+
+		if(!$stmt->execute([$order_id])) {
+			header("location: ../index.php?error=SomethingWentWrong");
+			exit();
+		}
+		
 	}
 
 	protected function removeItemFromCart($product_id, $user_id)

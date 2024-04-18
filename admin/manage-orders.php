@@ -6,58 +6,59 @@ require "../classes/model/adminModel.php";
 require "../classes/view/adminView.php";
 
 $adminView = new AdminView();
-
+$order_data = $adminView->fetchOrders();
 ?>
 
+<div class="container mt-5">
+    <h1 class="text-white mb-5">Manage Orders</h1>
+    <div class="row row-cols-1 row-cols-md-1 g-4" id="content_wrapper">
+        <?php foreach ($order_data as $order) : ?>
+            <div class="col-lg-3 col-md-6 col-sm-10 mx-auto">
+                <div class="card">
+                    <!-- <img class="card-img-top" src="..." alt="Card image cap"> -->
+                    <div class="card-body">
+                        <h5 class="card-title text-truncate"><b><?= $order['receipient_name'] ?></b></h5>
+                        <p class="card-text text-truncate">Order: <b><?= $order['product_name'] ?></b></p>
+                        <p class="card-text text-truncate">Quantity: <b><?= $order['quantity'] ?></b></p>
+                        <p class="card-text"><small class="text-muted">Total Price to pay: $<b><?= $order['order_total'] ?></b></small></p>
+                        <button data-order-id="<?= $order['id'] ?>" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#order_modal" onclick="getOrderInfo(this)">View Order</button>
+                    </div>
+                </div>
+            </div>
+        <?php endforeach; ?>
+    </div>
+</div>
 
-<div class="">
-    <div class="table-responsive mt-5">
-        <table class="table table-dark" style="table-layout: fixed;">
-            <thead>
-                <tr class="text-center">
-                    <th>Name</th>
-                    <th>Product Name</th>
-                    <th>Address</th>
-                    <th>Quanity</th>
-                    <th>Total Price</th>
-                    <th>Status</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php
-                $order_data = $adminView->fetchOrders();
-                foreach ($order_data as $order) :
-                ?>
-                    <tr class="text-center">
-                        <td class="pt-4">
-                            <p class="text-truncate"><?= $order['receipient_name'] ?></p>
-                        </td>
-                        <td class="pt-4">
-                            <p class="text-truncate"><?= $order['product_name'] ?></p>
-                        </td>
-                        <td class="pt-4">
-                            <p class="text-truncate"><?= $order['order_address'] ?></p>
-                        </td>
-                        <td class="pt-4">
-                            <p class="text-truncate">
-                                <?= $order['quantity'] ?>
-                            </p>
-                        </td>
-                        <td class="pt-4">
-                            <p class="text-truncate">
-                                $<?= $order['order_total'] ?>
-                            </p>
-                        </td>
-                        <td class="p-4 row">
-                            <select name="" id="" class="form-select col-md-10" onchange="changeOrderStatus(<?= $order['id'] ?>, this.value)">
-                                <option value="<?= $order['order_status'] ?>" selected><?= $order['order_status'] ?></option>
-                                <option value="On Delivery">On Delivery</option>
-                                <option value="Delivered">Delivered</option>
-                            </select>
-                        </td>
-                    </tr>
-                <?php endforeach; ?>
-            </tbody>
-        </table>
+<!-- MODAL -->
+<div class="modal fade" id="order_modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="staticBackdropLabel">Update Order Status</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Ordered Product: <b id="order_product">Skyrim</b></p>
+                <p>Recepient Name: <b id="receipient_holder">Lorenz Bocatot</b></p>
+                <p>Delivery Address: <b id="order_address">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Harum, vitae.</b></p>
+                <p>Order Quantity: <b id="order_quantity">10</b></p>
+                <p>Price to be paid: <b id="order_total">$1299</b></p>
+                <form action="">
+                    <label for="" class="form-label w-100">
+                        Order Status: 
+                        <select name="" id="order_status" class="form-select">
+                            <option value="Preparing to ship">Preparing to ship</option>
+                            <option value="Product picked up by courier">Product picked up by courier</option>
+                            <option value="On transit">On transit</option>
+                            <option value="Delivered">Delivered</option>
+                        </select>
+                    </label>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" id="updateOrderButton" class="btn btn-primary" onclick="updateOrderInfo()">Update Order Status</button>
+            </div>
+        </div>
     </div>
 </div>

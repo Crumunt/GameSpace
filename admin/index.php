@@ -18,28 +18,28 @@ $completed_count = $adminView->fetchCompletedOrders();
 
 <!-- <div class="container-fluid text-white"> -->
 <div class="row g-1 mt-5 text-white container-fluid px-5">
-    <div class="col-lg-3 col-md-5 col-sm-10 p-2 d-flex status-boxes shadow-md" style="background-color: #31363F;">
+    <div class="col-lg-3 col-md-5 col-sm-10 p-2 d-flex status-boxes shadow-md mx-auto" style="background-color: #31363F;">
         <div class="col d-flex align-items-center justify-content-center"><img src="../assets/svg/person-svgrepo-com.svg" alt="person" height="50" class="pink"></div>
         <div class="col py-3 ">
             <div class="row fw-bolder text-white user-count">User Count</div>
             <div class="row text-white user-count text-center"><?= $user_count[0]['count'] ?? 0 ?></div>
         </div>
     </div>
-    <div class="col-lg-3 col-md-5 col-sm-10 p-2 d-flex status-boxes shadow-md" style="background-color: #31363F;">
+    <div class="col-lg-3 col-md-5 col-sm-10 p-2 d-flex status-boxes shadow-md mx-auto" style="background-color: #31363F;">
         <div class="col d-flex align-items-center justify-content-center"><img src="../assets/svg/box-svgrepo-com.svg" alt="person" height="50" class="pink"></div>
         <div class="col py-3">
             <div class="row fw-bolder text-white user-count">Product Count</div>
             <div class="row text-white user-count text-center"><?= $product_count[0]['count'] ?? 0 ?></div>
         </div>
     </div>
-    <div class="col-lg-3 col-md-5 col-sm-10 p-2 d-flex status-boxes shadow-md" style="background-color: #31363F;">
+    <div class="col-lg-3 col-md-5 col-sm-10 p-2 d-flex status-boxes shadow-md mx-auto" style="background-color: #31363F;">
         <div class="col d-flex align-items-center justify-content-center"><img src="../assets/svg/reciept-svgrepo-com.svg" alt="person" height="50" class="pink"></div>
         <div class="col py-3">
             <div class="row fw-bolder text-white user-count">Total Orders</div>
             <div class="row text-white user-count text-center"><?= $completed_count[0]['count'] ?? 0 ?></div>
         </div>
     </div>
-    <div class="col-lg-3 col-md-5 col-sm-10 p-2 d-flex status-boxes shadow-md" style="background-color: #31363F;">
+    <div class="col-lg-3 col-md-5 col-sm-10 p-2 d-flex status-boxes shadow-md mx-auto" style="background-color: #31363F;">
         <div class="col d-flex align-items-center justify-content-center"><img src="../assets/svg/hourglass-end-svgrepo-com.svg" alt="person" height="50" class="pink"></div>
         <div class="col py-3">
             <div class="row fw-bolder text-white user-count">Pending Orders</div>
@@ -91,8 +91,36 @@ $completed_count = $adminView->fetchCompletedOrders();
 </div>
 <!-- </div> -->
 
+<?php
+
+$monthly_data = $adminView->fetchMonthlyRegistrations();
+foreach ($monthly_data as $data) {
+    $month[] = $data['monthname'];
+    $monthly_user_count[] = $data['users'];
+}
+?>
 <script>
     const ctx = document.getElementById('myChart');
+
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: <?= json_encode($month) ?>,
+            datasets: [{
+                label: '# of User Registrations',
+                data: <?= json_encode($monthly_user_count) ?>,
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    })
+
     const ctx1 = document.getElementById('categories');
 
     new Chart(ctx1, {
@@ -113,23 +141,4 @@ $completed_count = $adminView->fetchCompletedOrders();
             }
         }
     });
-
-    new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
-            datasets: [{
-                label: '# of Votes',
-                data: [12, 19, 3, 5, 2, 3],
-                borderWidth: 1
-            }]
-        },
-        options: {
-            scales: {
-                y: {
-                    beginAtZero: true
-                }
-            }
-        }
-    })
 </script>
