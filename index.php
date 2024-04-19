@@ -9,25 +9,22 @@ $carouselData = $userView->getRandomProducts(3);
 
 <?php include "user/partials/sidebar.php" ?>
 <!-- CAROUSEL START -->
-<div class="container mt-5">
-
-
-  <div id="carouselExampleAutoplaying" class="carousel slide rounded-5 overflow-hidden" data-bs-ride="carousel">
-    <div class="carousel-indicators">
-      <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
-      <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="1" aria-label="Slide 2"></button>
-      <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="2" aria-label="Slide 3"></button>
-    </div>
-    <div class="carousel-inner">
-      <?php
+<div id="carouselExampleAutoplaying" class="carousel slide overflow-hidden" data-bs-ride="carousel">
+  <div class="carousel-indicators">
+    <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+    <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="1" aria-label="Slide 2"></button>
+    <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="2" aria-label="Slide 3"></button>
+  </div>
+  <div class="carousel-inner">
+    <?php
       $carouselCounter = 1;
       foreach ($carouselData as $carouselItem) :
-      ?>
+        ?>
         <div class="carousel-item <?= ($carouselCounter == 1) ? 'active' : '' ?>">
           <?php
           $src = (str_contains($carouselItem['product_thumbnail'], 'https')) ? $carouselItem['product_thumbnail'] : "../assets/thumbnails/{$carouselItem['product_thumbnail']}";
           ?>
-          <img src="<?= $src ?>" class="img-fluid d-block w-100 carousel_image" alt="..." style="filter: brightness(0.5);">
+          <img src="<?= $src ?>" class="img-fluid d-block w-100 carousel_image object-fit-contain" alt="..." style="filter: brightness(0.5);">
           <div class="carousel-caption top-0 mt-lg-4 mt-sm-0">
             <p class="fs-1 fs-sm-5 mt-lg-5 mt-sm-4 fw-bolder text-capitalize text-truncate"><?= $carouselItem['product_name'] ?></p>
             <a href="user/view_game.php?product_id=<?= $carouselItem['id'] ?>" class="btn btn-primary px-4 py-2 fs-5 mt-5">View</a>
@@ -48,7 +45,8 @@ $carouselData = $userView->getRandomProducts(3);
     </button>
   </div>
   <!-- CAROUSEL END -->
-
+  
+  <div class="container mt-5">
   <!-- CARDS START -->
   <div class="row my-5 g-3">
     <h1 class="text-center text-white text-uppercase fw-bolder">Products</h1>

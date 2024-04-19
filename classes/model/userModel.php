@@ -76,7 +76,7 @@ class User extends Dbh
 	protected function getRandomGames($limit = NULL)
 	{
 
-		$sql = "SELECT * FROM tbl_products ORDER BY RAND()";
+		$sql = "SELECT * FROM product_view ORDER BY RAND()";
 
 		if ($limit != NULL) {
 			$sql .= " LIMIT $limit";
@@ -158,6 +158,15 @@ class User extends Dbh
 				header("location: ../cart.php?error=SomethingWentWrong");
 				exit();
 			}
+
+			$sold_sql = "UPDATE tbl_products SET sold_count = sold_count + 1 WHERE id = ?";
+			$sold_stmt = $this->connect()->prepare($sold_sql);
+
+			if(!$sold_stmt->execute([$product_id])) {
+				header('location: ../index.php?error=SomethingWentWrong');
+				exit();
+			}
+
 		} catch (Exception $e) {
 			echo "ERROR: $e";
 		}
@@ -186,10 +195,11 @@ class User extends Dbh
 			header("location: ../user/cart.php");
 			exit();
 		}
+
 	}
 
-	function getOrders($user_id) {
-		$sql = "SELECT * FROM order_view WHERE customer_id = ?";
+	protected function getOrders($user_id) {
+		$sql = "SELECT * FROM order_view WHERE customer_id = ? AND order_completed IS NULL";
 		$stmt = $this->connect()->prepare($sql);
 
 		if(!$stmt->execute([$user_id])) {
@@ -200,5 +210,16 @@ class User extends Dbh
 		$results = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 		return $results;
+	}
+
+	protected function setOrderComplete($order_id) {
+		$sql  = "UPDATE tbl_orders SET order_completed = NOW() WHERE id = ?";
+		$stmt = $this->connect()->prepare($sql);
+
+		if(!$stmt->execute([$order_id])) {
+			header("location: ../index.php?error=SomethingWentWrong");
+			exit();
+		}
+
 	}
 }

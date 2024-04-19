@@ -20,11 +20,14 @@ $order_data = $userView->fetchOrders($user_id);
 
 <div class="container py-3" style="min-height: 100vh;">
     <h1 class="text-white text-uppercase mb-5">Orders</h1>
-    <div class="row row-cols-lg-4 row-cols-md-2 row-cols-sm-1 g-4">
+    <div class="row row-cols-lg-4 row-cols-md-2 row-cols-sm-1 g-4" id="content_wrapper">
         <?php foreach ($order_data as $order) : ?>
             <div class="col">
                 <div class="card">
-                    <img src=<?= "{$order['product_thumbnail']}" ?> class="card-img-top object-fit-cover" alt="<?= $order['product_name'] ?> Thumbnail" style="max-height: 170px;">
+                    <?php
+                    $src = (str_contains($order['product_thumbnail'], 'https')) ? $order['product_thumbnail'] : "../assets/thumbnails/{$order['product_thumbnail']}";
+                    ?>
+                    <img src="<?= $src ?>" class="card-img-top object-fit-cover" alt="<?= $order['product_name'] ?> Thumbnail" style="max-height: 170px;">
                     <div class="card-body">
                         <p class="fs-5 text-truncate">Recipient: <b><?= $order['receipient_name'] ?></b></p>
                         <p class="fs-3 text-truncate"><?= $order['product_name'] ?></p>
@@ -32,11 +35,29 @@ $order_data = $userView->fetchOrders($user_id);
                     </div>
                     <div class="card-footer d-flex justify-content-between">
                         <h6><?= $order['order_status'] ?></h6>
-                        <button class="btn btn-primary" <?= ($order['order_completed'] == NULL) ? 'disabled': '' ?> >Order Received</button>
+                        <button class="btn btn-primary" <?= ($order['order_status'] != 'Delivered') ? 'disabled' : '' ?> data-bs-toggle="modal" data-bs-target="#order_confirmation">Order Received</button>
                     </div>
                 </div>
             </div>
         <?php endforeach; ?>
+    </div>
+</div>
+
+<div class="modal" id="order_confirmation" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Confirm Order</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p class="text-center fw-bolder fs-4">Have you received your order?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">No</button>
+                <button type="button" data-order-id="<?= $order['id'] ?>" onclick="receiveOrder(this)" class="btn btn-outline-success" data-bs-dismiss="modal">Yes</button>
+            </div>
+        </div>
     </div>
 </div>
 

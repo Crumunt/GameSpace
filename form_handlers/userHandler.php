@@ -31,6 +31,9 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
         sendEmail($userView, $mail);
     } elseif (isset($_POST['keyword'])) {
         searchGames($userView);
+    } elseif (isset($_POST['receive_order'])) {
+        setOrderComplete($userCtrl);
+        loadOrders($userView);
     }
 }
 
@@ -123,6 +126,11 @@ function sendEmail($userView, $mail)
 {
     $product_id = $_POST['product_id'];
 
+    $username = $_SESSION['username'];
+    $receipient_name = $_POST['reciepient_name'];
+    $order_address = $_POST['order_address'];
+    $order_total = $_POST['order_total'];
+    $quantity = $_POST['quantity'];
     $product_data = $userView->fetchGameInfo($product_id);
     $product_name = $product_data[0]['product_name'];
     $product_price = $product_data[0]['price'];
@@ -144,21 +152,22 @@ function sendEmail($userView, $mail)
 
         $mail->Subject = 'GameSpace Order Confirmation';
         $mail->Body = "
-        <p>Hello {$_SESSION['username']}, your order has been made!</p>
+        <p>Hello {$username}, your order has been made!</p>
         <p>Product Name: <b>{$product_name}</b></p>
-        <p>Quantity: <b>{$_POST['quantity']}</b></p>
+        <p>Quantity: <b>{$quantity}</b></p>
         <p>Price: $<b>{$product_price}</b></p>
         <hr>
-        <p>Total Payment: $<b>{$_POST['order_total']}</b></p>
+        <p>Total Payment: $<b>{$order_total}</b></p>
         <hr>
-        <p>Recipient Name: <b>{$_POST['recipient_name']}</b></p>
-        <p>Address: <b>{$_POST['order_address']}</b></p>
+        <p>Recipient Name: <b>{$receipient_name}</b></p>
+        <p>Address: <b>{$order_address}</b></p>
     ";
 
         $mail->send();
     } catch (Exception $e) {
         echo "ERROR: $e";
     }
+    echo "done";
 }
 
 function searchGames($userView)
@@ -194,6 +203,39 @@ function searchGames($userView)
                     </div>
                 </div>
             </a>
+        </div>
+    <?php endforeach;
+}
+
+function setOrderComplete($userCtrl)
+{
+
+    $order_id = $_POST['order_id'];
+
+    $userCtrl->setOrderReceived($order_id);
+}
+
+function loadOrders($userView)
+{
+
+    $user_id = $_SESSION['user_id'];
+
+    $order_data = $userView->fetchOrders($user_id);
+
+    foreach ($order_data as $order) : ?>
+        <div class="col">
+            <div class="card">
+                <img src=<?= "{$order['product_thumbnail']}" ?> class="card-img-top object-fit-cover" alt="<?= $order['product_name'] ?> Thumbnail" style="max-height: 170px;">
+                <div class="card-body">
+                    <p class="fs-5 text-truncate">Recipient: <b><?= $order['receipient_name'] ?></b></p>
+                    <p class="fs-3 text-truncate"><?= $order['product_name'] ?></p>
+                    <p class="fs-5">Total: $<?= $order['order_total'] ?></p>
+                </div>
+                <div class="card-footer d-flex justify-content-between">
+                    <h6><?= $order['order_status'] ?></h6>
+                    <button class="btn btn-primary" data-order-id="<?= $order['id'] ?>" <?= ($order['order_status'] != 'Delivered') ? 'disabled' : '' ?> onclick="receiveOrder(this)">Order Received</button>
+                </div>
+            </div>
         </div>
 <?php endforeach;
 }

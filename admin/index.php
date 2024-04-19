@@ -98,6 +98,12 @@ foreach ($monthly_data as $data) {
     $month[] = $data['monthname'];
     $monthly_user_count[] = $data['users'];
 }
+
+$popular_categories = $adminView->fetchPopularCategories();
+foreach ($popular_categories as $data) {
+    $categories[] = $data['category_name'];
+    $sold_count[] = $data['products_sold'];
+}
 ?>
 <script>
     const ctx = document.getElementById('myChart');
@@ -126,10 +132,10 @@ foreach ($monthly_data as $data) {
     new Chart(ctx1, {
         type: 'pie',
         data: {
-            labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+            labels: <?= json_encode($categories) ?>,
             datasets: [{
-                label: '# of Votes',
-                data: [12, 19, 3, 5, 2, 3],
+                label: '# of Products Sold',
+                data: <?= json_encode($sold_count) ?>,
                 borderWidth: 1
             }]
         },

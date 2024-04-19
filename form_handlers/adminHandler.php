@@ -82,7 +82,7 @@ function loadOrders($adminView = NULL, $order_data = NULL)
                 </div>
             </div>
         </div>
-<?php endforeach;
+    <?php endforeach;
 }
 
 function searchProduct($adminView)

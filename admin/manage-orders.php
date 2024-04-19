@@ -10,7 +10,7 @@ $order_data = $adminView->fetchOrders();
 ?>
 
 <div class="container mt-5">
-    <h1 class="text-white mb-5">Manage Orders</h1>
+    <h1 class="text-white text-uppercase fw-bolder mb-5">Manage Orders</h1>
     <div class="row row-cols-1 row-cols-md-1 g-4" id="content_wrapper">
         <?php foreach ($order_data as $order) : ?>
             <div class="col-lg-3 col-md-6 col-sm-10 mx-auto">
@@ -29,6 +29,7 @@ $order_data = $adminView->fetchOrders();
     </div>
 </div>
 
+
 <!-- MODAL -->
 <div class="modal fade" id="order_modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -45,10 +46,10 @@ $order_data = $adminView->fetchOrders();
                 <p>Price to be paid: <b id="order_total">$1299</b></p>
                 <form action="">
                     <label for="" class="form-label w-100">
-                        Order Status: 
+                        Order Status:
                         <select name="" id="order_status" class="form-select">
                             <option value="Preparing to ship">Preparing to ship</option>
-                            <option value="Product picked up by courier">Product picked up by courier</option>
+                            <option value="Shipped">Shipped</option>
                             <option value="On transit">On transit</option>
                             <option value="Delivered">Delivered</option>
                         </select>

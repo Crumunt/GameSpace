@@ -27,26 +27,10 @@ $gameData = $userView->fetchGameInfo($id);
     </div>
     <div class="col-lg-5 col-md-10 mx-auto d-flex flex-column justify-content-between">
       <div class="overview">
-        <h1 class="text-white fw-bolder"><?= $gameData[0]['product_name'] ?></h1>
-        <!-- TAGS START -->
-        <p class="text-white text-uppercase fw-bolder">Tags</p>
-        <div class="tags d-flex gap-2 align-items-center flex-wrap">
-          <?php
-          $cateogry_data = $userView->fetchGameCategories($gameData[0]['id']);
-          foreach ($cateogry_data as $game_category) :
-          ?>
-            <span class="btn btn-warning p-1 rounded-1"><?= $game_category['category_name'] ?></span>
-          <?php endforeach; ?>
-        </div>
-        <!-- PLATFORMS START -->
-        <p class="text-white text-uppercase fw-bolder mt-3">platforms</p>
-        <div class="platforms d-flex flex-wrap gap-2 mb-2">
-          <?php
-          $platform_data = $userView->fetchGamePlatforms($gameData[0]['id']);
-          foreach ($platform_data as $platform) : ?>
-            <span class="btn btn-danger p-1 rounded-1"><?= $platform['platform_name'] ?></span>
-          <?php endforeach; ?>
-        </div>
+        <h2 title="<?= $gameData[0]['product_name'] ?>" class="text-truncate text-white fw-bolder">
+          <?= $gameData[0]['product_name'] ?>
+        </h2>
+        <span class="fs-5 text-sm fw-normal text-white my-5">Price: $<b><?= number_format($gameData[0]['price'], 2) ?></b></span>
       </div>
       <!-- FORM START -->
       <div class="form justify-self-end">
@@ -64,6 +48,29 @@ $gameData = $userView->fetchGameInfo($id);
     </div>
   </div>
   <div class="row">
+
+    <div class="game_tags mt-5">
+      <!-- TAGS START -->
+      <p class="text-white text-uppercase fw-bolder">Tags</p>
+        <div class="tags d-flex gap-2 align-items-center flex-wrap">
+          <?php
+          $cateogry_data = $userView->fetchGameCategories($gameData[0]['id']);
+          foreach ($cateogry_data as $game_category) :
+          ?>
+            <span class="btn btn-warning p-1 rounded-1"><?= $game_category['category_name'] ?></span>
+          <?php endforeach; ?>
+        </div>
+      <!-- PLATFORMS START -->
+      <p class="text-white text-uppercase fw-bolder mt-3">platforms</p>
+        <div class="platforms d-flex flex-wrap gap-2 mb-2">
+          <?php
+          $platform_data = $userView->fetchGamePlatforms($gameData[0]['id']);
+          foreach ($platform_data as $platform) : ?>
+            <span class="btn btn-danger p-1 rounded-1"><?= $platform['platform_name'] ?></span>
+          <?php endforeach; ?>
+        </div>
+    </div>
+
     <h1 class="my-3 text-white fw-bolder">Description</h1>
     <div class="text-white fs-5"><?= $gameData[0]['product_description'] ?></div>
   </div>

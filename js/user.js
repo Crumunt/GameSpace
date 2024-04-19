@@ -45,9 +45,6 @@ function removeFromCart(button) {
 
             document.getElementById('cart_wrapper').innerHTML = this.responseText
             document.getElementById('modalStatus').textContent = "Item has been Removed."
-            console.log('hehe');
-
-
         }
 
     }
@@ -60,6 +57,7 @@ function removeFromCart(button) {
 function confirmDelete(button) {
 
     document.getElementById('confirmMessage').textContent = button.value
+    document.getElementById('confirm_delete').value = button.getAttribute('data-product-id')
 
 }
 
@@ -205,3 +203,25 @@ function redirectCheckout(product_id) {
     window.location = `checkout.php?product_id=${id}&quantity=${quantity}`
 
 }
+
+function receiveOrder(button) {
+
+    const ORDER_ID = button.getAttribute('data-order-id')
+
+    let data = new FormData()
+    data.append('receive_order', 'receive')
+    data.append('order_id', ORDER_ID)
+
+    let xhr = new XMLHttpRequest()
+
+    xhr.onreadystatechange = function() {
+        if(this.readyState == 4) {
+            console.log('order received')       
+            document.getElementById('content_wrapper').innerHTML = this.responseText
+        }
+    }
+
+    xhr.open('POST', '/GameSpace/form_handlers/userHandler.php')
+    xhr.send(data)
+}
+

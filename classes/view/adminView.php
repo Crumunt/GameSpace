@@ -63,6 +63,11 @@ class AdminView extends Admin
         return $data;
     }
 
+    public function fetchPopularCategories() {
+        $data = $this->getPopularCategories();
+        return $data;
+    }
+
     public function fetchOrderInfo($order_id) {
 		$data = $this->getOrderInfo($order_id);
 		return $data;

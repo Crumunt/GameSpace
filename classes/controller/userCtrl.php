@@ -27,4 +27,8 @@ class UserCtrl extends User
 
         return $action;
     }
+
+    public function setOrderReceived($order_id) {
+        $this->setOrderComplete($order_id);
+    }
 }

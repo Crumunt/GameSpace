@@ -54,6 +54,19 @@ class Admin extends Dbh
         return $results;
     }
 
+    protected function getPopularCategories() {
+        $sql = "SELECT * FROM popular_categories LIMIT 7";
+        $stmt = $this->connect()->prepare($sql);
+
+        if(!$stmt->execute()) {
+            header("location: ../admin/index.php?error=SomethinWentWrong");
+            exit();
+        }
+
+        $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $results;
+    }
+
 
     protected function getPlatforms()
     {
@@ -85,7 +98,7 @@ class Admin extends Dbh
 
     protected function getOrders($limit = NULL)
     {
-        $sql = "SELECT * FROM order_view ORDER BY id DESC";
+        $sql = "SELECT * FROM order_view WHERE order_completed IS NULL ORDER BY id DESC";
 
         if ($limit != NULL) {
             $sql .= " LIMIT $limit";

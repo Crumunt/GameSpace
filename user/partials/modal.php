@@ -10,7 +10,7 @@
             </div>
             <div class="modal-footer">
                 <button class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                <button class="btn btn-warning" value="<?= $cartItem['product_id'] ?>" onclick="removeFromCart(this)" data-bs-toggle="modal" data-bs-target="#confirmModal">Confirm</button>
+                <button class="btn btn-warning" id="confirm_delete" onclick="removeFromCart(this)" data-bs-toggle="modal" data-bs-target="#confirmModal">Confirm</button>
             </div>
         </div>
     </div>
