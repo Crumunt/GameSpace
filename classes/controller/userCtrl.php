@@ -4,9 +4,9 @@ class UserCtrl extends User
 {
 
 
-    public function addToCart($product_id, $quantity, $user_id)
+    public function addToCart($product_id, $quantity, $user_id, $platform_id)
     {
-        $action = $this->addItemToCart($product_id, $quantity, $user_id);
+        $action = $this->addItemToCart($product_id, $quantity, $user_id, $platform_id);
         return $action;
     }
 
@@ -15,12 +15,12 @@ class UserCtrl extends User
         $this->removeItemFromCart($product_id, $user_id);
     }
 
-    public function buyItem($user_id, $recipient_name, $product_id, $quantity, $order_total, $order_address)
+    public function buyItem($user_id, $recipient_name, $product_id, $quantity, $order_total, $order_address, $platform_id)
     {
 
         try {
 
-            $action = $this->purchaseGame($user_id, $recipient_name, $product_id, $quantity, $order_total, $order_address);
+            $action = $this->purchaseGame($user_id, $recipient_name, $product_id, $quantity, $order_total, $order_address, $platform_id);
         } catch (Exception $e) {
             echo "ERROR: $e";
         }
@@ -30,5 +30,9 @@ class UserCtrl extends User
 
     public function setOrderReceived($order_id) {
         $this->setOrderComplete($order_id);
+    }
+
+    public function updateCartItemQuantity($cart_id, $quantity, $user_id) {
+        $this->setCartItemQuantity($cart_id, $quantity, $user_id);
     }
 }

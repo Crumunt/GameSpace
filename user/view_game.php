@@ -33,13 +33,29 @@ $gameData = $userView->fetchGameInfo($id);
         <span class="fs-5 text-sm fw-normal text-white my-5">Price: $<b><?= number_format($gameData[0]['price'], 2) ?></b></span>
       </div>
       <!-- FORM START -->
-      <div class="form justify-self-end">
+      <div class="form justify-self-end text-white">
+
+        <!-- PLATFORM SELECT -->
+        <div class="form-group my-3">
+          <label for="" class="fw-bold text-uppercase">Platform</label>
+          <select name="" id="game_platform" class="form-select w-50">
+            <?php
+            $platform_data = $userView->fetchGamePlatforms($gameData[0]['id']);
+            foreach ($platform_data as $platform) : ?>
+              <option value="<?= $platform['platform_id'] ?>"><?= $platform['platform_name'] ?></option>
+            <?php endforeach; ?>
+          </select>
+        </div>
+
+        <!-- QUANTITY CONTROL -->
         <div class="form-group mb-3">
           <label for="" class="form-label text-white fw-bold text-uppercase">Quantity</label>
           <input type="number" name="quantity" value="1" min="1" id="quantity" class="form-control w-25">
         </div>
+
+        <!-- ACTION BUTTONS -->
         <div class="button-group mb-3">
-          <button value=<?= "{$gameData[0]['id']}" ?> onclick="addToCart(this)" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#confirmModal">
+          <button value=<?= "{$gameData[0]['id']}" ?> onclick="addToCart(this)" class="btn btn-warning " data-bs-toggle="modal" data-bs-target="#confirmModal">
             Add to Cart
           </button>
           <button class="btn btn-primary" value=<?= "{$gameData[0]['id']}" ?> onclick="redirectCheckout(this.value)">Buy Now</button>
@@ -52,23 +68,14 @@ $gameData = $userView->fetchGameInfo($id);
     <div class="game_tags mt-5">
       <!-- TAGS START -->
       <p class="text-white text-uppercase fw-bolder">Tags</p>
-        <div class="tags d-flex gap-2 align-items-center flex-wrap">
-          <?php
-          $cateogry_data = $userView->fetchGameCategories($gameData[0]['id']);
-          foreach ($cateogry_data as $game_category) :
-          ?>
-            <span class="btn btn-warning p-1 rounded-1"><?= $game_category['category_name'] ?></span>
-          <?php endforeach; ?>
-        </div>
-      <!-- PLATFORMS START -->
-      <p class="text-white text-uppercase fw-bolder mt-3">platforms</p>
-        <div class="platforms d-flex flex-wrap gap-2 mb-2">
-          <?php
-          $platform_data = $userView->fetchGamePlatforms($gameData[0]['id']);
-          foreach ($platform_data as $platform) : ?>
-            <span class="btn btn-danger p-1 rounded-1"><?= $platform['platform_name'] ?></span>
-          <?php endforeach; ?>
-        </div>
+      <div class="tags d-flex gap-2 align-items-center flex-wrap">
+        <?php
+        $cateogry_data = $userView->fetchGameCategories($gameData[0]['id']);
+        foreach ($cateogry_data as $game_category) :
+        ?>
+          <span class="btn btn-warning p-1 rounded-1"><?= $game_category['category_name'] ?></span>
+        <?php endforeach; ?>
+      </div>
     </div>
 
     <h1 class="my-3 text-white fw-bolder">Description</h1>

@@ -39,11 +39,12 @@ $order_data = $adminView->fetchOrders();
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <p>Ordered Product: <b id="order_product">Skyrim</b></p>
-                <p>Recepient Name: <b id="receipient_holder">Lorenz Bocatot</b></p>
-                <p>Delivery Address: <b id="order_address">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Harum, vitae.</b></p>
-                <p>Order Quantity: <b id="order_quantity">10</b></p>
-                <p>Price to be paid: <b id="order_total">$1299</b></p>
+                <p>Ordered Product: <b id="order_product"></b></p>
+                <p>Platform: <b id="order_platform"></b></p>
+                <p>Recepient Name: <b id="receipient_holder"></b></p>
+                <p>Address: <b id="order_address"></b></p>
+                <p>Quantity: <b id="order_quantity"></b></p>
+                <p>Total($): <b id="order_total"></b></p>
                 <form action="">
                     <label for="" class="form-label w-100">
                         Order Status:

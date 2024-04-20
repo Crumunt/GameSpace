@@ -6,17 +6,27 @@ require "../classes/model/userModel.php";
 require "../classes/view/userView.php";
 
 $user_id = $_SESSION['user_id'] ?? NULL;
+$cart_id = $_GET['cart_id'] ?? NULL;
 $product_id = $_GET['product_id'] ?? NULL;
-$quantity = $_GET['quantity'] ?? NULL;
 
-if($product_id == NULL || $quantity == NULL || $user_id == NULL) {
+if (($cart_id == NULL || $product_id == NULL) &&  $user_id == NULL) {
     header("location: ../login.php");
     exit();
 }
 
 $userView = new UserView();
 
-$data = $userView->fetchGameInfo($product_id);
+if (isset($_GET['product_id'])) {
+    $data = $userView->fetchGameInfo($product_id);
+} else {
+    $data = $userView->fetchOrderInfo($cart_id);
+}
+
+$product_name = $data[0]['product_name'];
+$quantity = $_GET['quantity'] ?? $data[0]['quantity'];
+$total_price = $data[0]['price'] * $quantity;
+$platform_id = $_GET['platform'] ?? $data[0]['platform_id'];
+$platform = $userView->fetchPlatform($platform_id);
 
 ?>
 
@@ -29,7 +39,10 @@ $data = $userView->fetchGameInfo($product_id);
             <ul class="list-group">
                 <li class="list-group-item d-flex justify-content-between">
                     <div>
-                        <h6 class="fs-5 fw-bolder"><?= $data[0]['product_name'] ?></h6>
+                        <h6 class="fs-5 fw-bolder"><?= $product_name ?></h6>
+                        <span class="text-muted">Platform: <span data-platform-id="<?= $platform[0]['id'] ?>" id="platform"><?= $platform[0]['platform_name'] ?></span></span>
+                    </div>
+                    <div>
                         <span class="text-muted">Quantity: <span id="order_quantity"><?= $quantity ?></span></span>
                     </div>
                     <span class="text-muted">$ <?= $data[0]['price'] ?></span>
@@ -38,7 +51,7 @@ $data = $userView->fetchGameInfo($product_id);
                     <div>
                         <h6>Total ($)</h6>
                     </div>
-                    <span class="text-muted">$ <span id="order_total"><?= ($data[0]['price'] * $quantity) ?></span></span>
+                    <span class="text-muted">$ <span id="order_total"><?= $total_price ?></span></span>
                 </li>
             </ul>
         </div>
@@ -62,7 +75,7 @@ $data = $userView->fetchGameInfo($product_id);
                     </div>
                 </div>
                 <hr>
-                <button type="submit" id="checkout_button" disabled class="btn btn-primary btn-block mb-4" onclick="checkout(<?= $user_id . ',' .$product_id?>) " data-bs-toggle="modal" data-bs-target="#confirmModal">Proceed To Checkout</button>
+                <button type="submit" id="checkout_button" disabled class="btn btn-primary btn-block mb-4" onclick="checkout(<?= $user_id . ',' . $product_id ?>) " data-bs-toggle="modal" data-bs-target="#confirmModal">Proceed To Checkout</button>
             </div>
         </div>
     </div>

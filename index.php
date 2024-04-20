@@ -2,6 +2,7 @@
 include "classes/dbh.php";
 include "classes/model/userModel.php";
 include "classes/view/userView.php";
+
 $userView = new UserView();
 $data = $userView->getProducts(NULL, 12);
 $carouselData = $userView->getRandomProducts(3);

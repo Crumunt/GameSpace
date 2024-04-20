@@ -11,6 +11,7 @@ function addToCart(button) {
     data.append('add_to_cart', 'add')
     data.append('product_id', button.value)
     data.append('quantity', getDataFromId('quantity').value)
+    data.append('platform', getDataFromId('game_platform').value)
 
     let xhr = new XMLHttpRequest()
 
@@ -35,7 +36,7 @@ function removeFromCart(button) {
     let data = new FormData();
 
     data.append('removeCartItem', 'remove')
-    data.append('product_id', button.value);
+    data.append('cart_id', button.value);
 
     let xhr = new XMLHttpRequest()
 
@@ -45,6 +46,7 @@ function removeFromCart(button) {
 
             document.getElementById('cart_wrapper').innerHTML = this.responseText
             document.getElementById('modalStatus').textContent = "Item has been Removed."
+            console.log(this.responseText)
         }
 
     }
@@ -57,7 +59,7 @@ function removeFromCart(button) {
 function confirmDelete(button) {
 
     document.getElementById('confirmMessage').textContent = button.value
-    document.getElementById('confirm_delete').value = button.getAttribute('data-product-id')
+    document.getElementById('confirm_delete').value = button.getAttribute('data-cart-id')
 
 }
 
@@ -72,16 +74,21 @@ function checkout(user_id, product_id) {
     data.append('product_id', product_id);
     data.append('quantity', getDataFromId('order_quantity').textContent)
     data.append('order_total', getDataFromId('order_total').textContent)
+    data.append('platform_id', getDataFromId('platform').getAttribute('data-platform-id'))
     data.append('order_address', getDataFromId('address').value)
 
-    console.log(data);
+    const MODAL_TEXT = document.getElementById('modalStatus')
 
     let xhr = new XMLHttpRequest()
 
     xhr.onreadystatechange = function () {
+        if(this.readyState <= 3) {
+            MODAL_TEXT.textContent = 'Processing order, please wait'
+        }
         if (this.readyState == 4) {
-            document.getElementById('modalStatus').textContent = 'Please check your email to confirm.'
+            MODAL_TEXT.textContent = 'Please check your email to confirm.'
             document.getElementById('modal_close').setAttribute('href', '../index.php');
+            console.log(this.responseText)
         }
     }
 
@@ -199,8 +206,9 @@ function redirectCheckout(product_id) {
 
     let id = product_id
     let quantity = getDataFromId('quantity').value
+    let platform = getDataFromId('game_platform').value
 
-    window.location = `checkout.php?product_id=${id}&quantity=${quantity}`
+    window.location = `checkout.php?product_id=${id}&quantity=${quantity}&platform=${platform}`
 
 }
 
@@ -225,3 +233,37 @@ function receiveOrder(button) {
     xhr.send(data)
 }
 
+function updateQuantity(button) {
+    
+    const cart_id = button.getAttribute('data-cart-id')
+    const quantity_wrapper = document.getElementById(`cart_quantity_${cart_id}`)
+    let quantity = Number(quantity_wrapper.textContent)    
+    let action = button.getAttribute('aria-label')
+
+    if(action == 'plus') {
+        quantity += 1;
+    }else {
+
+        if(quantity == 1) return
+
+        quantity -= 1;
+    }
+
+    let data = new FormData()
+    data.append('update_quantity', 'update')
+    data.append('cart_id', cart_id)
+    data.append('quantity', quantity)
+    console.log(data)
+
+    let xhr = new XMLHttpRequest()
+
+    xhr.onreadystatechange = function() {
+        if(this.readyState == 4) {
+            quantity_wrapper.textContent = quantity
+        }
+    }
+
+    xhr.open('POST', '/GameSpace/form_handlers/userHandler.php')
+    xhr.send(data)
+    
+}

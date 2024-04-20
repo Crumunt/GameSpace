@@ -34,6 +34,8 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
     } elseif (isset($_POST['receive_order'])) {
         setOrderComplete($userCtrl);
         loadOrders($userView);
+    } elseif(isset($_POST['update_quantity'])) {
+        updateCartQuantity($userCtrl);
     }
 }
 
@@ -49,10 +51,10 @@ function addItemToCart($userCtrl)
 
     $product_id = $_POST['product_id'];
     $quantity = $_POST['quantity'];
-
+    $platform = $_POST['platform'];
 
     try {
-        $action = $userCtrl->addToCart($product_id, $quantity, $user_id);
+        $action = $userCtrl->addToCart($product_id, $quantity, $user_id, $platform);
     } catch (Exception $e) {
         echo "ERROR: $e";
         exit();
@@ -103,10 +105,10 @@ function loadCartItems($userView)
 function removeCartItem($userCtrl)
 {
 
-    $product_id = $_POST['product_id'];
+    $cart_id = $_POST['cart_id'];
     $user_id = $_SESSION['user_id'];
 
-    $userCtrl->removeFromCart($product_id, $user_id);
+    $userCtrl->removeFromCart($cart_id, $user_id);
 }
 
 function checkout($userCtrl)
@@ -116,21 +118,25 @@ function checkout($userCtrl)
     $recipient_name = htmlspecialchars($_POST['recipient_name'], ENT_QUOTES);
     $product_id = filter_var($_POST['product_id'], FILTER_SANITIZE_NUMBER_INT);
     $quantity = filter_var($_POST['quantity'], FILTER_SANITIZE_NUMBER_INT);
+    $platform_id = filter_var($_POST['platform_id'], FILTER_SANITIZE_NUMBER_INT);
     $order_total = $_POST['order_total'];
     $order_address = htmlspecialchars($_POST['order_address'], ENT_QUOTES);
 
-    $userCtrl->buyItem($user_id, $recipient_name, $product_id, $quantity, $order_total, $order_address);
+    $userCtrl->buyItem($user_id, $recipient_name, $product_id, $quantity, $order_total, $order_address, $platform_id);
 }
 
 function sendEmail($userView, $mail)
 {
-    $product_id = $_POST['product_id'];
-
+    // GET USER INFO
     $username = $_SESSION['username'];
-    $receipient_name = $_POST['reciepient_name'];
+    $recipient_name = $_POST['recipient_name'];
+    $recipient_email = $_POST['recipient_email'];
     $order_address = $_POST['order_address'];
     $order_total = $_POST['order_total'];
     $quantity = $_POST['quantity'];
+    
+    // GET PRODUCT INFO
+    $product_id = $_POST['product_id'];
     $product_data = $userView->fetchGameInfo($product_id);
     $product_name = $product_data[0]['product_name'];
     $product_price = $product_data[0]['price'];
@@ -146,7 +152,7 @@ function sendEmail($userView, $mail)
         $mail->Port = 465;
 
         $mail->setFrom('lorenz.bocatot@clsu2.edu.ph');
-        $mail->addAddress($_POST['recipient_email']);
+        $mail->addAddress($recipient_email);
 
         $mail->isHTML(true);
 
@@ -159,7 +165,7 @@ function sendEmail($userView, $mail)
         <hr>
         <p>Total Payment: $<b>{$order_total}</b></p>
         <hr>
-        <p>Recipient Name: <b>{$receipient_name}</b></p>
+        <p>Recipient Name: <b>{$recipient_name}</b></p>
         <p>Address: <b>{$order_address}</b></p>
     ";
 
@@ -238,4 +244,14 @@ function loadOrders($userView)
             </div>
         </div>
 <?php endforeach;
+}
+
+function updateCartQuantity($userCtrl) {
+
+    $cart_id = filter_var($_POST['cart_id'], FILTER_SANITIZE_NUMBER_INT);
+    $quantity = filter_var($_POST['quantity'], FILTER_SANITIZE_NUMBER_INT);
+    $user_id = filter_var($_SESSION['user_id'], FILTER_SANITIZE_NUMBER_INT);
+
+    $userCtrl->updateCartItemQuantity($cart_id, $quantity, $user_id);
+
 }

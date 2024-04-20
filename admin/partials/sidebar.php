@@ -1,6 +1,14 @@
 <?php
 session_start();
+
+$user_id = $_SESSION['user_id'] ?? NULL;
+if($user_id == NULL) {
+    header('location: ../index.php?error=UserNotLoggedIn');
+    exit();
+}
+
 $page = basename($_SERVER['PHP_SELF'], ".php");
+
 ?>
 
 <!DOCTYPE html>

@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Card Payment</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+        integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
+</head>
+
+<style>
+    label {
+        cursor: pointer;
+        user-select: none;
+    }
+
+    label:has(input[type="radio"]:checked) {
+        /* border: none !important; */
+        border: 1px solid #950AE6 !important;
+        box-shadow: 0 2px 4px 1px rgba(0, 0, 0, 0.15);
+        font-weight: 500;
+        font-style: italic;
+        transition: 200ms;
+    }
+</style>
+
+<body class="bg-light">
+
+    <div class="container d-flex justify-content-center align-items-center" style="height: 100svh;">
+        <form action="" class="bg-white form-group border mx-auto w-50 p-5 rounded-2 shadow d-flex flex-column gap-2"
+            onsubmit="event.preventDefault()">
+            <div class="payment_method_form">
+                <h1 class="text-center text-uppercase mb-2">Choose payment method</h1>
+                <label for="visa"
+                    class="border w-100 display-6 d-flex gap-5 px-3 justify-content-between align-items-center">
+                    <img src="assets/svg/visa.svg" alt="" class="img" height="100">
+                    <input type="radio" name="payment_method" id="visa" class="d-none">
+                    Visa
+                </label>
+                <label for="mastercard"
+                    class="border w-100 display-6 d-flex gap-5 px-3 justify-content-between align-items-center">
+                    <img src="assets/svg/mastercard.svg" alt="" class="img" height="100">
+                    <input type="radio" name="payment_method" id="mastercard" class="d-none">
+                    MasterCard
+                </label>
+                <label for="paypal"
+                    class="border w-100 display-6 d-flex gap-5 px-3 justify-content-between align-items-center">
+                    <img src="assets/svg/paypal.svg" alt="" class="img" height="100">
+                    <input type="radio" name="payment_method" id="paypal" class="d-none">
+                    Paypal
+                </label>
+                <label for="amex"
+                    class="border w-100 display-6 d-flex gap-5 px-3 justify-content-between align-items-center">
+                    <img src="assets/svg/amex.svg" alt="" class="img" height="100">
+                    <input type="radio" name="payment_method" id="amex" class="d-none">
+                    AMEX
+                </label>
+
+                <div class="button-group mt-3">
+                    <button class="btn btn-primary w-100 mb-1" onclick="showCardForm()">Proceed</button>
+                    <button class="btn btn-secondary w-100">Cancel</button>
+                </div>
+            </div>
+            <div class="card_details_form d-none">
+                <h1 class="text-center text-uppercase mb-5">Card Details</h1>
+                <label for="card_number" class="form-label">Card Number</label>
+                <input type="text" id="card_number" class="form-control">
+                <div class="form-group mt-3 d-flex justify-content-between">
+                    <label for="" class="form-label">
+                        Card Expiry
+                        <input type="text" name="" id="" class="form-control">
+                    </label>
+                    <label for="" class="form-label">
+                        CVV/CVC
+                        <input type="text" name="" id="" class="form-control">
+                    </label>
+                </div>
+
+                <div class="button-group mt-3">
+                    <button class="btn btn-primary w-100 mb-1" onclick="buyItem()">Checkout</button>
+                    <button class="btn btn-secondary w-100" onclick="showCardForm()">Go Back</button>
+                </div>
+            </div>
+
+        </form>
+    </div>
+
+</body>
+
+</html>
+
+<script>
+    function showCardForm() {
+        document.querySelector('.payment_method_form').classList.toggle('d-none')
+        document.querySelector('.card_details_form').classList.toggle('d-none')
+    }
+</script>

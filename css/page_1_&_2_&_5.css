@@ -39,7 +39,6 @@
 }
 
 .product__snapshot {
-	filter: grayscale(1);
 	max-height: 300px;
 	overflow: hidden;
 	cursor: pointer;
@@ -55,7 +54,9 @@
 	overflow: hidden !important;
 }
 
-@media screen and (width < 1300px){
+/* VIEW GAME */
+
+@media screen and (width < 1300px) {
 	#carouselExampleAutoplaying {
 		height: 400px !important;
 		overflow: hidden !important;
@@ -83,5 +84,11 @@
 	.discount__preview,
 	.product__preview {
 		-webkit-line-clamp: 2;
+	}
+}
+
+@media (hover: hover) {
+	.product__snapshot {
+		filter: grayscale(1);
 	}
 }

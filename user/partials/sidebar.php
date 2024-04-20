@@ -1,6 +1,15 @@
 <?php
 session_start();
 $page = basename($_SERVER['PHP_SELF'], ".php");
+
+$user_type = $_SESSION['user_type'] ?? NULL;
+if($user_type == 'admin' && $user_type != NULL) {
+	$redirect = ($page == 'index') ? '' : '../';
+	header("location: {$redirect}admin/index.php");
+	exit();
+}
+
+
 ?>
 
 <!DOCTYPE html>

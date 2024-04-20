@@ -7,13 +7,13 @@ class User extends Dbh
 
 		$sql = "SELECT * FROM product_view";
 
-		if($where != NULL) {
+		if ($where != NULL) {
 			$sql .= " WHERE $where";
 		}
 
 		$sql .= " GROUP BY id";
-		
-		if($limit != NULL) {
+
+		if ($limit != NULL) {
 			$sql .= " LIMIT $limit";
 		}
 
@@ -29,12 +29,13 @@ class User extends Dbh
 		return $results;
 	}
 
-	protected function getGameCategories($product_id) {
+	protected function getGameCategories($product_id)
+	{
 
 		$sql = "SELECT category_name FROM product_view WHERE id = ?";
 		$stmt = $this->connect()->prepare($sql);
 
-		if(!$stmt->execute([$product_id])) {
+		if (!$stmt->execute([$product_id])) {
 			header("location: ../index.php?error=SomethingWentWrong");
 			exit();
 		}
@@ -43,18 +44,32 @@ class User extends Dbh
 		return $results;
 	}
 
-	protected function getGamePlatforms($product_id) {
-		$sql = "SELECT platform_name FROM game_platform_view WHERE product_id = ?";
+	protected function getGamePlatforms($product_id)
+	{
+		$sql = "SELECT platform_id, platform_name FROM game_platform_view WHERE product_id = ?";
 		$stmt = $this->connect()->prepare($sql);
 
-		if(!$stmt->execute([$product_id])) {
+		if (!$stmt->execute([$product_id])) {
 			header("location: ../index.php?error=SomethingWentWrong");
 			exit();
 		}
 
 		$results = $stmt->fetchAll(PDO::FETCH_ASSOC);
 		return $results;
+	}
 
+	protected function getPlaform($platform_id)
+	{
+		$sql = "SELECT id, platform_name FROM tbl_platforms WHERE id = ?";
+		$stmt = $this->connect()->prepare($sql);
+
+		if (!$stmt->execute([$platform_id])) {
+			header("location: ../index.php?error=SomethingWentWrong");
+			exit();
+		}
+		
+		$results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+		return $results;
 	}
 
 	protected function getGame($id)
@@ -85,8 +100,8 @@ class User extends Dbh
 		$stmt = $this->connect()->prepare($sql);
 
 		if (!$stmt->execute()) {
-			// HEAD TO LOCATION
-			echo "SOMETHING WENT WRONG";
+			header("location: ../index.php?error=SomethingWentWrong");
+			exit();
 		}
 
 		$results = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -109,7 +124,7 @@ class User extends Dbh
 
 	protected function getCartItems($user_id)
 	{
-		$sql = "SELECT tbl_cart.id as cart_id, product_id, SUM(quantity) as quantity, product_name, product_thumbnail FROM tbl_cart INNER JOIN tbl_products ON tbl_cart.product_id = tbl_products.id WHERE user_id = $user_id GROUP BY product_id";
+		$sql = "SELECT * FROM cart_view WHERE user_id = $user_id";
 		$stmt = $this->connect()->prepare($sql);
 
 		if (!$stmt->execute()) {
@@ -133,13 +148,27 @@ class User extends Dbh
 		return $results;
 	}
 
-	protected function addItemToCart($id, $quantity, $user_id)
+	protected function addItemToCart($product_id, $quantity, $user_id, $platform_id)
 	{
+		$find_existing_query = "SELECT * FROM tbl_cart WHERE product_id = ? AND user_id = ? AND platform_id = ?";
+		$find_stmt = $this->connect()->prepare($find_existing_query);
 
-		$sql = "INSERT INTO tbl_cart (product_id,quantity,user_id) VALUES (?,?,?)";
+		if (!$find_stmt->execute([$product_id, $user_id, $platform_id])) {
+			header("location: ../index.php?error=SomethingWentWrong");
+			exit();
+		}
+
+		$find_results = $find_stmt->fetchAll(PDO::FETCH_ASSOC);
+
+		if ($find_results) {
+			$sql = "UPDATE tbl_cart SET quantity = quantity + ? WHERE product_id = ? AND user_id = ? AND platform_id = ?";
+		} else {
+			$sql = "INSERT INTO tbl_cart (quantity,product_id,user_id, platform_id) VALUES (?,?,?,?)";
+		}
+
 		$stmt = $this->connect()->prepare($sql);
 
-		if (!$stmt->execute([$id, $quantity, $user_id])) {
+		if (!$stmt->execute([$quantity, $product_id, $user_id, $platform_id])) {
 			header("location: ../index.php?error=SomethingWentWrong");
 			exit();
 		}
@@ -147,14 +176,28 @@ class User extends Dbh
 		return 'Product has been added to cart!';
 	}
 
-	protected function purchaseGame($user_id, $recipient_name, $product_id, $quantity, $order_total, $order_address)
+	protected function getOrderInfo($cart_id)
+	{
+		$sql = "SELECT * FROM tbl_cart INNER JOIN tbl_products ON tbl_cart.product_id = tbl_products.id WHERE tbl_cart.id = ?";
+		$stmt = $this->connect()->prepare($sql);
+
+		if (!$stmt->execute([$cart_id])) {
+			header("location: ../index.php?error=SomethingWentWrong");
+			exit();
+		}
+
+		$results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+		return $results;
+	}
+
+	protected function purchaseGame($user_id, $recipient_name, $product_id, $quantity, $order_total, $order_address, $platform_id)
 	{
 
 		try {
-			$sql = "INSERT INTO tbl_orders(customer_id, receipient_name, product_id, quantity, order_total, order_address) VALUES (?,?,?,?,?,?)";
+			$sql = "INSERT INTO tbl_orders(customer_id, receipient_name, product_id, quantity, order_total, order_address, platform_id) VALUES (?,?,?,?,?,?,?)";
 			$stmt = $this->connect()->prepare($sql);
 
-			if (!$stmt->execute([$user_id, $recipient_name, $product_id, $quantity, $order_total, $order_address])) {
+			if (!$stmt->execute([$user_id, $recipient_name, $product_id, $quantity, $order_total, $order_address, $platform_id])) {
 				header("location: ../cart.php?error=SomethingWentWrong");
 				exit();
 			}
@@ -162,11 +205,10 @@ class User extends Dbh
 			$sold_sql = "UPDATE tbl_products SET sold_count = sold_count + 1 WHERE id = ?";
 			$sold_stmt = $this->connect()->prepare($sold_sql);
 
-			if(!$sold_stmt->execute([$product_id])) {
+			if (!$sold_stmt->execute([$product_id])) {
 				header('location: ../index.php?error=SomethingWentWrong');
 				exit();
 			}
-
 		} catch (Exception $e) {
 			echo "ERROR: $e";
 		}
@@ -174,35 +216,34 @@ class User extends Dbh
 		return "Check your email to verify your purchase.";
 	}
 
-	protected function completeOrder($order_id) {
+	protected function completeOrder($order_id)
+	{
 		$sql = "UPDATE tbl_orders SET date_completed = NOW() WHERE id = ?";
 		$stmt = $this->connect()->prepare($sql);
 
-		if(!$stmt->execute([$order_id])) {
+		if (!$stmt->execute([$order_id])) {
 			header("location: ../index.php?error=SomethingWentWrong");
 			exit();
 		}
-		
 	}
 
-	protected function removeItemFromCart($product_id, $user_id)
+	protected function removeItemFromCart($id, $user_id)
 	{
-
-		$sql = "DELETE FROM tbl_cart WHERE product_id = ? AND user_id = ?";
+		$sql = "DELETE FROM tbl_cart WHERE id = ? AND user_id = ?";
 		$stmt = $this->connect()->prepare($sql);
 
-		if (!$stmt->execute([$product_id, $user_id])) {
+		if (!$stmt->execute([$id, $user_id])) {
 			header("location: ../user/cart.php");
 			exit();
 		}
-
 	}
 
-	protected function getOrders($user_id) {
+	protected function getOrders($user_id)
+	{
 		$sql = "SELECT * FROM order_view WHERE customer_id = ? AND order_completed IS NULL";
 		$stmt = $this->connect()->prepare($sql);
 
-		if(!$stmt->execute([$user_id])) {
+		if (!$stmt->execute([$user_id])) {
 			header("location: ../index.php?error=SomethingWentWrong");
 			exit();
 		}
@@ -212,14 +253,25 @@ class User extends Dbh
 		return $results;
 	}
 
-	protected function setOrderComplete($order_id) {
+	protected function setOrderComplete($order_id)
+	{
 		$sql  = "UPDATE tbl_orders SET order_completed = NOW() WHERE id = ?";
 		$stmt = $this->connect()->prepare($sql);
 
-		if(!$stmt->execute([$order_id])) {
+		if (!$stmt->execute([$order_id])) {
 			header("location: ../index.php?error=SomethingWentWrong");
 			exit();
 		}
+	}
 
+	protected function setCartItemQuantity($cart_id, $quantity, $user_id)
+	{
+		$sql = "UPDATE tbl_cart SET quantity = ? WHERE id = ? AND user_id = ?";
+		$stmt = $this->connect()->prepare($sql);
+
+		if (!$stmt->execute([$quantity, $cart_id, $user_id])) {
+			header("location: ../index.php?error=SomethingWentWrong");
+			exit();
+		}
 	}
 }
