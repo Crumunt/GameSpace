@@ -5,6 +5,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GameSapce</title>
+
+    <script src="js/login-signup.js" defer></script>
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
@@ -22,20 +25,23 @@
                             <div class="card-body p-5">
                                 <h2 class="text-uppercase text-center mb-5">Login</h2>
 
-                                <form action="form_handlers/login_signup_handler.php" method="POST">
+                                <form action="form_handlers/login_signup_handler.php" method="POST" onsubmit="event.preventDefault()">
 
                                     <div data-mdb-input-init class="form-outline mb-4">
-                                        <input type="text" name="email" id="form3Example4cdg" class="form-control form-control-lg" required />
+                                        <input type="text" name="email" id="email" class="form-control form-control-lg" required />
                                         <label class="form-label" for="form3Example4cdg">Email</label>
                                     </div>
-
+                                    
                                     <div data-mdb-input-init class="form-outline mb-4">
-                                        <input type="password" name="password" id="form3Example4cg" class="form-control form-control-lg" required />
+                                        <input type="password" name="password" id="password" class="form-control form-control-lg" required />
                                         <label class="form-label" for="form3Example4cg">Password</label>
+                                        <div class="invalid-feedback">
+                                            Invalid Email or Password
+                                        </div>
                                     </div>
 
                                     <div class="d-flex justify-content-center">
-                                        <button type="submit" name="login" class="btn btn-outline-success w-50 btn-lg text-body">Login</button>
+                                        <button type="submit" name="login" class="btn btn-outline-success w-50 btn-lg text-body" onclick="sendWarning()">Login</button>
                                     </div>
 
                                     <p class="text-center text-muted mt-5 mb-0">Don't an account? <a href="signup.php" class="fw-bold text-body"><u>Register here</u></a></p>

@@ -61,6 +61,18 @@ $page = basename($_SERVER['PHP_SELF'], ".php");
                         <span class="fs-5">Manage Orders</span>
                     </a>
                 </li>
+                <li class="sidebar-item">
+                    <a href="manage-categories.php" class="sidebar-link d-flex align-item-center">
+                        <i class='bx bx-category fs-4'></i>
+                        <span class="fs-5">Manage Categories</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="manage-platforms.php" class="sidebar-link d-flex align-item-center">
+                        <i class='bx bx-devices fs-4'></i>
+                        <span class="fs-5">Manage Platforms</span>
+                    </a>
+                </li>
                 <li class="sidebar-item mt-5">
                     <a href="" class="sidebar-link has-dropdown collapsed d-flex align-items-center" data-bs-toggle="collapse" data-bs-target="#user_collapse" aria-expanded="false" aria-controls="user_collapse">
                         <i class='bx bx-user-circle fs-4'></i>

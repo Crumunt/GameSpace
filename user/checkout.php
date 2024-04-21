@@ -75,7 +75,7 @@ $platform = $userView->fetchPlatform($platform_id);
                     </div>
                 </div>
                 <hr>
-                <button type="submit" id="checkout_button" disabled class="btn btn-primary btn-block mb-4" onclick="checkout(<?= $user_id . ',' . $product_id ?>) " data-bs-toggle="modal" data-bs-target="#confirmModal">Proceed To Checkout</button>
+                <button type="submit" id="checkout_button" disabled class="btn btn-primary btn-block mb-4"  onclick="checkout(<?= $user_id . ',' . $product_id ?>)" data-bs-toggle="modal" data-bs-target="#confirmModal">Proceed To Checkout</button>
             </div>
         </div>
     </div>

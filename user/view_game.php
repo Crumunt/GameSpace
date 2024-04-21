@@ -23,7 +23,9 @@ $gameData = $userView->fetchGameInfo($id);
       <?php
       $src = (str_contains($gameData[0]['product_thumbnail'], 'https') == true) ? $gameData[0]['product_thumbnail'] : "../assets/thumbnails/" . $gameData[0]['product_thumbnail'];
       ?>
-      <img src="<?= $src ?>" alt="Product Image" class="img-fluid w-100 rounded-4">
+      <div id="product_thumbnail_wrapper" class="overflow-hidden rounded-4 object-fit-cover">
+        <img src="<?= $src ?>" alt="Product Image" class="img-fluid w-100 h-100">
+      </div>
     </div>
     <div class="col-lg-5 col-md-10 mx-auto d-flex flex-column justify-content-between">
       <div class="overview">
@@ -73,7 +75,7 @@ $gameData = $userView->fetchGameInfo($id);
         $cateogry_data = $userView->fetchGameCategories($gameData[0]['id']);
         foreach ($cateogry_data as $game_category) :
         ?>
-          <span class="btn btn-warning p-1 rounded-1"><?= $game_category['category_name'] ?></span>
+          <a href="games.php?category=<?= $game_category['category_name'] ?>" class="btn btn-warning p-1 rounded-1"><?= $game_category['category_name'] ?></a>
         <?php endforeach; ?>
       </div>
     </div>

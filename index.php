@@ -25,10 +25,10 @@ $carouselData = $userView->getRandomProducts(3);
           <?php
           $src = (str_contains($carouselItem['product_thumbnail'], 'https')) ? $carouselItem['product_thumbnail'] : "../assets/thumbnails/{$carouselItem['product_thumbnail']}";
           ?>
-          <img src="<?= $src ?>" class="img-fluid d-block w-100 carousel_image object-fit-contain" alt="..." style="filter: brightness(0.5);">
+          <img src="<?= $src ?>" class="img-fluid d-block w-100 carousel_image object-fit-contain" alt="..." style="filter: brightness(0.3);">
           <div class="carousel-caption top-0 mt-lg-4 mt-sm-0">
             <p class="fs-1 fs-sm-5 mt-lg-5 mt-sm-4 fw-bolder text-capitalize text-truncate"><?= $carouselItem['product_name'] ?></p>
-            <a href="user/view_game.php?product_id=<?= $carouselItem['id'] ?>" class="btn btn-primary px-4 py-2 fs-5 mt-5">View</a>
+            <a href="user/view_game.php?product_id=<?= $carouselItem['id'] ?>" class="btn btn-light px-4 py-2 fs-5 mt-5">View</a>
           </div>
         </div>
       <?php

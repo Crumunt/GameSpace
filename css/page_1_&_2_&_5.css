@@ -55,6 +55,25 @@
 }
 
 /* VIEW GAME */
+#product_thumbnail_wrapper {
+	max-width: 525px !important;
+	max-height: 300px !important;
+}
+
+/* CHECKOUT */
+p.loader {
+	letter-spacing: 10px;
+	/* font-family: monospace; */
+	width: 100%;
+	white-space: nowrap;
+	overflow: hidden;
+	animation: typing 2s infinite;
+}
+
+@keyframes typing {
+	from {width: 0;}
+}
+
 
 @media screen and (width < 1300px) {
 	#carouselExampleAutoplaying {

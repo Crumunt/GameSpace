@@ -16,12 +16,13 @@ class Admin extends Dbh
         return $results;
     }
 
-    protected function getProductInfo($product_id) {
+    protected function getProductInfo($product_id)
+    {
 
         $sql = "SELECT product_view.id, product_name, product_description, category_name, platform_name, price FROM product_view INNER JOIN game_platform_view ON product_view.id = game_platform_view.product_id WHERE product_view.id = ?";
         $stmt = $this->connect()->prepare($sql);
 
-        if(!$stmt->execute([$product_id])) {
+        if (!$stmt->execute([$product_id])) {
             header("location: ../admin/index.php?error=SomethingWentWrong");
             exit();
         }
@@ -40,25 +41,62 @@ class Admin extends Dbh
         return $results;
     }
 
-    protected function getCategories()
-    {
-        $sql = "SELECT * FROM tbl_categories";
+    protected function setCategory($category_name, $background_image, $description) {
+        $sql = "INSERT INTO tbl_categories(category_name, background_image, description) VALUES (?,?,?)";
         $stmt = $this->connect()->prepare($sql);
 
-        if (!$stmt->execute()) {
-            header("location: ../admin/index.php?error=SomethingWentWrong");
+        if(!$stmt->execute([$category_name, $background_image, $description])) {
+            header("location: ../index.php?error=SomethingWentWrong");
             exit();
+        }
+    }
+
+    protected function getCategories($offset = 0, $limit = NULL, $where = NULL)
+    {
+        try {
+            $sql = "SELECT * FROM tbl_categories";
+
+            if($where != NULL) {
+                $sql .= " WHERE $where";
+            }
+
+            if ($limit != NULL) {
+                $sql .= " LIMIT $offset, $limit";
+            }
+
+            $stmt = $this->connect()->prepare($sql);
+
+            if (!$stmt->execute()) {
+                header("location: ../admin/index.php?error=SomethingWentWrong");
+                exit();
+            }
+        } catch (Exception $e) {
+            echo "ERROR: $e";
         }
 
         $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
         return $results;
     }
 
-    protected function getPopularCategories() {
+    protected function getCategory($id)
+    {
+        $sql = "SELECT * FROM tbl_categories WHERE id = ?";
+        $stmt = $this->connect()->prepare($sql);
+
+        if(!$stmt->execute([$id])) {
+            header("location: ../index.php?error=SomethingWentWrong");
+        }
+
+        $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $results;
+    }
+
+    protected function getPopularCategories()
+    {
         $sql = "SELECT * FROM popular_categories LIMIT 7";
         $stmt = $this->connect()->prepare($sql);
 
-        if(!$stmt->execute()) {
+        if (!$stmt->execute()) {
             header("location: ../admin/index.php?error=SomethinWentWrong");
             exit();
         }
@@ -67,10 +105,28 @@ class Admin extends Dbh
         return $results;
     }
 
+    protected function setPlatform($platform_name) {
+        $sql = "INSERT INTO tbl_platforms(platform_name) VALUES (?)";
+        $stmt = $this->connect()->prepare($sql);
 
-    protected function getPlatforms()
+        if(!$stmt->execute([$platform_name])) {
+            header("location: ../index.php?error=SomethingWentWrong");
+            exit();
+        }
+    }
+
+    protected function getPlatforms($offset, $limit, $where)
     {
         $sql = "SELECT * FROM tbl_platforms";
+
+        if($where != NULL) {
+            $sql .= " WHERE $where";
+        }
+
+        if($limit != NULL) {
+            $sql .= " LIMIT $offset, $limit";
+        }
+
         $stmt = $this->connect()->prepare($sql);
 
         if (!$stmt->execute()) {
@@ -80,6 +136,39 @@ class Admin extends Dbh
 
         $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
         return $results;
+    }
+
+    protected function getPlatform($platform_id) {
+        $sql = "SELECT * FROM tbl_platforms WHERE id = ?";
+        $stmt = $this->connect()->prepare($sql);
+
+        if(!$stmt->execute([$platform_id])) {
+            header("location: ../admin/index.php?error=SomethingWentWrong");
+            exit();
+        }
+
+        $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $results;
+    }
+
+    protected function removePlatform($platform_id) {
+        $sql = "DELETE FROM tbl_platforms WHERE id = ?";
+        $stmt = $this->connect()->prepare($sql);
+
+        if(!$stmt->execute([$platform_id])) {
+            header("../admin/index.php?error=SomethingWentWrong");
+            exit();
+        }
+    }
+    
+    protected function setPlatformName($platform_name, $platform_id) {
+        $sql = "UPDATE tbl_platforms SET platform_name = ? WHERE id = ?";
+        $stmt = $this->connect()->prepare($sql);
+
+        if(!$stmt->execute([$platform_name, $platform_id])) {
+            header("location: ../admin/index.php?error=SomethingWentWrong");
+            exit();
+        }
     }
 
     protected function searchGames($keyword)
@@ -114,12 +203,13 @@ class Admin extends Dbh
         $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
         return $results;
     }
-    
-    protected function getOrderInfo($order_id) {
+
+    protected function getOrderInfo($order_id)
+    {
         $sql = "SELECT * FROM order_view WHERE id = ?";
         $stmt = $this->connect()->prepare($sql);
 
-        if(!$stmt->execute([$order_id])) {
+        if (!$stmt->execute([$order_id])) {
             header("location: ../admin/index.php?error=SomethingWentWrong");
             exit();
         }
@@ -127,15 +217,15 @@ class Admin extends Dbh
         return $results;
     }
 
-    protected function setOrder($order_id, $order_status) {
+    protected function setOrder($order_id, $order_status)
+    {
         $sql = "UPDATE tbl_orders SET order_status = ? WHERE id = ?";
         $stmt = $this->connect()->prepare($sql);
 
-        if(!$stmt->execute([$order_status, $order_id])) {
+        if (!$stmt->execute([$order_status, $order_id])) {
             header("location: ../admin/index.php?error=SomethingWentWrong");
             exit();
         }
-
     }
 
     protected function getOrderCount()
@@ -214,7 +304,7 @@ class Admin extends Dbh
     protected function clear_resources()
     {
 
-        $sql = "SELECT product_thumbnail, snapshots FROM tbl_products";
+        $sql = "SELECT product_thumbnail, snapshots FROM tbl_products WHERE deleted_at IS NULL";
         $stmt = $this->connect()->prepare($sql);
         $stmt->execute();
         $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -227,10 +317,8 @@ class Admin extends Dbh
             }
         }
 
-        // var_dump($snapshots_in_use);
-
         $thumbnail_files = glob("../assets/thumbnails/*");
-        $snapshot_files = glob("../assets/");
+        $snapshot_files = glob("../assets");
 
         foreach ($thumbnail_files as $thumb_file) {
             $thumb_name = end(explode("/", $thumb_file));
@@ -240,14 +328,17 @@ class Admin extends Dbh
         }
 
         foreach ($snapshot_files as $snap_file) {
-            $snap_name = end(explode("/", $snap_file));
+            if(str_contains($snap_file, 'thumbnails') || str_contains($snap_file, 'svg')) continue;
+            $snap_name = end(explode("/",$snap_file));
             if (!in_array($snap_name, $snapshot_files)) {
+
                 unlink($snap_file);
             }
         }
     }
 
-    protected function updateProduct($product_name, $product_desc, $product_thumbnail = NULL, $snapshots = NULL, $price, $product_category, $product_platform, $product_id) {
+    protected function updateProduct($product_name, $product_desc, $product_thumbnail = NULL, $snapshots = NULL, $price, $product_category, $product_platform, $product_id)
+    {
         // INITIALIZE empty array to store values that will be updated
         $products_array = [];
         // store value from parameters to products_array
@@ -258,12 +349,12 @@ class Admin extends Dbh
 
         // check if thumbnail is not null
         // if not null concat a update statement in the sql and push its corresponding value to the products_array
-        if($product_thumbnail != NULL) {
+        if ($product_thumbnail != NULL) {
             $prod_sql .= ", product_thumbnail = ?";
             array_push($products_array, $product_thumbnail);
         }
         // same procedure as the one from the thumbnail
-        if($snapshots != NULL) {
+        if ($snapshots != NULL) {
             $prod_sql .= ", snapshots = ?";
             array_push($products_array, $snapshots);
         }
@@ -301,11 +392,11 @@ class Admin extends Dbh
 
         // LOOP THROUGH ALL PLATFORMS SELECTED AND STORE IT IN THE DATABASE
         foreach ($product_platform as $platform) {
-            
+
             $del_plat_sql = "DELETE FROM tbl_product_platforms WHERE product_id = ? AND platform_id = ?";
             $del_plat_stmt = $this->connect()->prepare($del_plat_sql);
 
-            if(!$del_plat_stmt->execute([$product_id, $platform])) {
+            if (!$del_plat_stmt->execute([$product_id, $platform])) {
                 header("location: ../admin/index.php?error=SomethingWentWrong");
                 exit();
             }
@@ -320,21 +411,23 @@ class Admin extends Dbh
         }
     }
 
-    protected function archiveProduct($product_id) {
+    protected function archiveProduct($product_id)
+    {
         $sql = "UPDATE tbl_products SET deleted_at = NOW() WHERE id = ?";
         $stmt = $this->connect()->prepare($sql);
 
-        if(!$stmt->execute([$product_id])) {
+        if (!$stmt->execute([$product_id])) {
             header("location: ../admin/index.php?error=SomethingWentWrong");
             exit();
         }
     }
-    
-    protected function getMonthlyUserRegistrations() {
+
+    protected function getMonthlyUserRegistrations()
+    {
         $sql = "SELECT MONTHNAME(date_registered) as monthname, COUNT(*) as users FROM tbl_users GROUP BY date_registered";
         $stmt = $this->connect()->prepare($sql);
 
-        if(!$stmt->execute()) {
+        if (!$stmt->execute()) {
             header("location: ../index.php?error=SomethingWentWrong");
             exit();
         }

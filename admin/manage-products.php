@@ -28,8 +28,8 @@ $data = $adminView->showProducts();
         <?php foreach ($data as $game) : ?>
             <div class="col-lg-3 col-md-6 col-sm-10">
                 <div class="card text-white border w-100 h-100" style="background-color: #2C2E34;">
-                    <?php 
-                        $src = (str_contains($game['product_thumbnail'], 'https') == true) ? $game['product_thumbnail'] : "../assets/thumbnails/" . $game['product_thumbnail'];
+                    <?php
+                    $src = (str_contains($game['product_thumbnail'], 'https') == true) ? $game['product_thumbnail'] : "../assets/thumbnails/" . $game['product_thumbnail'];
                     ?>
                     <img src="<?= $src ?>" class="card-img-top w-100 h-100 d-block object-fit-cover" alt="...">
                     <div class="card-body">
@@ -57,15 +57,18 @@ $data = $adminView->showProducts();
                 <form class="form">
                     <div class="form-group mb-3">
                         <label for="" class="form-label">Product Name <span class="text-muted">(Required*)</span></label>
-                        <input type="text" class="form-control" id="product_name">
+                        <input type="text" class="form-control" id="product_name" onkeyup="checkProductDuplication(this), validateProductInfo(this.value)">
+                        <div class="invalid-feedback">
+                            Product has already been added
+                        </div>
                     </div>
                     <div class="form-group mb-3">
                         <label for="" class="form-label">Product Description</label>
-                        <textarea name="" id="product_description" cols="30" rows="10" class="form-control" style="max-height: 255px;"></textarea>
+                        <textarea onkeyup="validateProductInfo(this.value)" name="" id="product_description" cols="30" rows="10" class="form-control" style="max-height: 255px;"></textarea>
                     </div>
                     <div class="form-group mb-3">
                         <label for="product_price" class="form-label">Product Price $ <span class="text-muted">(Required*)</span></label>
-                        <input type="number" value="1" name="product_price" min="1" max="99999" id="product_price" class="form-control">
+                        <input onkeyup="validateProductInfo(this.value)" type="number" value="1" name="product_price" min="1" max="99999" id="product_price" class="form-control">
                     </div>
                     <div class="form-group mb-3">
                         <div class="accordion accordion-flush" id="accordionFlushExample">
@@ -82,7 +85,7 @@ $data = $adminView->showProducts();
                                         foreach ($categories as $category) :
                                         ?>
                                             <label for="<?= $category['id'] ?>" class="category-label p-2 rounded-1 border">
-                                                <input type="checkbox" name="category[]" value="<?= $category['id'] ?>" id="<?= $category['id'] ?>" class="d-none">
+                                                <input onchange="validateProductInfo(this.value)" type="checkbox" name="category[]" value="<?= $category['id'] ?>" id="<?= $category['id'] ?>" class="category d-none">
                                                 <?= $category['category_name'] ?>
                                             </label>
                                         <?php endforeach; ?>
@@ -102,7 +105,7 @@ $data = $adminView->showProducts();
                                         foreach ($platforms as $platform) :
                                         ?>
                                             <label for="platform_<?= $platform['id'] ?>" class="platform-label p-2 rounded-1 border">
-                                                <input type="checkbox" name="platform[]" value="<?= $platform['id'] ?>" id="platform_<?= $platform['id'] ?>" class="d-none">
+                                                <input onchange="validateProductInfo(this.value)" type="checkbox" name="platform[]" value="<?= $platform['id'] ?>" id="platform_<?= $platform['id'] ?>" class="platform d-none">
                                                 <?= $platform['platform_name'] ?>
                                             </label>
                                         <?php endforeach; ?>
@@ -115,7 +118,7 @@ $data = $adminView->showProducts();
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" onclick="resetForm()">Close</button>
-                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editor_images_modal">Next</button>
+                <button type="button" class="btn btn-primary" id="next_button" disabled data-bs-toggle="modal" data-bs-target="#editor_images_modal">Next</button>
             </div>
         </div>
     </div>
@@ -135,7 +138,7 @@ $data = $adminView->showProducts();
                             Add Thumbnail
                             <input type="file" class="d-none" name="" id="thumbnail_input" onchange="addThumbnail(this)">
                         </label>
-                        <div id="thumbnail_container" class="mx-auto">
+                        <div id="thumbnail_container" class="mx-auto container mb-3">
 
                         </div>
                     </div>

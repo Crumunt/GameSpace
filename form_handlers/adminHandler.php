@@ -10,7 +10,7 @@ $adminCtrl = new AdminCtrl();
 if ($_SERVER['REQUEST_METHOD'] == "POST") {
 
     if (isset($_POST['product_keyword'])) {
-        searchProduct($adminView);
+        findProduct($adminView);
     } elseif (isset($_POST['add_game'])) {
         addGame($adminCtrl);
     } elseif (isset($_POST['update_game'])) {
@@ -24,6 +24,13 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
         echo "THIS IS HAPPENING";
     } elseif (isset($_POST['load_orders'])) {
         loadOrders($adminView);
+    } elseif (isset($_POST['addContent'])) {
+        addContent($adminCtrl);
+    } elseif (isset($_POST['updateContent'])) {
+        updateContent($adminCtrl);
+        loadPlatformsByPage($adminView);
+    }elseif(isset($_POST['content_delete_id'])) {
+        removeContent($adminCtrl, $adminView);
     }
 }
 
@@ -36,6 +43,30 @@ if ($_SERVER['REQUEST_METHOD'] == "GET") {
     }
     if (isset($_GET['order_id'])) {
         getOrderInfo($adminView);
+    }
+    if (isset($_GET['product_name'])) {
+        checkDuplicateProducts($adminView);
+    }
+    if (isset($_GET['category_page'])) {
+        loadCategoriesByPage($adminView);
+    }
+    if (isset($_GET['platform_page'])) {
+        loadPlatformsByPage($adminView);
+    }
+    if (isset($_GET['platform_id'])) {
+        getPlatform($adminView);
+    }
+    if (isset($_GET['category_id'])) {
+        getCategory($adminView);
+    }
+    if (isset($_GET['category_keyword'])) {
+        getCategory($adminView);
+    }
+    if (isset($_GET['content_keyword'])) {
+        searchDuplicateContent($adminView);
+    }
+    if (isset($_GET['confirm_delete'])) {
+        getContentInfo($adminView);
     }
 }
 
@@ -85,7 +116,7 @@ function loadOrders($adminView = NULL, $order_data = NULL)
     <?php endforeach;
 }
 
-function searchProduct($adminView)
+function findProduct($adminView)
 {
 
     $keyword = htmlspecialchars($_POST['product_keyword'], ENT_QUOTES);
@@ -199,4 +230,172 @@ function updateOrderStatus($adminCtrl)
     }
 
     echo "success";
+}
+
+function checkDuplicateProducts($adminView)
+{
+
+    $keyword = $_GET['product_name'];
+    $action = $adminView->searchProduct($keyword);
+
+    if (count($action) > 0) {
+        echo 'duplication';
+    }
+}
+
+function loadCategories($data = NULL, $counter = 1)
+{
+
+    foreach ($data as $category) :
+    ?>
+        <tr>
+            <td><?= $counter++ ?></td>
+            <td><?= $category['category_name'] ?></td>
+            <td>
+                <button class="btn btn-warning" onclick="loadCategoryInfo(this.value)" value="<?= $category['id'] ?>" data-bs-toggle="modal" data-bs-target="#add_modal">Edit</button>
+                <button class="btn btn-danger">Delete</button>
+            </td>
+        </tr>
+    <?php endforeach;
+}
+
+function loadPlatforms($data = NULL, $counter = 1)
+{
+
+    foreach ($data as $platform) :
+    ?>
+        <tr>
+            <td><?= $counter++ ?></td>
+            <td><?= $platform['platform_name'] ?></td>
+            <td>
+                <button class="btn btn-warning" onclick="loadPlatformInfo(this.value)" value="<?= $platform['id'] ?>" data-bs-toggle="modal" data-bs-target="#add_modal">Edit</button>
+                <button class="btn btn-danger" onclick="confirmRemoveContent(this.value)" value="<?= $platform['id'] ?>" data-bs-toggle="modal" data-bs-target="#verify_modal">Delete</button>
+            </td>
+        </tr>
+<?php endforeach;
+}
+
+function loadCategoriesByPage($adminView)
+{
+
+    $limit = 10;
+
+    $page_number = $_GET['category_page'];
+    $offset = $page_number * $limit;
+
+    try {
+        $category_data = $adminView->fetchCategories($offset, $limit);
+    } catch (Exception $e) {
+        echo "ERROR: $e";
+    }
+    $counter = $offset + 1;
+    loadCategories($category_data, $counter);
+}
+
+function loadPlatformsByPage($adminView)
+{
+    $limit = 10;
+
+    $page_number = $_GET['platform_page'] ?? $_POST['page_number'];
+    $offset = $page_number * $limit;
+
+    $platform_data = $adminView->fetchPlatforms($offset, $limit);
+    $counter = $offset + 1;
+    loadPlatforms($platform_data, $counter);
+}
+
+function getCategory($adminView)
+{
+
+    if (isset($_GET['category_id'])) {
+        $category_id = $_GET['category_id'];
+
+        $data = $adminView->fetchCategory($category_id);
+        echo $data[0]['category_name'];
+    } else {
+        $keyword = $_GET['category_keyword'];
+        $action = $adminView->fetchCategories(0, 10, "category_name LIKE '%$keyword%'");
+        loadCategories($action);
+    }
+}
+
+function searchDuplicateContent($adminView)
+{
+
+    $keyword = $_GET['content_keyword'];
+
+    $action = $adminView->fetchCategories(0, NULL, "category_name LIKE '%$keyword%'");
+
+    if (count($action) > 0) {
+        echo 'duplicate';
+    }
+}
+
+function addContent($adminCtrl)
+{
+
+    $tbl = $_POST['content_table'];
+    $input_value = $_POST['input_name'];
+
+    if ($tbl == 'category') {
+    } else {
+        $adminCtrl->addPlatform($input_value);
+    }
+}
+
+function getPlatform($adminView)
+{
+
+    if (isset($_GET['platform_id'])) {
+        $platform_id = $_GET['platform_id'];
+
+        $data = $adminView->fetchPlatform($platform_id);
+        echo $data[0]['platform_name'];
+    } else {
+        $keyword = $_GET['category_keyword'];
+        $action = $adminView->fetchCategories(0, 10, "category_name LIKE '%$keyword%'");
+        loadCategories($action);
+    }
+}
+
+function updateContent($adminCtrl)
+{
+
+    $content_id = $_POST['content_id'];
+    $content_value = $_POST['input_field'];
+    $table = $_POST['content_table'];
+
+    if ($table == 'category') {
+        echo "HIHI";
+    } else {
+        $adminCtrl->updatePlatform($content_value, $content_id);
+    }
+}
+
+function getContentInfo($adminView)
+{
+
+    $content_id = $_GET['confirm_delete'];
+    $table = $_GET['content_table'];
+
+    if ($table == 'category') {
+        echo "HEHE";
+    } else {
+        $data = $adminView->fetchPlatform($content_id);
+
+        echo $data[0]['platform_name'];
+    }
+}
+
+function removeContent($adminCtrl, $adminView)
+{
+    $content_id = $_POST['content_delete_id'];
+    $table = $_POST['content_table'];
+
+    if ($table == 'category') {
+        echo "HEHE";
+    } else {
+        $adminCtrl->deletePlatform($content_id);
+        loadPlatformsByPage($adminView);
+    }
 }

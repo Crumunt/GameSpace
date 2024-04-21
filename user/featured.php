@@ -30,13 +30,14 @@ $banner__product = $userView->getRandomProducts(1);
         </div>
     </div>
     <!-- POPULAR TITLES START -->
+    <?php $popular__products_data = $userView->getRandomProducts(9); ?>
     <div class="row mt-5">
         <h1 class="text-white">Popular Titles</h1>
         <!-- FIRST ROW -->
         <div class="row d-flex mx-auto g-3">
             <?php
-            $popular__products_data = $userView->getRandomProducts(2);
-            foreach ($popular__products_data as $popular__items) :
+            // $popular__products_data = $userView->getRandomProducts(2);
+            foreach (array_slice($popular__products_data,0, 2) as $popular__items) :
             ?>
                 <div class="col-lg-6 col-md-11 mx-auto">
                     <div class="card text-bg-dark overflow-hidden" style="max-height: 350px;">
@@ -61,8 +62,8 @@ $banner__product = $userView->getRandomProducts(1);
         <!-- SECOND ROW -->
         <div class="row d-flex my-5 mx-auto g-1">
             <?php
-            $popular__products_data = $userView->getRandomProducts(3);
-            foreach ($popular__products_data as $popular__items) :
+            // $popular__products_data = $userView->getRandomProducts(3);
+            foreach (array_slice($popular__products_data, 2, 3) as $popular__items) :
             ?>
                 <div class="col-lg-4 col-md-5 mx-auto">
                     <div class="card text-bg-dark overflow-hidden" style="max-height: 230px;">
@@ -87,8 +88,8 @@ $banner__product = $userView->getRandomProducts(1);
         <!-- LAST ROW -->
         <div class="row d-flex mb-5 mx-auto g-3">
             <?php
-            $popular__products_data = $userView->getRandomProducts(4);
-            foreach ($popular__products_data as $popular__items) :
+            // $popular__products_data = $userView->getRandomProducts(4);
+            foreach (array_slice($popular__products_data, 3, 4) as $popular__items) :
             ?>
                 <div class="col-lg-3 col-md-4 col-sm-10">
                     <div class="card text-bg-dark overflow-hidden" style="max-height: 187px;">

@@ -28,13 +28,23 @@ class AdminView extends Admin
         return $data;
     }
 
-    public function fetchCategories() {
-        $data = $this->getCategories();
+    public function fetchCategories($offset = 0, $limit = NULL, $where = NULL) {
+        $data = $this->getCategories($offset, $limit, $where);
         return $data;
     }
 
-    public function fetchPlatforms() {
-        $data = $this->getPlatforms();
+    public function fetchCategory($id) {
+        $data = $this->getCategory($id);
+        return $data;
+    }
+
+    public function fetchPlatforms($offset = 0, $limit = NULL, $where = NULL) {
+        $data = $this->getPlatforms($offset, $limit, $where);
+        return $data;
+    }
+
+    public function fetchPlatform($platform_id) {
+        $data = $this->getPlatform($platform_id);
         return $data;
     }
 

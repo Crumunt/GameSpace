@@ -59,10 +59,11 @@ function loginUser($authCtrl)
     $type = $action[0]['role'];
 
     if ($type == 'student') {
-        header("location: ../index.php?error=none");
+        echo 'index.php';
         exit();
     } else {
-        header("location: ../admin/index.php?error=none");
+        // header("location: ../admin/index.php?error=none");
+        echo 'admin/index.php';
         exit();
     }
 }

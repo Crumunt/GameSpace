@@ -61,7 +61,8 @@ class Authentication extends Dbh
         $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         if (!password_verify($password, $results[0]['password'])) {
-            header("location: ../login.php?error=WrongPassword");
+            // header("location: ../login.php?error=WrongPassword");
+            echo "error";
             exit();
         }
 

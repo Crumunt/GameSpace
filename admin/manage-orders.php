@@ -10,7 +10,11 @@ $order_data = $adminView->fetchOrders();
 ?>
 
 <div class="container mt-5">
-    <h1 class="text-white text-uppercase fw-bolder mb-5">Manage Orders</h1>
+    <nav class="navbar bg-dark-subtle rounded-3 mb-5">
+        <div class="container-fluid">
+            <a class="navbar-brand text-uppercase fw-bolder fs-4">Manage Orders</a>
+        </div>
+    </nav>
     <div class="row row-cols-1 row-cols-md-1 g-4" id="content_wrapper">
         <?php foreach ($order_data as $order) : ?>
             <div class="col-lg-3 col-md-6 col-sm-10 mx-auto">

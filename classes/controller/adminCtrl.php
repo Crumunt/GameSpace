@@ -104,4 +104,16 @@ class AdminCtrl extends Admin
     public function updateOrderStatus($order_id, $order_status) {
         $this->setOrder($order_id, $order_status);
     }
+
+    public function addPlatform($platform_name) {
+        $this->setPlatform($platform_name);
+    }
+    
+    public function updatePlatform($platform_name, $id) {
+        $this->setPlatformName($platform_name, $id);
+    }
+
+    public function deletePlatform($platform_id) {
+        $this->removePlatform($platform_id);
+    }
 }
