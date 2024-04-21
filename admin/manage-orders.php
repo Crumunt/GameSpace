@@ -63,7 +63,7 @@ $order_data = $adminView->fetchOrders();
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" id="updateOrderButton" class="btn btn-primary" onclick="updateOrderInfo()">Update Order Status</button>
+                <button type="button" id="updateOrderButton" class="btn btn-primary" data-bs-dismiss="modal" onclick="updateOrderInfo()">Update Order Status</button>
             </div>
         </div>
     </div>
