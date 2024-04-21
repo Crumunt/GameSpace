@@ -20,9 +20,10 @@ $category_data = $userView->fetchCategories();
 
     <div class="category__wrapper">
         <?php foreach ($category_data as $category) : ?>
-            <div class="card card<?= rand(1, 8) ?>">
+            <div class="card card<?= rand(1, 8) ?>" style="width: 18rem;">
                 <div class="poster">
-                    <img src=<?= "{$category['background_image']}" ?> alt="Yes Poster Image">
+                    <?php $src = (str_contains($category['background_image'], 'https')) ? $category['background_image'] : "../assets/category_assets/{$category['background_image']}"; ?>
+                    <img src="<?= $src ?>" alt="Yes Poster Image">
                     <div class="title-overlay">
                         <h2><?= $category['category_name'] ?></h2>
                     </div>

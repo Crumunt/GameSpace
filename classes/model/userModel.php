@@ -84,9 +84,9 @@ class User extends Dbh
 		return $this->executeQuery($stmt);
 	}
 
-	protected function getCategories($page = 0, $limit = 10)
+	protected function getCategories()
 	{
-		$sql = "SELECT * FROM tbl_categories LIMIT $page, $limit";
+		$sql = "SELECT * FROM tbl_categories";
 		$stmt = $this->connect()->prepare($sql);
 
 		return $this->executeQuery($stmt);

@@ -168,7 +168,7 @@ function addProduct() {
         if (this.readyState == 4) {
             loadContent('products')
             resetForm()
-            console.log('hehe');
+            console.log(this.responseText);
         }
     }
 
@@ -482,27 +482,51 @@ function addContent() {
     data.append('addContent', 'content')
     data.append('input_name', input_field.value)
     data.append('content_table', content_table)
+    if (content_table == 'category') {
+        let bg_image = document.getElementById('category_image')
+        let category_description = document.getElementById('category_description');
+        data.append('bg_image', bg_image.files[0], bg_image.files[0].name)
+        data.append('category_description', category_description.value)
+
+        document.getElementById('add_form').reset()
+    }
 
     let xhr = new XMLHttpRequest()
 
     xhr.onreadystatechange = function () {
         if (this.readyState == 4) {
             document.getElementById('confirm_message').textContent = `${content_table} added successfully`
+            console.log(this.responseText)
+            reloadPagination()
         }
     }
 
     xhr.open('POST', '/GameSpace/form_handlers/adminHandler.php')
     xhr.send(data)
 
+    console.log(data)
+
 }
 
 function loadCategoryInfo(id) {
+
+    let input_field = document.getElementById('input_field')
+    let save_button = document.getElementById('save_button')
+    let category_description = document.getElementById('category_description')
 
     let xhr = new XMLHttpRequest()
 
     xhr.onreadystatechange = function () {
         if (this.readyState == 4) {
-            document.getElementById('input_field').value = this.responseText
+            let data = JSON.parse(this.responseText)
+
+            input_field.value = data[0].category_name
+            category_description.value = data[0].description
+            save_button.removeAttribute('onclick')
+            save_button.setAttribute('value', id);
+            save_button.setAttribute('onclick', 'updateContent(this)')
+            save_button.textContent = 'Update'
+            console.log(data)
         }
     }
     xhr.open('GET', '/GameSpace/form_handlers/adminHandler.php?category_id=' + id)
@@ -536,7 +560,7 @@ function updateContent(button) {
     let input_field = document.getElementById('input_field')
     let content_table = input_field.getAttribute('aria-label')
     let save_button = document.getElementById('save_button')
-    let platform_id = button.value
+    let content_id = button.value
     let page = document.querySelector('.number_page.active').getAttribute('data-page-number')
 
     let data = new FormData()
@@ -544,8 +568,18 @@ function updateContent(button) {
     data.append('updateContent', 'update')
     data.append('content_table', content_table)
     data.append('input_field', input_field.value)
-    data.append('content_id', platform_id)
+    data.append('content_id', content_id)
     data.append('page_number', page)
+
+    if (content_table == 'category') {
+        let category_description = document.getElementById('category_description').value
+        let bg_image = document.getElementById('category_image')
+
+        if (bg_image.files.length > 0) {
+            data.append('bg_image', bg_image.files[0], bg_image.files[0].name)
+        }
+        data.append('category_description', category_description)
+    }
 
     let xhr = new XMLHttpRequest()
 
@@ -553,6 +587,7 @@ function updateContent(button) {
         if (this.readyState == 4) {
             document.getElementById('confirm_message').textContent = `${content_table} updated successfully`
             document.getElementById('table_content_wrapper').innerHTML = this.responseText
+            console.log(this.responseText)
         }
     }
 
@@ -567,10 +602,7 @@ function updateContent(button) {
 function confirmRemoveContent(id) {
 
     const content_table = document.getElementById('table_pagination').getAttribute('aria-label')
-
-    let data = new FormData()
-    data.append('getContent', id)
-    data.append('content_table', content_table)
+    let content_header = (content_table.includes('categories')) ? 'category' : 'platform'
 
     let xhr = new XMLHttpRequest()
 
@@ -581,7 +613,7 @@ function confirmRemoveContent(id) {
         }
     }
 
-    xhr.open('GET', `/GameSpace/form_handlers/adminHandler.php?confirm_delete=${id}&content_table=${content_table}`)
+    xhr.open('GET', `/GameSpace/form_handlers/adminHandler.php?confirm_delete=${id}&content_table=${content_header}`)
     xhr.send();
 
 }
@@ -590,12 +622,13 @@ function removeContent(id) {
 
 
     let content_table = document.getElementById('table_pagination').getAttribute('aria-label')
+    let content_header = (content_table.includes('categories')) ? 'category' : 'clatform'
     let page = document.querySelector('.number_page.active').getAttribute('data-page-number')
 
     let data = new FormData()
 
     data.append('content_delete_id', id)
-    data.append('content_table', content_table)
+    data.append('content_table', content_header)
     data.append('page_number', page)
 
 
@@ -603,8 +636,9 @@ function removeContent(id) {
 
     xhr.onreadystatechange = function () {
         if (this.readyState == 4) {
-            document.getElementById('confirm_message').textContent = `Platform has been deleted successfully`
+            document.getElementById('confirm_message').textContent = `${content_header} has been deleted successfully`
             document.getElementById('table_content_wrapper').innerHTML = this.responseText
+            reloadPagination()
         }
     }
 
@@ -638,16 +672,40 @@ function checkDuplication(input) {
 
 }
 
-function searchCategory(keyword) {
+function searchContent(keyword) {
+
+    const content_table = document.getElementById('table_content_wrapper');
+    const content = document.getElementById('table_pagination').getAttribute('aria-label')
+    let content_keyword = (content.includes('categories')) ? 'category_' : 'platform_'
+
+    content_keyword.concat('keyword' + keyword);
 
     let xhr = new XMLHttpRequest()
     xhr.onreadystatechange = function () {
         if (this.readyState == 4) {
-            document.getElementById('table_content_wrapper').innerHTML = this.responseText;
+            content_table.innerHTML = this.responseText;
         }
     }
 
     xhr.open('GET', '/GameSpace/form_handlers/adminHandler.php?category_keyword=' + keyword)
+    xhr.send()
+}
+
+function reloadPagination() {
+
+    let pagination_wrapper = document.getElementById('table_pagination')
+    let content_header = (pagination_wrapper.getAttribute('aria-label').includes('categories')) ? 'category_' : 'platform_'
+
+
+    let xhr = new XMLHttpRequest()
+
+    xhr.onreadystatechange = function() {
+        if(this.readyState == 4) {
+            pagination_wrapper.innerHTML = this.responseText
+        }
+    }
+
+    xhr.open('GET', '/GameSpace/form_handlers/adminHandler.php?reload_pagination=' + content_header)
     xhr.send()
 
 }

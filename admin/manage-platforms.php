@@ -13,7 +13,7 @@ $adminView = new AdminView();
         <div class="container-fluid">
             <a class="navbar-brand text-uppercase fw-bolder fs-4">Manage Platforms</a>
             <div class="d-flex" role="search">
-                <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" onkeyup="searchCategory(this.value)">
+                <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" onkeyup="searchContent(this.value)">
                 <button class="btn btn-outline-dark" data-bs-toggle="modal" data-bs-target="#add_modal">Add</button>
             </div>
         </div>

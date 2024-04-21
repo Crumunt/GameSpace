@@ -52,7 +52,7 @@ class AdminCtrl extends Admin
 
             $file_tmp = $product_image_tmp[$i];
 
-            $upload_directory = "../assets/" . (($i == 0) ? 'thumbnails/' : '');
+            $upload_directory = "../assets/" . (($i == 0) ? 'thumbnails/' : 'snapshots/');
 
             $upload_destination = $upload_directory . $file_name;
 
@@ -60,10 +60,42 @@ class AdminCtrl extends Admin
                 move_uploaded_file($file_tmp, $upload_destination);
             } catch (Exception $e) {
                 echo "ERROR: $e";
+                exit();
             }
         }
 
         return [$thumbnail, $snapshots];
+    }
+
+    private function upload_image($files) {
+
+        if(empty($files ?? NULL)) {
+            return;
+        }
+
+        $file_name = $files['bg_image']['name'];
+        $ext = end(explode('.', $file_name));
+
+        $file_name = 'category_image_' . rand(0,9999) . '.' . $ext;
+
+        $destination_directory = '../assets/category_assets/';
+        $destination_path = $destination_directory . $file_name;
+
+        $source_path = $files['bg_image']['tmp_name'];
+
+        try {
+            $upload = move_uploaded_file($source_path, $destination_path);
+        } catch (Exception $e) {
+            echo "ERROR: $e";
+        }
+
+        if(!$upload) {
+            // header("location: ../admin/index.php?error=SomethingWentWrong");
+            exit();
+        }
+
+        return $file_name;
+
     }
 
     public function clear_unused_resources()
@@ -115,5 +147,35 @@ class AdminCtrl extends Admin
 
     public function deletePlatform($platform_id) {
         $this->removePlatform($platform_id);
+    }
+
+    public function addCategory($category_name, $description, $image) {
+        $file_name = $this->upload_image($image);
+
+        try {
+            $this->setCategory($category_name, $file_name, $description);
+        } catch (Exception $e) {
+            echo "ERROR: $e";
+        }
+    }
+
+    public function reformCategory($category_name, $bg_image = NULL, $description, $id) {
+
+        if($bg_image != NULL) {
+            $file_name = $this->upload_image($bg_image);
+            echo "THIS IS HAPPENING";
+            try {
+                $this->updateCategory($category_name, $file_name, $description, $id);
+            } catch (Exception $e) {
+                echo "ERROR: $e";
+            }
+        }else {
+            $this->updateCategory($category_name, NULL, $description, $id);
+        }
+
+    }
+
+    public function deleteCategory($category_id) {
+        $this->removeCategory($category_id);
     }
 }

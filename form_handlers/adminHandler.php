@@ -27,9 +27,8 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
     } elseif (isset($_POST['addContent'])) {
         addContent($adminCtrl);
     } elseif (isset($_POST['updateContent'])) {
-        updateContent($adminCtrl);
-        loadPlatformsByPage($adminView);
-    }elseif(isset($_POST['content_delete_id'])) {
+        updateContent($adminCtrl, $adminView);
+    } elseif (isset($_POST['content_delete_id'])) {
         removeContent($adminCtrl, $adminView);
     }
 }
@@ -67,6 +66,12 @@ if ($_SERVER['REQUEST_METHOD'] == "GET") {
     }
     if (isset($_GET['confirm_delete'])) {
         getContentInfo($adminView);
+    }
+    if (isset($_GET['platform_keyword'])) {
+        getPlatform($adminView);
+    }
+    if(isset($_GET['reload_pagination'])) {
+        reloadPagination($adminView);
     }
 }
 
@@ -130,6 +135,7 @@ function addGame($adminCtrl)
 {
     $data = getPostData();
 
+    // var_dump($data);
     try {
         $action = $adminCtrl->addProduct($data);
     } catch (Exception $e) {
@@ -253,7 +259,7 @@ function loadCategories($data = NULL, $counter = 1)
             <td><?= $category['category_name'] ?></td>
             <td>
                 <button class="btn btn-warning" onclick="loadCategoryInfo(this.value)" value="<?= $category['id'] ?>" data-bs-toggle="modal" data-bs-target="#add_modal">Edit</button>
-                <button class="btn btn-danger">Delete</button>
+                <button class="btn btn-danger" onclick="confirmRemoveContent(this.value)" value="<?= $category['id'] ?>" data-bs-toggle="modal" data-bs-target="#verify_modal">Delete</button>
             </td>
         </tr>
     <?php endforeach;
@@ -272,7 +278,7 @@ function loadPlatforms($data = NULL, $counter = 1)
                 <button class="btn btn-danger" onclick="confirmRemoveContent(this.value)" value="<?= $platform['id'] ?>" data-bs-toggle="modal" data-bs-target="#verify_modal">Delete</button>
             </td>
         </tr>
-<?php endforeach;
+    <?php endforeach;
 }
 
 function loadCategoriesByPage($adminView)
@@ -280,7 +286,7 @@ function loadCategoriesByPage($adminView)
 
     $limit = 10;
 
-    $page_number = $_GET['category_page'];
+    $page_number = $_GET['category_page']  ?? $_POST['page_number'];
     $offset = $page_number * $limit;
 
     try {
@@ -311,7 +317,7 @@ function getCategory($adminView)
         $category_id = $_GET['category_id'];
 
         $data = $adminView->fetchCategory($category_id);
-        echo $data[0]['category_name'];
+        echo json_encode($data);
     } else {
         $keyword = $_GET['category_keyword'];
         $action = $adminView->fetchCategories(0, 10, "category_name LIKE '%$keyword%'");
@@ -338,6 +344,11 @@ function addContent($adminCtrl)
     $input_value = $_POST['input_name'];
 
     if ($tbl == 'category') {
+        $category_desc = $_POST['category_description'];
+        foreach ($_FILES['bg_image'] as $name => $value) {
+            $bg_image["bg_image"][$name] = $value;
+        }
+        $adminCtrl->addCategory($input_value, $category_desc, $bg_image);
     } else {
         $adminCtrl->addPlatform($input_value);
     }
@@ -352,13 +363,13 @@ function getPlatform($adminView)
         $data = $adminView->fetchPlatform($platform_id);
         echo $data[0]['platform_name'];
     } else {
-        $keyword = $_GET['category_keyword'];
-        $action = $adminView->fetchCategories(0, 10, "category_name LIKE '%$keyword%'");
-        loadCategories($action);
+        $keyword = $_GET['platform_keyword'];
+        $action = $adminView->fetchPlatforms(0, 10, "platform_name LIKE '%$keyword%'");
+        loadPlatforms($action);
     }
 }
 
-function updateContent($adminCtrl)
+function updateContent($adminCtrl, $adminView)
 {
 
     $content_id = $_POST['content_id'];
@@ -366,9 +377,14 @@ function updateContent($adminCtrl)
     $table = $_POST['content_table'];
 
     if ($table == 'category') {
-        echo "HIHI";
+        $bg_image = $_FILES['bg_image'] ?? NULL;
+        $description = $_POST['category_description'];
+
+        $adminCtrl->reformCategory($content_value, $bg_image, $description, $content_id);
+        loadCategoriesByPage($adminView);
     } else {
         $adminCtrl->updatePlatform($content_value, $content_id);
+        loadPlatformsByPage($adminView);
     }
 }
 
@@ -376,26 +392,52 @@ function getContentInfo($adminView)
 {
 
     $content_id = $_GET['confirm_delete'];
-    $table = $_GET['content_table'];
+    $content = $_GET['content_table'];
 
-    if ($table == 'category') {
-        echo "HEHE";
+    if ($content == 'category') {
+        $data = $adminView->fetchCategory($content_id);
     } else {
         $data = $adminView->fetchPlatform($content_id);
-
-        echo $data[0]['platform_name'];
     }
+    echo $data[0]["{$content}_name"];
 }
 
 function removeContent($adminCtrl, $adminView)
 {
     $content_id = $_POST['content_delete_id'];
-    $table = $_POST['content_table'];
+    $content = $_POST['content_table'];
 
-    if ($table == 'category') {
-        echo "HEHE";
+    if ($content == 'category') {
+        $adminCtrl->deleteCategory($content_id);
+        loadCategoriesByPage($adminView);
     } else {
         $adminCtrl->deletePlatform($content_id);
         loadPlatformsByPage($adminView);
     }
+}
+
+function reloadPagination($adminView)
+{
+
+    $content_header = $_GET['reload_pagination'];
+    if ($content_header == 'category_') {
+        $data = $adminView->fetchCategories();
+    } else {
+        $data = $adminView->fetchPlatforms();
+    }
+
+    $number_of_items = 10;
+    $pages = ceil(count($data) / $number_of_items);
+    ?>
+    <?php for ($i = 1; $i <= $pages; $i++) {
+    ?>
+        <li class="page-item">
+            <button class="number_page page-link <?= ($i == 1) ? 'active' : '' ?>" data-page-number="<?= ($i - 1) ?>" onclick="changePage(this)"><?= $i ?></button>
+        </li>
+    <?php
+    }
+    ?>
+    </ul>
+<?php
+
 }

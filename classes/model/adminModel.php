@@ -105,6 +105,16 @@ class Admin extends Dbh
         return $results;
     }
 
+    protected function removeCategory($category_id) {
+        $sql = "DELETE FROM tbl_categories WHERE id = ?";
+        $stmt = $this->connect()->prepare($sql);
+
+        if(!$stmt->execute([$category_id])) {
+            header("location: ../admin/index.php?error=SomethingWentWrong");
+            exit();
+        }
+    }
+
     protected function setPlatform($platform_name) {
         $sql = "INSERT INTO tbl_platforms(platform_name) VALUES (?)";
         $stmt = $this->connect()->prepare($sql);
@@ -304,37 +314,37 @@ class Admin extends Dbh
     protected function clear_resources()
     {
 
-        $sql = "SELECT product_thumbnail, snapshots FROM tbl_products WHERE deleted_at IS NULL";
+        $sql = "SELECT * FROM tbl_products";
         $stmt = $this->connect()->prepare($sql);
         $stmt->execute();
         $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
         $thumbnails_in_use = [];
         $snapshots_in_use = [];
         foreach ($results as $image) {
-            array_push($thumbnails_in_use, $image['product_thumbnail']);
+            $thumbnails_in_use[] = $image['product_thumbnail'];
             foreach (unserialize($image['snapshots']) as $snapshot) {
-                array_push($snapshots_in_use, $snapshot);
+                $snapshots_in_use[] = $snapshot;
             }
         }
 
         $thumbnail_files = glob("../assets/thumbnails/*");
-        $snapshot_files = glob("../assets");
+        $snapshot_files = glob("../assets/snapshots/*");
 
         foreach ($thumbnail_files as $thumb_file) {
-            $thumb_name = end(explode("/", $thumb_file));
+            $thumb_name = end(explode('/', $thumb_file));
             if (!in_array($thumb_name, $thumbnails_in_use)) {
                 unlink($thumb_file);
             }
         }
 
-        foreach ($snapshot_files as $snap_file) {
-            if(str_contains($snap_file, 'thumbnails') || str_contains($snap_file, 'svg')) continue;
-            $snap_name = end(explode("/",$snap_file));
-            if (!in_array($snap_name, $snapshot_files)) {
+        // foreach ($snapshot_files as $snap_file) {
+        //     // if(str_contains($snap_file, 'thumbnails') || str_contains($snap_file, 'svg')) continue;
+        //     $snap_name = end(explode('/',$snap_file));
+        //     if (!in_array($snap_name, $snapshot_files)) {
+        //         unlink($snap_file);
+        //     }
+        // }
 
-                unlink($snap_file);
-            }
-        }
     }
 
     protected function updateProduct($product_name, $product_desc, $product_thumbnail = NULL, $snapshots = NULL, $price, $product_category, $product_platform, $product_id)
@@ -434,5 +444,32 @@ class Admin extends Dbh
 
         $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
         return $results;
+    }
+
+    protected function updateCategory($category_name, $bg_image = NULL, $description, $id) {
+
+        $sql_values = [$category_name, $description];
+
+        $sql = "UPDATE tbl_categories SET category_name = ?, description = ?";
+
+        if($bg_image != NULL)  {
+            $sql .= ", background_image = ?";
+            array_push($sql_values, $bg_image);
+        }
+
+        $sql .= " WHERE id = ?";
+        array_push($sql_values, $id);
+
+        try {
+            $stmt = $this->connect()->prepare($sql);
+
+        if(!$stmt->execute($sql_values)) {
+            header("location: ../admin/index.php");
+            exit();
+        }
+        } catch (Exception $e) {
+            echo "ERROR: $e";
+        }
+
     }
 }

@@ -12,7 +12,7 @@ $adminView = new AdminView();
         <div class="container-fluid">
             <a class="navbar-brand text-uppercase fw-bolder fs-4">Manage Categories</a>
             <div class="d-flex" role="search">
-                <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" onkeyup="searchCategory(this.value)">
+                <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" onkeyup="searchContent(this.value)">
                 <button class="btn btn-outline-dark" data-bs-toggle="modal" data-bs-target="#add_modal">Add</button>
             </div>
         </div>
@@ -37,7 +37,7 @@ $adminView = new AdminView();
                         <td><?= $data['category_name'] ?></td>
                         <td>
                             <button class="btn btn-warning" onclick="loadCategoryInfo(this.value)" value="<?= $data['id'] ?>" data-bs-toggle="modal" data-bs-target="#add_modal">Edit</button>
-                            <button class="btn btn-danger" onclick="loadCategoryInfo(this.value)" value="<?= $data['id'] ?>">Delete</button>
+                            <button class="btn btn-danger" onclick="confirmRemoveContent(this.value)" value="<?= $data['id'] ?>" data-bs-toggle="modal" data-bs-target="#verify_modal">Delete</button>
                         </td>
                     </tr>
                 <?php endforeach; ?>

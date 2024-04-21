@@ -11,13 +11,26 @@ $page_header = ($page == 'manage-categories') ? 'Category' : 'Platform'
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <label for="" class="form-label w-100">
-                    <?= $page_header ?> Name
-                    <input type="text" name="" id="input_field" onkeyup="checkDuplication(this)" aria-label="<?= strtolower($page_header) ?>" class="form-control w-100">
-                    <div class="invalid-feedback">
-                        <?= $page_header ?> has already been added
-                    </div>
-                </label>
+                <form action="" id="add_form">
+                    <label for="" class="form-label w-100">
+                        <?= $page_header ?> Name
+                        <input type="text" name="" id="input_field" onkeyup="checkDuplication(this)" aria-label="<?= strtolower($page_header) ?>" class="form-control w-100">
+                        <div class="invalid-feedback">
+                            <?= $page_header ?> has already been added
+                        </div>
+                    </label>
+                    <?php if ($page == 'manage-categories') { ?>
+                        <div class="form-group mt-3 d-flex gap-2 align-items-center flex-wrap justify-content-center">
+                            <label for="category_image" class="form-label">
+                                Background Image
+                                <input type="file" name="" id="category_image" class="">
+                            </label>
+                        </div>
+                        <div class="form-group mt-3">
+                            <textarea name="" id="category_description" cols="30" rows="10" class="form-control"></textarea>
+                        </div>
+                    <?php } ?>
+                </form>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
