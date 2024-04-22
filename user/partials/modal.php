@@ -26,7 +26,11 @@
                 </a>
             </div>
             <div class="modal-body">
-                <p id="modalStatus" class="text-success text-center fs-3"></p>
+                <p class="d-flex align-items-center justify-content-center">
+                    <i class='bx bx-loader-circle bx-spin bx-lg d-none' id="loader"></i>
+                    <i class='bx bxs-check-circle bx-tada bx-lg d-none fs-4' id="load_complete" style='color:#69de1e'></i>
+                    <span id="modalStatus" class="text-success text-center fs-4"></span>
+                </p>
             </div>
         </div>
     </div>

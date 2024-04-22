@@ -26,3 +26,9 @@ function sendWarning() {
     xhr.send(data)
 
 }
+
+function checkDuplicateEmail() {
+
+
+    
+}

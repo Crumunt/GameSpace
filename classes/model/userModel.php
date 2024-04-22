@@ -2,16 +2,16 @@
 class User extends Dbh
 {
 
-	private function executeQuery($stmt, $values = NULL) {
+	private function executeQuery($stmt, $values = NULL)
+	{
 
-		if(!$stmt->execute($values)) {
+		if (!$stmt->execute($values)) {
 			header("location: ../index.php?error=SomethingWentWrong");
 			exit();
 		}
 
 		$results = $stmt->fetchAll(PDO::FETCH_ASSOC);
 		return $results;
-
 	}
 
 	protected function getGames($where = NULL, $limit = NULL)
@@ -225,5 +225,21 @@ class User extends Dbh
 			header("location: ../index.php?error=SomethingWentWrong");
 			exit();
 		}
+	}
+
+	protected function sendConcern($concern_header, $concern_body = NULL, $user_id)
+	{
+		try {
+			$sql = "INSERT INTO tbl_messages(concern_header, concern_body, user_id) VALUES (?,?,?)";
+			$stmt = $this->connect()->prepare($sql);
+
+			if (!$stmt->execute([$concern_header, $concern_body, $user_id])) {
+				header("location: ../index.php?error=SomethingWentWrong");
+				exit();
+			}
+		} catch (Exception $e) {
+			echo "ERROR: $e";
+		}
+		echo "DONE";
 	}
 }

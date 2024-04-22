@@ -23,24 +23,28 @@ $data = $userView->fetchCartItems($user_id);
         <?php foreach ($data as $cartItem) : ?>
             <div class="card text-white mb-3 w-75 mx-auto" style="background-color: #2C2E34">
                 <div class="row g-0">
-                    <div class="col-md-4" style="height: 203px;">
+                    <div class="col-md-4" >
                         <?php
                         $src = (str_contains($cartItem['product_thumbnail'], 'https')) ? $cartItem['product_thumbnail'] : "../assets/thumbnails/{$cartItem['product_thumbnail']}";
                         ?>
-                        <img src="<?= $src ?>" class="img-fluid object-fit-cover rounded-start w-100 h-100" alt="...">
+                        <img src="<?= $src ?>" class="img-fluid object-fit-cover rounded-start w-100 h-100" alt="..." style="height: 203px;">
                     </div>
                     <div class="col-md-8">
                         <div class="card-body d-flex justify-content-between flex-column h-100">
-                            <h5 class="card-title fw-bolder fs-2"><?= $cartItem['product_name'] ?></h5>
+                            <h5 class="card-title fw-bolder fs-2 text-truncate"><?= $cartItem['product_name'] ?></h5>
                             <div class="card-text">
                                 <div class="platform_wrapper">
-                                    <p>Platform: <?= $cartItem['platform_name'] ?></p>
+                                    <p class="text-truncate">Platform: <?= $cartItem['platform_name'] ?></p>
                                 </div>
-                                <div class="form-group d-flex gap-2 align-items-center">
-                                    <label for="" class="">Quantity: </label>
-                                    <span id="cart_quantity_<?= $cartItem['cart_id'] ?>"><?= $cartItem['quantity'] ?></span>
-                                    <button data-cart-id="<?= $cartItem['cart_id'] ?>" aria-label="minus" class="btn btn-outline-light" onclick="updateQuantity(this)"><i class='bx bx-minus'></i></button>
-                                    <button data-cart-id="<?= $cartItem['cart_id'] ?>" aria-label="plus" class="btn btn-outline-light" onclick="updateQuantity(this)"><i class='bx bx-plus'></i></button>
+                                <div class="form-group d-flex align-items-center flex-wrap gap-2">
+                                    <div class="form-group">
+                                        <label for="" class="">Quantity: </label>
+                                        <span id="cart_quantity_<?= $cartItem['cart_id'] ?>"><?= $cartItem['quantity'] ?></span>
+                                    </div>
+                                    <div class="button-group">
+                                        <button data-cart-id="<?= $cartItem['cart_id'] ?>" aria-label="minus" class="btn btn-outline-light" onclick="updateQuantity(this)"><i class='bx bx-minus'></i></button>
+                                        <button data-cart-id="<?= $cartItem['cart_id'] ?>" aria-label="plus" class="btn btn-outline-light" onclick="updateQuantity(this)"><i class='bx bx-plus'></i></button>
+                                    </div>
                                 </div>
                                 <p class="card-text">
                                 <div class="button-group d-flex flex-wrap gap-2">

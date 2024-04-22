@@ -578,7 +578,7 @@ function updateContent(button) {
         if (this.readyState == 4) {
             document.getElementById('confirm_message').textContent = `${content_table} updated successfully`
             document.getElementById('table_content_wrapper').innerHTML = this.responseText
-            console.log(this.responseText)
+            // console.log(this.responseText)
         }
     }
 

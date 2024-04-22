@@ -3,7 +3,7 @@ session_start();
 $page = basename($_SERVER['PHP_SELF'], ".php");
 
 $user_type = $_SESSION['user_type'] ?? NULL;
-if($user_type == 'admin' && $user_type != NULL) {
+if ($user_type == 'admin' && $user_type != NULL) {
 	$redirect = ($page == 'index') ? '' : '../';
 	header("location: {$redirect}admin/index.php");
 	exit();
@@ -89,7 +89,7 @@ if($user_type == 'admin' && $user_type != NULL) {
 					</a>
 				</li>
 				<li class="sidebar-item">
-					<a href="<?= ($page == 'index') ? 'user/' : '' ?>order.php"" class=" sidebar-link d-flex align-items-center">
+					<a href="<?= ($page == 'index') ? 'user/' : '' ?>order.php" class=" sidebar-link d-flex align-items-center">
 						<i class='bx bxs-truck fs-4'></i>
 						<span class="fs-5">Orders</span>
 					</a>
@@ -100,6 +100,11 @@ if($user_type == 'admin' && $user_type != NULL) {
 						<span class="fs-5"><?= $_SESSION['username'] ?? "Not Logged in" ?></span>
 					</a>
 					<ul id="user_collapse" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
+						<li class="sidebar-item">
+							<a href="<?= ($page == 'index') ? 'user/' : '' ?>contact_us.php" class="sidebar-link">
+								Contact Us
+							</a>
+						</li>
 						<li class="sidebar-item">
 							<?php
 							if (isset($_SESSION['user_id'])) {

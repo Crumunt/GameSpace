@@ -187,10 +187,10 @@ function searchGames($userView)
         <?php
         $src = (str_contains($game['product_thumbnail'], 'https') == true) ? $game['product_thumbnail'] : "../assets/thumbnails/" . $game['product_thumbnail'];
         ?>
-        <div class="card rounded-5 card1" style="width: 18rem;">
+        <div class="card card1" style="width: 18rem;">
             <a href="view_game.php?product_id=<?= $game['id'] ?>">
                 <div class="poster">
-                    <img src="<?= $src ?>" alt="Yes Poster Image">
+                    <img src="<?= $src ?>" alt="<?= $game['product_name'] ?> cover picture">
                     <div class="title-overlay w-100">
                         <h3><?= $game['product_name'] ?></h3>
                         <div class="product__preview"><?= $game['product_description'] ?></div>

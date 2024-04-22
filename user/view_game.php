@@ -89,7 +89,7 @@ $gameData = $userView->fetchGameInfo($id);
     <div class="row">
       <?php foreach (unserialize($gameData[0]['snapshots']) as $snapshot) : ?>
         <?php
-        $src = (str_contains($snapshot, 'https') == true) ? $snapshot : "../assets/" . $snapshot;
+        $src = (str_contains($snapshot, 'https') == true) ? $snapshot : "../assets/snapshots/" . $snapshot;
         ?>
         <div class="col-lg-4 col-md-6 col-sm-10 mb-5">
           <div class="card bg-dark border text-white product__snapshot w-75 h-100 mx-auto">

@@ -269,3 +269,37 @@ function updateQuantity(button) {
     xhr.send(data)
     
 }
+
+function sendConcern() {
+
+    let concern_header = getDataFromId('concern_header').value
+    let concern_body = getDataFromId('concern_body').value
+
+    // MODAL ITEMS
+    let loader = document.getElementById('loader')
+    let success_icon = document.getElementById('load_complete')
+    let confirm_message = document.getElementById('modalStatus')
+
+    let data = new FormData()
+
+    data.append('send_concern', 'concern')
+    data.append('concern_header', concern_header)
+    data.append('concern_body', concern_body)
+
+    let xhr = new XMLHttpRequest()
+    xhr.onreadystatechange = function() {
+        if(this.readyState <= 3) {
+            loader.classList.remove('d-none')
+            confirm_message.textContent = 'Sending Concern';
+        }
+        if(this.readyState == 4) {
+            loader.classList.add('d-none')
+            success_icon.classList.remove('d-none')
+            confirm_message.textContent = 'Concern has been sent successfully';
+            console.log(this.responseText)
+        }
+    }
+    
+    xhr.open('POST', '/GameSpace/form_handlers/concern_handler.php')
+    xhr.send(data)
+}

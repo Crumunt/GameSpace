@@ -28,11 +28,19 @@ class UserCtrl extends User
         return $action;
     }
 
-    public function setOrderReceived($order_id) {
+    public function setOrderReceived($order_id)
+    {
         $this->setOrderComplete($order_id);
     }
 
-    public function updateCartItemQuantity($cart_id, $quantity, $user_id) {
+    public function updateCartItemQuantity($cart_id, $quantity, $user_id)
+    {
         $this->setCartItemQuantity($cart_id, $quantity, $user_id);
+    }
+
+    public function submitConcern($concern_header, $concern_body, $user_id)
+    {
+        echo "THIS IS BEING CALLED";
+        $this->sendConcern($concern_header, $concern_body, $user_id);
     }
 }

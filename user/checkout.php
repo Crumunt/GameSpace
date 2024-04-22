@@ -67,7 +67,7 @@ $platform = $userView->fetchPlatform($platform_id);
                         <label class="form-label" for="email">Email
                             <span class="text-muted"> (Required)</span>
                         </label>
-                        <input type="text" id="email" class="form-control checkout_data" onkeyup="checkInput()" required>
+                        <input type="text" id="email" value="<?= $_SESSION['email'] ?>" class="form-control checkout_data" onkeyup="checkInput()" required>
                     </div>
                     <div class="col-12">
                         <label class="form-label" for="address">Address </label>

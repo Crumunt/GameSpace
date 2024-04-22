@@ -55,6 +55,7 @@ function loginUser($authCtrl)
 
     $_SESSION['username'] = $action[0]['username'];
     $_SESSION['user_id'] = $action[0]['id'];
+    $_SESSION['email'] = $action[0]['email'];
     $_SESSION['user_type'] = $action[0]['role'];
     $type = $action[0]['role'];
 
