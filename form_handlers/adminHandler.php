@@ -258,8 +258,8 @@ function loadCategories($data = NULL, $counter = 1)
             <td><?= $counter++ ?></td>
             <td><?= $category['category_name'] ?></td>
             <td>
-                <button class="btn btn-warning" onclick="loadCategoryInfo(this.value)" value="<?= $category['id'] ?>" data-bs-toggle="modal" data-bs-target="#add_modal">Edit</button>
-                <button class="btn btn-danger" onclick="confirmRemoveContent(this.value)" value="<?= $category['id'] ?>" data-bs-toggle="modal" data-bs-target="#verify_modal">Delete</button>
+                <button class="btn btn-warning" onclick="loadTagInfo(this.value)" value="<?= $category['id'] ?>" data-bs-toggle="modal" data-bs-target="#add_modal">Edit</button>
+                <button class="btn btn-danger" onclick="confirmRemoveTag(this.value)" value="<?= $category['id'] ?>" data-bs-toggle="modal" data-bs-target="#verify_modal">Delete</button>
             </td>
         </tr>
     <?php endforeach;
@@ -274,8 +274,8 @@ function loadPlatforms($data = NULL, $counter = 1)
             <td><?= $counter++ ?></td>
             <td><?= $platform['platform_name'] ?></td>
             <td>
-                <button class="btn btn-warning" onclick="loadPlatformInfo(this.value)" value="<?= $platform['id'] ?>" data-bs-toggle="modal" data-bs-target="#add_modal">Edit</button>
-                <button class="btn btn-danger" onclick="confirmRemoveContent(this.value)" value="<?= $platform['id'] ?>" data-bs-toggle="modal" data-bs-target="#verify_modal">Delete</button>
+                <button class="btn btn-warning" onclick="loadTagInfo(this.value)" value="<?= $platform['id'] ?>" data-bs-toggle="modal" data-bs-target="#add_modal">Edit</button>
+                <button class="btn btn-danger" onclick="confirmRemoveTag(this.value)" value="<?= $platform['id'] ?>" data-bs-toggle="modal" data-bs-target="#verify_modal">Delete</button>
             </td>
         </tr>
     <?php endforeach;
@@ -329,8 +329,14 @@ function searchDuplicateContent($adminView)
 {
 
     $keyword = $_GET['content_keyword'];
+    $tbl = $_GET['content'];
 
-    $action = $adminView->fetchCategories(0, NULL, "category_name LIKE '%$keyword%'");
+    if($tbl == 'category') {
+        $action = $adminView->fetchCategories(0, NULL, "category_name LIKE '%$keyword%'");
+    }else {
+        $action = $adminView->fetchPlatforms(0, NULL, "platform_name LIKE '%$keyword%'");
+    }
+
 
     if (count($action) > 0) {
         echo 'duplicate';

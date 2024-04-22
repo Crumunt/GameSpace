@@ -194,6 +194,9 @@ function loadGameInfo(button) {
             modal_header.textContent = 'Update Game'
             modal_sub_header.textContent = 'Update Game'
 
+            let next_button = document.getElementById('next_button')
+            next_button.removeAttribute('disabled')
+
             let save_button = document.getElementById('save_button')
             save_button.setAttribute('value', parsed_data[0].id)
             save_button.textContent = 'Update'
@@ -452,8 +455,6 @@ function changePage(button) {
     let page_number = Number(button.getAttribute('data-page-number'))
     let max_pages = document.getElementById('table_pagination').getAttribute('data-pages')
     let active_button = document.querySelector('.page-link.active')
-    let previous_button = document.getElementById('previous')
-    let next_button = document.getElementById('next')
     let page_button = document.querySelector(`button[data-page-number='${page_number}'].number_page`)
 
     let page = (document.getElementById('table_pagination').getAttribute('aria-label').includes('categories')) ? 'category' : 'platform'
@@ -508,49 +509,39 @@ function addContent() {
 
 }
 
-function loadCategoryInfo(id) {
+function loadTagInfo(id) {
+    const input_field = getFormData('input_field')
+    const page = input_field.getAttribute('aria-label')
+    const save_button = document.getElementById('save_button')
 
-    let input_field = document.getElementById('input_field')
-    let save_button = document.getElementById('save_button')
-    let category_description = document.getElementById('category_description')
+    if (page == 'category') {
+        const category_desc = getFormData('category_description')
+    }
+
+    console.log(page)
 
     let xhr = new XMLHttpRequest()
 
     xhr.onreadystatechange = function () {
         if (this.readyState == 4) {
-            let data = JSON.parse(this.responseText)
 
-            input_field.value = data[0].category_name
-            category_description.value = data[0].description
+            if (page == 'category') {
+                let data = JSON.parse(this.responseText)
+                input_field.value = data[0].category_name
+                category_description.value = data[0].description
+            } else {
+                input_field.value = this.responseText
+            }
+
             save_button.removeAttribute('onclick')
             save_button.setAttribute('value', id);
             save_button.setAttribute('onclick', 'updateContent(this)')
             save_button.textContent = 'Update'
-            console.log(data)
+
         }
     }
-    xhr.open('GET', '/GameSpace/form_handlers/adminHandler.php?category_id=' + id)
-    xhr.send();
 
-}
-
-function loadPlatformInfo(id) {
-
-    let input_field = document.getElementById('input_field')
-    let save_button = document.getElementById('save_button')
-
-    let xhr = new XMLHttpRequest()
-
-    xhr.onreadystatechange = function () {
-        if (this.readyState == 4) {
-            input_field.value = this.responseText
-            save_button.removeAttribute('onclick')
-            save_button.setAttribute('value', id);
-            save_button.setAttribute('onclick', 'updateContent(this)')
-            save_button.textContent = 'Update'
-        }
-    }
-    xhr.open('GET', '/GameSpace/form_handlers/adminHandler.php?platform_id=' + id)
+    xhr.open('GET', `/GameSpace/form_handlers/adminHandler.php?${page}_id=${id}`)
     xhr.send();
 
 }
@@ -599,7 +590,7 @@ function updateContent(button) {
     save_button.textContent = 'Update'
 }
 
-function confirmRemoveContent(id) {
+function confirmRemoveTag(id) {
 
     const content_table = document.getElementById('table_pagination').getAttribute('aria-label')
     let content_header = (content_table.includes('categories')) ? 'category' : 'platform'
@@ -619,7 +610,6 @@ function confirmRemoveContent(id) {
 }
 
 function removeContent(id) {
-
 
     let content_table = document.getElementById('table_pagination').getAttribute('aria-label')
     let content_header = (content_table.includes('categories')) ? 'category' : 'clatform'
@@ -667,7 +657,7 @@ function checkDuplication(input) {
         }
     }
 
-    xhr.open('GET', '/GameSpace/form_handlers/adminHandler.php?content_keyword=' + keyword)
+    xhr.open('GET', '/GameSpace/form_handlers/adminHandler.php?content_keyword=' + keyword + '&content=' + tbl)
     xhr.send();
 
 }
@@ -676,9 +666,7 @@ function searchContent(keyword) {
 
     const content_table = document.getElementById('table_content_wrapper');
     const content = document.getElementById('table_pagination').getAttribute('aria-label')
-    let content_keyword = (content.includes('categories')) ? 'category_' : 'platform_'
-
-    content_keyword.concat('keyword' + keyword);
+    let content_keyword = (content.includes('categories')) ? 'category_keyword' : 'platform_keyword'
 
     let xhr = new XMLHttpRequest()
     xhr.onreadystatechange = function () {
@@ -687,7 +675,7 @@ function searchContent(keyword) {
         }
     }
 
-    xhr.open('GET', '/GameSpace/form_handlers/adminHandler.php?category_keyword=' + keyword)
+    xhr.open('GET', `/GameSpace/form_handlers/adminHandler.php?${content_keyword}=${keyword}`)
     xhr.send()
 }
 
@@ -699,8 +687,8 @@ function reloadPagination() {
 
     let xhr = new XMLHttpRequest()
 
-    xhr.onreadystatechange = function() {
-        if(this.readyState == 4) {
+    xhr.onreadystatechange = function () {
+        if (this.readyState == 4) {
             pagination_wrapper.innerHTML = this.responseText
         }
     }

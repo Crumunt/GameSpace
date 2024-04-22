@@ -24,7 +24,7 @@ $data = $adminView->showProducts();
     </nav>
 
 
-    <div id="content_wrapper" class="row row-cols-lg-4 row-cols-md-2 row-cols-sm-1 g-4 mt-5">
+    <div id="content_wrapper" class="row row-cols-lg-4 row-cols-md-2 row-cols-sm-1 g-4 mt-5 justify-content-center">
         <?php foreach ($data as $game) : ?>
             <div class="col-lg-3 col-md-6 col-sm-10">
                 <div class="card text-white border w-100 h-100" style="background-color: #2C2E34;">

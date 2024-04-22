@@ -37,8 +37,8 @@ $adminView = new AdminView();
                         <td class="fw-bolder"><?= $counter++ ?></td>
                         <td><?= $data['platform_name'] ?></td>
                         <td>
-                            <button class="btn btn-warning" onclick="loadPlatformInfo(this.value)" value="<?= $data['id'] ?>" data-bs-toggle="modal" data-bs-target="#add_modal">Edit</button>
-                            <button class="btn btn-danger" onclick="confirmRemoveContent(this.value)" value="<?= $data['id'] ?>" data-bs-toggle="modal" data-bs-target="#verify_modal">Delete</button>
+                            <button class="btn btn-warning" onclick="loadTagInfo(this.value)" value="<?= $data['id'] ?>" data-bs-toggle="modal" data-bs-target="#add_modal">Edit</button>
+                            <button class="btn btn-danger" onclick="confirmRemoveTag(this.value)" value="<?= $data['id'] ?>" data-bs-toggle="modal" data-bs-target="#verify_modal">Delete</button>
                         </td>
                     </tr>
                 <?php endforeach; ?>
