@@ -2,7 +2,7 @@
 class User extends Dbh
 {
 
-	private function executeQuery($stmt, $values = NULL)
+	private function executeQuery($stmt, ...$values)
 	{
 
 		if (!$stmt->execute($values)) {
@@ -41,7 +41,7 @@ class User extends Dbh
 		$sql = "SELECT category_name FROM product_view WHERE id = ?";
 		$stmt = $this->connect()->prepare($sql);
 
-		return $this->executeQuery($stmt, [$product_id]);
+		return $this->executeQuery($stmt, $product_id);
 	}
 
 	protected function getGamePlatforms($product_id)
@@ -49,7 +49,7 @@ class User extends Dbh
 		$sql = "SELECT platform_id, platform_name FROM game_platform_view WHERE product_id = ?";
 		$stmt = $this->connect()->prepare($sql);
 
-		return $this->executeQuery($stmt, [$product_id]);
+		return $this->executeQuery($stmt, $product_id);
 	}
 
 	protected function getPlaform($platform_id)
@@ -57,7 +57,7 @@ class User extends Dbh
 		$sql = "SELECT id, platform_name FROM tbl_platforms WHERE id = ?";
 		$stmt = $this->connect()->prepare($sql);
 
-		return $this->executeQuery($stmt, [$platform_id]);
+		return $this->executeQuery($stmt, $platform_id);
 	}
 
 	protected function getGame($id)
@@ -66,7 +66,7 @@ class User extends Dbh
 		$sql = "SELECT * FROM tbl_products WHERE id = ?";
 		$stmt = $this->connect()->prepare($sql);
 
-		return $this->executeQuery($stmt, [$id]);
+		return $this->executeQuery($stmt, $id);
 	}
 
 	protected function getRandomGames($limit = NULL)
@@ -97,20 +97,7 @@ class User extends Dbh
 		$sql = "SELECT * FROM cart_view WHERE user_id = ?";
 		$stmt = $this->connect()->prepare($sql);
 
-		return $this->executeQuery($stmt, [$user_id]);
-	}
-
-	protected function getWishlistItems()
-	{
-		$sql = "SELECT * FROM tbl_wishlists";
-		$stmt = $this->connect()->prepare($sql);
-
-		if (!$stmt->execute()) {
-			// HEAD TO LOCATION
-		}
-
-		$results = $stmt->fetchAll(PDO::FETCH_ASSOC);
-		return $results;
+		return $this->executeQuery($stmt, $user_id);
 	}
 
 	protected function addItemToCart($product_id, $quantity, $user_id, $platform_id)
@@ -118,12 +105,7 @@ class User extends Dbh
 		$find_existing_query = "SELECT * FROM tbl_cart WHERE product_id = ? AND user_id = ? AND platform_id = ?";
 		$find_stmt = $this->connect()->prepare($find_existing_query);
 
-		if (!$find_stmt->execute([$product_id, $user_id, $platform_id])) {
-			header("location: ../index.php?error=SomethingWentWrong");
-			exit();
-		}
-
-		$find_results = $find_stmt->fetchAll(PDO::FETCH_ASSOC);
+		$find_results = $this->executeQuery($find_stmt, $product_id, $user_id, $platform_id);
 
 		if ($find_results) {
 			$sql = "UPDATE tbl_cart SET quantity = quantity + ? WHERE product_id = ? AND user_id = ? AND platform_id = ?";
@@ -133,10 +115,7 @@ class User extends Dbh
 
 		$stmt = $this->connect()->prepare($sql);
 
-		if (!$stmt->execute([$quantity, $product_id, $user_id, $platform_id])) {
-			header("location: ../index.php?error=SomethingWentWrong");
-			exit();
-		}
+		$this->executeQuery($stmt, $quantity, $product_id, $user_id, $platform_id);
 
 		return 'Product has been added to cart!';
 	}
@@ -146,33 +125,27 @@ class User extends Dbh
 		$sql = "SELECT * FROM tbl_cart INNER JOIN tbl_products ON tbl_cart.product_id = tbl_products.id WHERE tbl_cart.id = ?";
 		$stmt = $this->connect()->prepare($sql);
 
-		return $this->executeQuery($stmt, [$cart_id]);
+		return $this->executeQuery($stmt, $cart_id);
 	}
 
 	protected function purchaseGame($user_id, $recipient_name, $product_id, $quantity, $order_total, $order_address, $platform_id)
 	{
 
+		echo "Check your email to verify your purchase.";
 		try {
 			$sql = "INSERT INTO tbl_orders(customer_id, receipient_name, product_id, quantity, order_total, order_address, platform_id) VALUES (?,?,?,?,?,?,?)";
 			$stmt = $this->connect()->prepare($sql);
 
-			if (!$stmt->execute([$user_id, $recipient_name, $product_id, $quantity, $order_total, $order_address, $platform_id])) {
-				header("location: ../cart.php?error=SomethingWentWrong");
-				exit();
-			}
+			$this->executeQuery($stmt, $user_id, $recipient_name, $product_id, $quantity, $order_total, $order_address, $platform_id);
 
 			$sold_sql = "UPDATE tbl_products SET sold_count = sold_count + ? WHERE id = ?";
 			$sold_stmt = $this->connect()->prepare($sold_sql);
 
-			if (!$sold_stmt->execute([$quantity, $product_id])) {
-				header('location: ../index.php?error=SomethingWentWrong');
-				exit();
-			}
+			$this->executeQuery($sold_stmt, $quantity, $product_id);
 		} catch (Exception $e) {
 			echo "ERROR: $e";
 		}
 
-		return "Check your email to verify your purchase.";
 	}
 
 	protected function completeOrder($order_id)
@@ -180,10 +153,7 @@ class User extends Dbh
 		$sql = "UPDATE tbl_orders SET date_completed = NOW() WHERE id = ?";
 		$stmt = $this->connect()->prepare($sql);
 
-		if (!$stmt->execute([$order_id])) {
-			header("location: ../index.php?error=SomethingWentWrong");
-			exit();
-		}
+		$this->executeQuery($stmt, $order_id);
 	}
 
 	protected function removeItemFromCart($id, $user_id)
@@ -191,10 +161,7 @@ class User extends Dbh
 		$sql = "DELETE FROM tbl_cart WHERE id = ? AND user_id = ?";
 		$stmt = $this->connect()->prepare($sql);
 
-		if (!$stmt->execute([$id, $user_id])) {
-			header("location: ../user/cart.php");
-			exit();
-		}
+		$this->executeQuery($stmt, $id, $user_id);
 	}
 
 	protected function getOrders($user_id)
@@ -202,7 +169,7 @@ class User extends Dbh
 		$sql = "SELECT * FROM order_view WHERE customer_id = ? AND order_completed IS NULL";
 		$stmt = $this->connect()->prepare($sql);
 
-		return $this->executeQuery($stmt, [$user_id]);
+		return $this->executeQuery($stmt, $user_id);
 	}
 
 	protected function setOrderComplete($order_id)
@@ -210,10 +177,7 @@ class User extends Dbh
 		$sql  = "UPDATE tbl_orders SET order_completed = NOW() WHERE id = ?";
 		$stmt = $this->connect()->prepare($sql);
 
-		if (!$stmt->execute([$order_id])) {
-			header("location: ../index.php?error=SomethingWentWrong");
-			exit();
-		}
+		$this->executeQuery($stmt, $order_id);
 	}
 
 	protected function setCartItemQuantity($cart_id, $quantity, $user_id)
@@ -221,10 +185,7 @@ class User extends Dbh
 		$sql = "UPDATE tbl_cart SET quantity = ? WHERE id = ? AND user_id = ?";
 		$stmt = $this->connect()->prepare($sql);
 
-		if (!$stmt->execute([$quantity, $cart_id, $user_id])) {
-			header("location: ../index.php?error=SomethingWentWrong");
-			exit();
-		}
+		$this->executeQuery($stmt, $quantity, $cart_id, $user_id);
 	}
 
 	protected function sendConcern($concern_header, $concern_body = NULL, $user_id)
@@ -233,10 +194,7 @@ class User extends Dbh
 			$sql = "INSERT INTO tbl_messages(concern_header, concern_body, user_id) VALUES (?,?,?)";
 			$stmt = $this->connect()->prepare($sql);
 
-			if (!$stmt->execute([$concern_header, $concern_body, $user_id])) {
-				header("location: ../index.php?error=SomethingWentWrong");
-				exit();
-			}
+			$this->executeQuery($stmt, $concern_header, $concern_body, $user_id);
 		} catch (Exception $e) {
 			echo "ERROR: $e";
 		}

@@ -91,8 +91,12 @@ function checkout(user_id, product_id) {
             MODAL_TEXT.classList.add('text-success')
             MODAL_TEXT.textContent = 'Please check your email to confirm.'
             document.getElementById('modal_close').setAttribute('href', '../index.php');
+            console.log(this.responseText)
+            console.log('hey')
         }
     }
+
+    console.log(data)
 
     xhr.open('POST', '/GameSpace/form_handlers/userHandler.php');
 

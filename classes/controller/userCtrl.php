@@ -19,7 +19,7 @@ class UserCtrl extends User
     {
 
         try {
-
+            echo "THIS IS BEING CALLED";
             $action = $this->purchaseGame($user_id, $recipient_name, $product_id, $quantity, $order_total, $order_address, $platform_id);
         } catch (Exception $e) {
             echo "ERROR: $e";
@@ -40,7 +40,6 @@ class UserCtrl extends User
 
     public function submitConcern($concern_header, $concern_body, $user_id)
     {
-        echo "THIS IS BEING CALLED";
         $this->sendConcern($concern_header, $concern_body, $user_id);
     }
 }
