@@ -22,7 +22,7 @@ if ($user_type == 'admin' && $user_type != NULL) {
 	<link rel="stylesheet" href="<?= ($page == 'index') ? '' : "../" ?>css/sidebar-footer.css">
 	<link rel="stylesheet" href="<?= ($page == 'index') ? '' : "../" ?>css/page_1_&_2_&_5.css">
 	<?php
-	$included_pages = ['index', 'featured', 'view_game', 'cart', 'checkout', 'order'];
+	$included_pages = ['index', 'featured', 'view_game', 'cart', 'checkout', 'order', 'library'];
 	if (!in_array($page, $included_pages)) {
 	?>
 		<link rel="stylesheet" href="../css/page3.css">
@@ -77,7 +77,7 @@ if ($user_type == 'admin' && $user_type != NULL) {
 					</ul>
 				</li>
 				<li class="sidebar-item">
-					<a href="<?= ($page == 'index') ? 'user/' : '' ?>libary.php" class="sidebar-link d-flex align-items-center">
+					<a href="<?= ($page == 'index') ? 'user/' : '' ?>library.php" class="sidebar-link d-flex align-items-center">
 						<i class='bx bx-library fs-4'></i>
 						<span class="fs-5">Library</span>
 					</a>
@@ -92,6 +92,12 @@ if ($user_type == 'admin' && $user_type != NULL) {
 					<a href="<?= ($page == 'index') ? 'user/' : '' ?>order.php" class=" sidebar-link d-flex align-items-center">
 						<i class='bx bxs-truck fs-4'></i>
 						<span class="fs-5">Orders</span>
+					</a>
+				</li>
+				<li class="sidebar-item">
+					<a href="<?= ($page == 'index') ? 'user/' : '' ?>blog.php" class="sidebar-link d-flex align-items-center">
+						<i class='bx bxl-blogger fs-4'></i>
+						<span class="fs-5">Blogs</span>
 					</a>
 				</li>
 				<li class="sidebar-item mt-5">

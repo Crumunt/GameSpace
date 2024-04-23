@@ -1,0 +1,255 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Poppins', sans-serif;
+}
+
+body{
+    font-family: 'Poppins, sans-serif';
+    background-color: #212529;
+}
+
+/* .header {
+    display: flex;
+    align-items: center;
+} */
+
+h1{
+    font-size: 50px;
+    text-align: center;
+    color: white;
+}
+.pagination{
+    padding: 10px;
+    display: flex;
+    justify-content: center;
+    margin: 20px 0;
+}
+.pagination button{
+    height: 50px;
+    width: 50px;
+    padding: 10px;
+    margin: 10px;
+    border-radius: 100%;
+    outline: none;
+    border: none;
+    background-color: aliceblue;
+    cursor: pointer;
+}
+span.page-number{
+    margin: 10px;
+    height: 50px;
+    width: 50px;
+    display: flex;
+    justify-content: center;
+    border-radius: 100%;    
+}
+
+
+p{
+    margin-bottom: 10px;
+}
+span{
+    color: black;
+    background-color: aliceblue;
+    cursor: pointer;
+    padding: 10px;
+    border-radius: 10px;
+}
+.like-button.liked {
+    color: blue; 
+}
+.like-count{
+    margin-left: 3px;
+    padding: 10px;
+    border-radius: 10%;
+}
+
+
+.flex-container{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.flex-items{
+    display: block;
+    padding: 5px;
+    border: none solid 1px;
+    border-radius: 5%;
+    margin: auto;
+    text-align: center;
+    margin: 2%;
+    width: 25%;
+    background-color: white;
+    text-align: center;
+    padding: 20px;
+}
+
+img{
+    cursor: pointer;
+    object-fit: cover;
+    width: 100%;
+    border-radius: 5%;
+}
+
+img:hover{
+    opacity: 0.5;
+}
+
+a {
+    text-decoration: none;
+    color: black;
+    background-color: rgb(176, 176, 223);
+    padding: 2%;
+    border-radius: 10px;
+    font-size: 15px;
+}
+
+button{
+
+    height: 34px;
+    width: 34px;
+    text-decoration: none;
+    padding: 5px;
+    border: none;
+    border-radius: 50%;
+    background-color: aliceblue;
+    text-align: center;
+
+}
+
+a:hover{
+    cursor: pointer;
+    background-color: rebeccapurple;
+}
+button:hover{
+    cursor: pointer;
+}
+
+
+/* wrapper */
+.wrapper {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    overflow: hidden;
+    margin-bottom: 10px;
+}
+
+.container {
+    max-width: 100%;
+    height: 400px;
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: start;
+}
+
+.card {
+    width: 80px;
+    border-radius: .75rem;
+    background-size: cover;
+    cursor: pointer;
+    overflow: hidden;
+    border-radius: 2rem;
+    margin: 0 10px;
+    display: flex;
+    align-items: flex-end;
+    transition: .6s cubic-bezier(.28,-0.03,0,.99);
+    box-shadow: 0px 10px 30px -5px rgba(0,0,0,0.8);
+}
+
+.card > .row {
+    color: white;
+    display: flex;
+    flex-wrap: nowrap;
+    padding-bottom: 40px;
+}
+
+.card > .row > .icon {
+    background: #223;
+    color: white;
+    border-radius: 50%;
+    width: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 15px;
+}
+
+.card > .row > .description {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    overflow: hidden;
+    height: 80px;
+    width: 520px;
+    opacity: 0;
+    transform: translateY(30px);
+    transition-delay: .3s;
+    transition: all .3s ease;
+}
+
+.description p {
+    color: white;
+    padding-top: 5px;
+}
+
+.description h4 {
+    color: white;
+    text-transform: uppercase;
+}
+
+input {
+    display: none;
+}
+
+input:checked + label {
+    width: 600px;
+}
+
+input:checked + label .description {
+    opacity: 1 !important;
+    transform: translateY(0) !important;
+}
+
+input:not(:checked) + label {
+    opacity: .4;
+}
+
+.card[for="c1"] {
+    background-image: url(../assets/blog_assets/mario.png);
+}
+.card[for="c2"] {
+    background-image: url(../assets/blog_assets/rockstar.png);
+}
+.card[for="c3"] {
+    background-image: url(../assets/blog_assets/2021-12-07-image-9-j_1100.png);
+}
+.card[for="c4"] {
+    background-image: url(../assets/blog_assets/blizzard.png);
+}
+.collapsed {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease; /* Smooth transition */
+}
+@media (max-width: 800px){
+    .flex-items{
+        flex: 50%;
+    }
+}
+
+
+@media (max-width: 768px){
+    .container{
+        height: 200px;
+    }
+    p h4{
+        font-size: 10px;
+    }
+}

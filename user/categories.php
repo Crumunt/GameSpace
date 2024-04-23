@@ -18,7 +18,7 @@ $category_data = $userView->fetchCategories();
         </div>
     </nav>
 
-    <div class="category__wrapper">
+    <div class="category__wrapper container">
         <?php foreach ($category_data as $category) : ?>
             <div class="card card<?= rand(1, 8) ?>" style="width: 18rem;">
                 <div class="poster">

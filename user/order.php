@@ -33,9 +33,9 @@ $order_data = $userView->fetchOrders($user_id);
                         <p class="fs-3 text-truncate"><?= $order['product_name'] ?></p>
                         <p class="fs-5">Total: $<?= $order['order_total'] ?></p>
                     </div>
-                    <div class="card-footer d-flex justify-content-between">
+                    <div class="card-footer d-flex justify-content-center flex-column">
                         <h6><?= $order['order_status'] ?></h6>
-                        <button class="btn btn-primary" <?= ($order['order_status'] != 'Delivered') ? 'disabled' : '' ?> data-bs-toggle="modal" data-bs-target="#order_confirmation">Order Received</button>
+                        <button value="<?= $order['id'] ?>" onclick="setOrderId(this.value)" class="btn btn-primary" <?= ($order['order_status'] != 'Delivered') ? 'disabled' : '' ?> data-bs-toggle="modal" data-bs-target="#order_confirmation">Order Received</button>
                     </div>
                 </div>
             </div>
@@ -55,7 +55,7 @@ $order_data = $userView->fetchOrders($user_id);
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">No</button>
-                <button type="button" data-order-id="<?= $order['id'] ?>" onclick="receiveOrder(this)" class="btn btn-outline-success" data-bs-dismiss="modal">Yes</button>
+                <button type="button" id="confirm_receive_order" onclick="receiveOrder(this)" class="btn btn-outline-success" data-bs-dismiss="modal">Yes</button>
             </div>
         </div>
     </div>

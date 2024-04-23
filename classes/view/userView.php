@@ -32,7 +32,8 @@ class UserView extends User
 		return $data;
 	}
 
-	public function fetchPlatform($platform_id) {
+	public function fetchPlatform($platform_id)
+	{
 		$data = $this->getPlaform($platform_id);
 		return $data;
 	}
@@ -58,6 +59,12 @@ class UserView extends User
 	public function fetchOrders($user_id)
 	{
 		$data = $this->getOrders($user_id);
+		return $data;
+	}
+
+	public function fetchCompletedOrders($user_id)
+	{
+		$data = $this->getCompletedOrders($user_id);
 		return $data;
 	}
 }

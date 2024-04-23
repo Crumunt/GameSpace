@@ -5,7 +5,9 @@ session_start();
 require "../classes/dbh.php";
 require "../classes/model/authenticationModel.php";
 require "../classes/controller/authenticationCtrl.php";
+require "../classes/view/authView.php";
 
+$authView = new Authview();
 $authCtrl = new AuthenticationCtrl();
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -13,6 +15,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         registerUser($authCtrl);
     } elseif (isset($_POST['login'])) {
         loginUser($authCtrl);
+    }
+}
+if($_SERVER['REQUEST_METHOD'] == 'GET') {
+    if(isset($_GET['user_email'])) {
+        checkEmail($authView);
     }
 }
 
@@ -28,6 +35,7 @@ function registerUser($authCtrl)
 
     $_SESSION['username'] = $action[0];
     $_SESSION['user_id'] = $action[1];
+    $_SESSION['email'] = $action[2];
 
     header("location: ../index.php");
     exit();
@@ -67,4 +75,16 @@ function loginUser($authCtrl)
         echo 'admin/index.php';
         exit();
     }
+}
+
+function checkEmail($authView) {
+
+    $user_email = $_GET['user_email'];
+
+    $action = $authView->fetchUserEmail($user_email);
+
+    if(count($action) > 0) {
+        echo "error";
+    }
+
 }

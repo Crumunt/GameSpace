@@ -19,7 +19,6 @@ $userView = new UserView();
 if ($_SERVER['REQUEST_METHOD'] == "POST") {
 
     if (isset($_POST['add_to_cart'])) {
-        // echo "HEHE";
         addItemToCart($userCtrl);
     } elseif (isset($_POST['loadCart'])) {
         loadCartItems($userView);

@@ -1,7 +1,7 @@
 <?php
-include "../classes/dbh.php";
-include "../classes/model/userModel.php";
-include "../classes/view/userView.php";
+require "../classes/dbh.php";
+require "../classes/model/userModel.php";
+require "../classes/view/userView.php";
 include "partials/sidebar.php";
 
 $userView = new Userview();
@@ -10,7 +10,7 @@ $banner__product = $userView->getRandomProducts(1);
 ?>
 <div class="container">
     <h1 class="text-white mt-3 fw-bold">Featured & Recommended</h1>
-    <div class="card mt-2 discount__card shadow" style="">
+    <div class="card mt-2 discount__card shadow">
         <div class="row g-0">
             <div class="col-md-4">
                 <img src=<?= "{$banner__product[0]['product_thumbnail']}" ?> class="img-fluid rounded-start w-100 h-100" alt="...">

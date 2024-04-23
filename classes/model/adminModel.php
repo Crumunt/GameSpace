@@ -372,7 +372,7 @@ class Admin extends Dbh
 
     protected function getMonthlyUserRegistrations()
     {
-        $sql = "SELECT MONTHNAME(date_registered) as monthname, COUNT(*) as users FROM tbl_users GROUP BY date_registered";
+        $sql = "SELECT MONTHNAME(date_registered) as monthname, COUNT(*) as users FROM tbl_users WHERE role = 'student' GROUP BY monthname";
         $stmt = $this->connect()->prepare($sql);
 
         return $this->executeQuery($stmt);

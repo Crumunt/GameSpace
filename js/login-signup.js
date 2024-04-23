@@ -27,8 +27,21 @@ function sendWarning() {
 
 }
 
-function checkDuplicateEmail() {
+function checkEmail(email) {
 
+    let xhr = new XMLHttpRequest()
+    xhr.onreadystatechange = function() {
+        if(this.readyState == 4) {
+            if(this.responseText.includes('error')) {
+                document.getElementById('email_form').classList.add('is-invalid')
+            }else {
+                document.getElementById('email_form').classList.remove('is-invalid')
+            }
+            console.log(this.responseText)
+        }
+    }
 
+    xhr.open('GET', '/GameSpace/form_handlers/login_signup_handler.php?user_email=' + email)
+    xhr.send()
     
 }

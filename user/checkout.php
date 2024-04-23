@@ -9,7 +9,8 @@ $user_id = $_SESSION['user_id'] ?? NULL;
 $cart_id = $_GET['cart_id'] ?? NULL;
 $product_id = $_GET['product_id'] ?? NULL;
 
-if ($cart_id == NULL || $user_id == NULL) {
+
+if ($user_id == NULL) {
     header("location: ../login.php");
     exit();
 }

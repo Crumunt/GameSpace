@@ -145,7 +145,6 @@ class User extends Dbh
 		} catch (Exception $e) {
 			echo "ERROR: $e";
 		}
-
 	}
 
 	protected function completeOrder($order_id)
@@ -154,6 +153,14 @@ class User extends Dbh
 		$stmt = $this->connect()->prepare($sql);
 
 		$this->executeQuery($stmt, $order_id);
+	}
+
+	protected function getCompletedOrders($user_id)
+	{
+		$sql = "SELECT * FROM order_view WHERE customer_id = ? AND order_completed IS NOT NULL";
+		$stmt = $this->connect()->prepare($sql);
+
+		return $this->executeQuery($stmt, $user_id);
 	}
 
 	protected function removeItemFromCart($id, $user_id)

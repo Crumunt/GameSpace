@@ -24,7 +24,7 @@ class Authentication extends Dbh
             exit();
         }
 
-        return [$username, $user_id];
+        return [$username, $user_id, $email];
     }
 
     private function getUserId($email)
@@ -66,6 +66,20 @@ class Authentication extends Dbh
             exit();
         }
 
+        return $results;
+    }
+
+    protected function getUserEmail($email)
+    {
+        $sql = "SELECT * FROM tbl_users WHERE email = ?";
+        $stmt = $this->connect()->prepare($sql);
+
+        if (!$stmt->execute([$email])) {
+            header("location: ../signup.php?error=SomethingWentWrong");
+            exit();
+        }
+
+        $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
         return $results;
     }
 }

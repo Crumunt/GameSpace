@@ -307,3 +307,7 @@ function sendConcern() {
     xhr.open('POST', '/GameSpace/form_handlers/concern_handler.php')
     xhr.send(data)
 }
+
+function setOrderId(id) {
+    document.getElementById('confirm_receive_order').setAttribute('data-order-id', id)
+}
