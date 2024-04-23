@@ -105,6 +105,7 @@ function addSnapshots(file) {
         snapshot.setAttribute('onclick', 'removeImage(this)');
         snapshot.classList.add('snapshot')
         snapshot.setAttribute('title', 'CLICK TO REMOVE')
+        snapshot.setAttribute('name', file.files[i].name)
         snapshot.src = URL.createObjectURL(file.files[i])
         snapshot_container.appendChild(snapshot)
     }
@@ -112,6 +113,10 @@ function addSnapshots(file) {
 }
 
 function removeImage(image) {
+    if(image.id.includes('thumbnail')) {
+        document.getElementById('thumbnail_input').value = null
+    }
+    
     image.remove();
 }
 
@@ -253,6 +258,7 @@ function updateData(button) {
 
     let images = getFormData('snapshot_input')
     if (images.files.length > 0) {
+        console.log('this is happening')
         for (let j = 0; j < images.files.length; j++) {
             data.append('game_images[]', images.files[j], images.files[j].name)
         }
